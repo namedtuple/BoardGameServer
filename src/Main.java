@@ -14,5 +14,9 @@ public class Main {
         ticTacToeBoard.debugPrintBoardContents();
 
         ticTacToeBoard.debugPrintBoardContentsBetter();
+
+
+        GUI gui = new GUI(ticTacToeBoard);
+
     }
 }
