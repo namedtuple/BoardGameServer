@@ -51,4 +51,8 @@ public class Board {
         return size;
     }
 
+    public HashMap<Pair<Integer, Integer>, Character> getBoardMap() {
+        return boardMap;
+    }
+
 }

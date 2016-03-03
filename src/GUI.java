@@ -14,6 +14,7 @@ public class GUI {
     // Methods
     public GUI(Board board) {
         this.board = board;
+        HashMap<Pair<Integer, Integer>, Character> boardMap = board.getBoardMap();
         this.jFrame = new JFrame("GUI");
 
         JPanel boardPanel = new JPanel();
@@ -27,6 +28,9 @@ public class GUI {
                 GUIBoardCell cell = new GUIBoardCell();
                 guiBoardMap.put(pair, cell);
                 boardPanel.add(cell);
+                Character c = boardMap.get(Pair.with(xCol, yRow));
+                JLabel label = new JLabel(String.valueOf(c));
+                cell.add(label);
             }
         }
 
