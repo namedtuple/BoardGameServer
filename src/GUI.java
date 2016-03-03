@@ -28,9 +28,13 @@ public class GUI {
                 GUIBoardCell cell = new GUIBoardCell();
                 guiBoardMap.put(pair, cell);
                 boardPanel.add(cell);
+                cell.setLayout(new GridBagLayout());
+
                 Character c = boardMap.get(Pair.with(xCol, yRow));
                 JLabel label = new JLabel(String.valueOf(c));
-                cell.add(label);
+
+                GridBagConstraints gbc = new GridBagConstraints();
+                cell.add(label, gbc);
             }
         }
 
