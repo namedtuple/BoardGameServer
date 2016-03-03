@@ -4,19 +4,18 @@ public class Main {
 
     public static void main(String[] args) {
         Board ticTacToeBoard = new Board(3);
-        ticTacToeBoard.debugPrintBoardContents();
+        GUI gui = new GUI(ticTacToeBoard);
+        ticTacToeBoard.debugPrintBoardContentsBetter();
 
         ticTacToeBoard.makeMove(2,2, 'X');
-        ticTacToeBoard.debugPrintBoardContents();
+        ticTacToeBoard.debugPrintBoardContentsBetter();
+        gui.update(ticTacToeBoard.getBoardMap());
 
         Pair<Integer, Integer> loc = Pair.with(1,1);
         ticTacToeBoard.makeMove(loc, 'O');
-        ticTacToeBoard.debugPrintBoardContents();
-
         ticTacToeBoard.debugPrintBoardContentsBetter();
+        gui.update(ticTacToeBoard.getBoardMap());
 
-
-        GUI gui = new GUI(ticTacToeBoard);
 
     }
 }

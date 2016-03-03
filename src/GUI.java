@@ -11,12 +11,10 @@ public class GUI {
     private JPanel boardPanel;
     private Board board;
     private HashMap<Pair<Integer, Integer>, GUIBoardCell> guiBoardMap;
-    private HashMap<Pair<Integer, Integer>, Character> boardMap;
 
     // Methods
     public GUI(Board board) {
         this.board = board;
-        boardMap = board.getBoardMap();
         frame = new JFrame("GUI");
         boardPanel = new JPanel();
         guiBoardMap = new HashMap<>();
@@ -30,10 +28,10 @@ public class GUI {
         frame.setVisible(true);
         frame.setResizable(false);
 
-        update();
+        setupGUIBoard(this.board.getBoardMap());
     }
 
-    public void update() {
+    public void setupGUIBoard(HashMap<Pair<Integer, Integer>, Character> boardMap) {
         for (int xCol=1; xCol<=board.getSize(); ++xCol) {
             for (int yRow=1; yRow<=board.getSize(); ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
@@ -47,6 +45,18 @@ public class GUI {
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 cell.add(label, gbc);
+            }
+        }
+    }
+
+    public void update(HashMap<Pair<Integer, Integer>, Character> boardMap) {
+        for (int xCol=1; xCol<=board.getSize(); ++xCol) {
+            for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
+                Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
+                Character c = boardMap.get(pair);
+                GUIBoardCell cell = guiBoardMap.get(pair);
+                JLabel label = (JLabel) cell.getComponent(0);
+                label.setText(String.valueOf(c));
             }
         }
     }
