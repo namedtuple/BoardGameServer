@@ -1,7 +1,11 @@
 import org.javatuples.Pair;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class GUI {
@@ -11,6 +15,7 @@ public class GUI {
     private JPanel boardPanel;
     private Board board;
     private HashMap<Pair<Integer, Integer>, GUIBoardCell> guiBoardMap;
+    private HashMap<Character, BufferedImage> imageHashMap;
 
     // Methods
     public GUI(Board board) {
@@ -18,6 +23,9 @@ public class GUI {
         frame = new JFrame("GUI");
         boardPanel = new JPanel();
         guiBoardMap = new HashMap<>();
+        imageHashMap = new HashMap<>();
+        loadImages();
+        setupGUIBoard(this.board.getBoardMap());
 
         boardPanel.setBackground(Color.yellow);
         boardPanel.setLayout(new GridLayout(3, 3, 2, 2));
@@ -26,9 +34,17 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(450, 300);
         frame.setVisible(true);
-        frame.setResizable(false);
+        frame.setResizable(true);
+    }
 
-        setupGUIBoard(this.board.getBoardMap());
+    public void loadImages() {
+        try {
+            imageHashMap.put('X', ImageIO.read(new File("img/x.png")));
+            imageHashMap.put('O', ImageIO.read(new File("img/o.png")));
+            imageHashMap.put('_', ImageIO.read(new File("img/blank.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setupGUIBoard(HashMap<Pair<Integer, Integer>, Character> boardMap) {
@@ -41,10 +57,10 @@ public class GUI {
                 cell.setLayout(new GridBagLayout());
 
                 Character c = boardMap.get(Pair.with(xCol, yRow));
-                JLabel label = new JLabel(String.valueOf(c));
+                BufferedImage img = imageHashMap.get(c);
+                JLabel label = new JLabel(new ImageIcon(img));
 
-                GridBagConstraints gbc = new GridBagConstraints();
-                cell.add(label, gbc);
+                cell.add(label);
             }
         }
     }
@@ -56,7 +72,7 @@ public class GUI {
                 Character c = boardMap.get(pair);
                 GUIBoardCell cell = guiBoardMap.get(pair);
                 JLabel label = (JLabel) cell.getComponent(0);
-                label.setText(String.valueOf(c));
+                label.setIcon(new ImageIcon(imageHashMap.get(c)));
             }
         }
     }
