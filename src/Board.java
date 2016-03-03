@@ -7,7 +7,7 @@ import java.util.Map;
 public class Board {
 
     // Fields
-    private HashMap<Pair, Character> boardMap;
+    private HashMap<Pair<Integer, Integer>, Character> boardMap;
     private int size;
 
     // Methods
@@ -31,7 +31,7 @@ public class Board {
     }
 
     public void debugPrintBoardContents() {
-        for (Map.Entry<Pair, Character> entry : boardMap.entrySet()) {
+        for (Map.Entry<Pair<Integer, Integer>, Character> entry : boardMap.entrySet()) {
             System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
         System.out.println();
@@ -45,6 +45,10 @@ public class Board {
             }
             System.out.println();
         }
+    }
+
+    public int getSize() {
+        return size;
     }
 
 }
