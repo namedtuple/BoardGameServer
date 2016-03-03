@@ -12,5 +12,7 @@ public class Main {
         Pair<Integer, Integer> loc = Pair.with(1,1);
         ticTacToeBoard.makeMove(loc, "O");
         ticTacToeBoard.debugPrintBoardContents();
+
+        ticTacToeBoard.debugPrintBoardContentsBetter();
     }
 }
