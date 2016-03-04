@@ -24,7 +24,6 @@ public class GUI {
         boardPanel = new JPanel();
         guiBoardMap = new HashMap<>();
         imageHashMap = new HashMap<>();
-        boardMap = board.getBoardMap();
         loadImages();
         createBoard();
 
