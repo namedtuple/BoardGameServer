@@ -14,7 +14,8 @@ public class GUI {
     private JFrame frame;
     private JPanel boardPanel;
     private Board board;
-    private HashMap<Pair<Integer, Integer>, GUIBoardCell> guiBoardMap;
+    //private HashMap<Pair<Integer, Integer>, GUIBoardCell> guiBoardMap;
+    private HashMap<Pair<Integer, Integer>, JButton> guiBoardMap;
     private HashMap<Character, BufferedImage> imageHashMap;
     private HashMap<Pair<Integer, Integer>, Character> boardMap;
 
@@ -27,7 +28,8 @@ public class GUI {
         imageHashMap = new HashMap<>();
         boardMap = board.getBoardMap();
         loadImages();
-        setupGUIBoard(this.board.getBoardMap());
+        //setupGUIBoard(this.board.getBoardMap());
+        createBoard();
 
         boardPanel.setBackground(Color.yellow);
         boardPanel.setLayout(new GridLayout(3, 3, 2, 2));
@@ -49,33 +51,53 @@ public class GUI {
         }
     }
 
-    public void setupGUIBoard(HashMap<Pair<Integer, Integer>, Character> boardMap) {
+    /*
+     * This method will create a hashmap with keys being a button's coordinates,
+     * and the values are Button objects. Buttons are also added to the panel
+     * at the end of this method.
+     */
+    public void createBoard() {
+        guiBoardMap = new HashMap<>();
         for (int xCol=1; xCol<=board.getSize(); ++xCol) {
             for (int yRow=1; yRow<=board.getSize(); ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                GUIBoardCell cell = new GUIBoardCell();
-                guiBoardMap.put(pair, cell);
-                boardPanel.add(cell);
-                cell.setLayout(new GridBagLayout());
-
-                Character c = boardMap.get(Pair.with(xCol, yRow));
-                BufferedImage img = imageHashMap.get(c);
-                JLabel label = new JLabel(new ImageIcon(img));
-
-                cell.add(label);
+                BoardButtonAction action = new BoardButtonAction(board);
+                ImageIcon icon = action.chooseIcon(board.getValue(pair));
+                BoardButton button = new BoardButton(pair, icon);
+                button.addActionListener(action);
+                guiBoardMap.put(pair, button);
+                boardPanel.add(button);
             }
         }
     }
 
-    public void update() {
-        for (int xCol=1; xCol<=board.getSize(); ++xCol) {
-            for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
-                Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                Character c = boardMap.get(pair);
-                GUIBoardCell cell = guiBoardMap.get(pair);
-                JLabel label = (JLabel) cell.getComponent(0);
-                label.setIcon(new ImageIcon(imageHashMap.get(c)));
-            }
-        }
-    }
+    //public void setupGUIBoard(HashMap<Pair<Integer, Integer>, Character> boardMap) {
+    //    for (int xCol=1; xCol<=board.getSize(); ++xCol) {
+    //        for (int yRow=1; yRow<=board.getSize(); ++yRow) {
+    //            Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
+    //            GUIBoardCell cell = new GUIBoardCell();
+    //            guiBoardMap.put(pair, cell);
+    //            boardPanel.add(cell);
+    //            cell.setLayout(new GridBagLayout());
+    //
+    //            Character c = boardMap.get(Pair.with(xCol, yRow));
+    //            BufferedImage img = imageHashMap.get(c);
+    //            JLabel label = new JLabel(new ImageIcon(img));
+    //
+    //            cell.add(label);
+    //        }
+    //    }
+    //}
+    //
+    //public void update() {
+    //    for (int xCol=1; xCol<=board.getSize(); ++xCol) {
+    //        for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
+    //            Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
+    //            Character c = boardMap.get(pair);
+    //            GUIBoardCell cell = guiBoardMap.get(pair);
+    //            JLabel label = (JLabel) cell.getComponent(0);
+    //            label.setIcon(new ImageIcon(imageHashMap.get(c)));
+    //        }
+    //    }
+    //}
 }

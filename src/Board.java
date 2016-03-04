@@ -8,7 +8,8 @@ public class Board {
 
     // Fields
     private HashMap<Pair<Integer, Integer>, Character> boardMap;
-    private int size;
+    private int size;       // size of board
+    private int turn;       // 0 is player one turn, 1 is player two turn
 
     // Methods
     public Board(int size) {
@@ -54,6 +55,27 @@ public class Board {
 
     public HashMap<Pair<Integer, Integer>, Character> getBoardMap() {
         return boardMap;
+    }
+
+    public char getValue(Pair<Integer, Integer> pair) {
+        return boardMap.get(pair);
+    }
+
+    public Pair<Integer, Integer> getKey(char value) {
+        for (Pair<Integer, Integer> pair : boardMap.keySet()) {
+            if (boardMap.get(pair).equals(value)) {
+                return pair;
+            }
+        }
+        return null;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void switchTurn() {
+        turn = ((turn == 0) ? 1 : 0);
     }
 
 }
