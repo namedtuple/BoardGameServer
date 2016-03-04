@@ -3,7 +3,6 @@ import org.javatuples.Pair;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Board {
 
     // Fields
@@ -15,9 +14,9 @@ public class Board {
     public Board(int size) {
         this.size = size;
         boardMap = new HashMap<>();
-        for (int xCol=1; xCol<=size; ++xCol) {
-            for (int yRow=1; yRow<=size; ++yRow) {
-                Pair<Integer, Integer> pair = Pair.with(xCol,yRow);
+        for (int xCol = 1; xCol <= size; ++xCol) {
+            for (int yRow = 1; yRow <= size; ++yRow) {
+                Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
                 boardMap.put(pair, '_');
             }
         }
@@ -77,5 +76,4 @@ public class Board {
     public void switchTurn() {
         turn = ((turn == 0) ? 1 : 0);
     }
-
 }

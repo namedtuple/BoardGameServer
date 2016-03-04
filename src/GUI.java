@@ -58,8 +58,8 @@ public class GUI {
      */
     public void createBoard() {
         guiBoardMap = new HashMap<>();
-        for (int xCol=1; xCol<=board.getSize(); ++xCol) {
-            for (int yRow=1; yRow<=board.getSize(); ++yRow) {
+        for (int xCol = 1; xCol <= board.getSize(); ++xCol) {
+            for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
                 BoardButtonAction action = new BoardButtonAction(board);
                 ImageIcon icon = action.chooseIcon(board.getValue(pair));
