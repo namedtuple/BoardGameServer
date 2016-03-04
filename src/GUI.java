@@ -16,6 +16,7 @@ public class GUI {
     private Board board;
     private HashMap<Pair<Integer, Integer>, GUIBoardCell> guiBoardMap;
     private HashMap<Character, BufferedImage> imageHashMap;
+    private HashMap<Pair<Integer, Integer>, Character> boardMap;
 
     // Methods
     public GUI(Board board) {
@@ -24,6 +25,7 @@ public class GUI {
         boardPanel = new JPanel();
         guiBoardMap = new HashMap<>();
         imageHashMap = new HashMap<>();
+        boardMap = board.getBoardMap();
         loadImages();
         setupGUIBoard(this.board.getBoardMap());
 
@@ -65,7 +67,7 @@ public class GUI {
         }
     }
 
-    public void update(HashMap<Pair<Integer, Integer>, Character> boardMap) {
+    public void update() {
         for (int xCol=1; xCol<=board.getSize(); ++xCol) {
             for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);

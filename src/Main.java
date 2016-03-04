@@ -9,12 +9,12 @@ public class Main {
 
         ticTacToeBoard.makeMove(2,2, 'X');
         ticTacToeBoard.debugPrintBoardContentsBetter();
-        gui.update(ticTacToeBoard.getBoardMap());
+        gui.update();
 
         Pair<Integer, Integer> loc = Pair.with(1,1);
         ticTacToeBoard.makeMove(loc, 'O');
         ticTacToeBoard.debugPrintBoardContentsBetter();
-        gui.update(ticTacToeBoard.getBoardMap());
+        gui.update();
 
 
     }
