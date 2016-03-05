@@ -26,4 +26,8 @@ public class GUI extends JFrame {
         return client;
     }
 
+    public Board getSlave() {
+        return board;
+    }
+
 }

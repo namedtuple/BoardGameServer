@@ -1,7 +1,9 @@
 import org.javatuples.Pair;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board extends JPanel {
 
@@ -10,11 +12,13 @@ public class Board extends JPanel {
     private HashMap<Pair<Integer, Integer>, Character> guiBoardMap;
     private int length;     // size of board
     private int turn;       // 0 is player one turn, 1 is player two turn
+    private List<Tile> slaves;
 
     // Methods
     public Board(GUI gui, int length) {
         this.gui = gui;
         this.length = length;
+        this.slaves = new ArrayList<>();
         setupBoard();
     }
 
@@ -31,6 +35,7 @@ public class Board extends JPanel {
                 guiBoardMap.put(pair, '_');
                 Tile tile = new Tile(this, pair);
                 add(tile);
+                slaves.add(tile);
             }
         }
 
@@ -65,5 +70,9 @@ public class Board extends JPanel {
 
     public GUI getMaster() {
         return gui;
+    }
+
+    public List<Tile> getSlaves() {
+        return slaves;
     }
 }
