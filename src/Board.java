@@ -7,7 +7,7 @@ public class Board extends JPanel {
 
     // Fields
     private Client client;
-    private HashMap<Pair<Integer, Integer>, Character> boardMap;
+    private HashMap<Pair<Integer, Integer>, Character> guiBoardMap;
     private int length;       // size of board
     private int turn;       // 0 is player one turn, 1 is player two turn
 
@@ -24,11 +24,11 @@ public class Board extends JPanel {
      * at the end of this method.
      */
     private void setupBoard() {
-        boardMap = new HashMap<>();
+        guiBoardMap = new HashMap<>();
         for (int xCol = 1; xCol <= length; ++xCol) {
             for (int yRow = 1; yRow <= length; ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                boardMap.put(pair, '_');
+                guiBoardMap.put(pair, '_');
                 Tile tile = new Tile(client, this, pair);
                 add(tile);
             }
@@ -37,18 +37,18 @@ public class Board extends JPanel {
     }
 
     public void makeMove(Pair<Integer, Integer> location, char piece) {
-        boardMap.put(location, piece);
+        guiBoardMap.put(location, piece);
     }
 
     public void makeMove(int xCol, int yRow, char piece) {
-        boardMap.put(Pair.with(xCol, yRow), piece);
+        guiBoardMap.put(Pair.with(xCol, yRow), piece);
     }
 
     public void debugPrintBoardContentsBetter() {
         System.out.print("\n\n");
         for (int xCol = 1; xCol <= length; ++xCol) {
             for (int yRow = 1; yRow <= length; ++yRow) {
-                char val = boardMap.get(Pair.with(xCol, yRow));
+                char val = guiBoardMap.get(Pair.with(xCol, yRow));
                 System.out.print(val + " ");
             }
             System.out.println();
@@ -59,17 +59,17 @@ public class Board extends JPanel {
         return length;
     }
 
-    public HashMap<Pair<Integer, Integer>, Character> getBoardMap() {
-        return boardMap;
+    public HashMap<Pair<Integer, Integer>, Character> getGuiBoardMap() {
+        return guiBoardMap;
     }
 
     public char getValue(Pair<Integer, Integer> pair) {
-        return boardMap.get(pair);
+        return guiBoardMap.get(pair);
     }
 
     public Pair<Integer, Integer> getKey(char value) {
-        for (Pair<Integer, Integer> pair : boardMap.keySet()) {
-            if (boardMap.get(pair).equals(value)) {
+        for (Pair<Integer, Integer> pair : guiBoardMap.keySet()) {
+            if (guiBoardMap.get(pair).equals(value)) {
                 return pair;
             }
         }

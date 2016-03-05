@@ -18,14 +18,33 @@ public class ServerThread extends Thread {
     }
 
     public void run() {
-        send("Hello new client!");
+        Game game = null;
+        send("WELCOME");
         while (true) {
             try {
                 String msg = receive();
                 send("You said: " + msg);
+                if (msg.equals("TIC-TAC-TOE")) {
+                    game = new Game(this);
+                }
+                else if (game != null) {
+                    if (msg.startsWith("MOVE")) {
+
+                        int i = msg.indexOf('[');
+                        int j = msg.indexOf(',');
+                        int k = msg.indexOf(']');
+
+                        int x = Integer.parseInt(msg.substring(i+1, j).trim());
+                        int y = Integer.parseInt(msg.substring(j+1, k).trim());
+
+                        System.out.println(x);
+                        System.out.println(y);
+                    }
+                }
                 //send("You said: " + receive());
             } catch (IOException e) {
                 e.printStackTrace();
+                break;
             }
         }
     }
