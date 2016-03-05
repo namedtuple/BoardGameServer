@@ -8,7 +8,7 @@ public class Board extends JPanel {
     // Fields
     private Client client;
     private HashMap<Pair<Integer, Integer>, Character> guiBoardMap;
-    private int length;       // size of board
+    private int length;     // size of board
     private int turn;       // 0 is player one turn, 1 is player two turn
 
     // Methods
@@ -40,10 +40,6 @@ public class Board extends JPanel {
         guiBoardMap.put(location, piece);
     }
 
-    public void makeMove(int xCol, int yRow, char piece) {
-        guiBoardMap.put(Pair.with(xCol, yRow), piece);
-    }
-
     public void debugPrintBoardContentsBetter() {
         System.out.print("\n\n");
         for (int xCol = 1; xCol <= length; ++xCol) {
@@ -55,25 +51,8 @@ public class Board extends JPanel {
         }
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public HashMap<Pair<Integer, Integer>, Character> getGuiBoardMap() {
-        return guiBoardMap;
-    }
-
     public char getValue(Pair<Integer, Integer> pair) {
         return guiBoardMap.get(pair);
-    }
-
-    public Pair<Integer, Integer> getKey(char value) {
-        for (Pair<Integer, Integer> pair : guiBoardMap.keySet()) {
-            if (guiBoardMap.get(pair).equals(value)) {
-                return pair;
-            }
-        }
-        return null;
     }
 
     public int getTurn() {

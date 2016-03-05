@@ -25,19 +25,12 @@ public class Client {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
     }
-        //int i = 2;
-        //while (true) {
-        //    receive();
-        //    if (i > 0) {
-        //        send("Applesauce is tasty.");
-        //        --i;
-        //    }
-        //}
+
     public void go() throws IOException {
         while (true) {
             if (receive().equals("WELCOME")) {
                 send("TIC-TAC-TOE");
-                // create game board
+                // create Board here, as opposed to in GUI constructor?
             }
         }
     }
