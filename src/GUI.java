@@ -2,8 +2,6 @@ import org.javatuples.Pair;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
 
 public class GUI {
 
@@ -12,16 +10,13 @@ public class GUI {
     private JPanel boardPanel;
     private Board board;
     private Client client;
-    private HashMap<Pair<Integer, Integer>, JButton> guiBoardMap;
-    private HashMap<Character, BufferedImage> imageHashMap;
 
     // Methods
     public GUI(Board board, Client client) {
+        this.client = client;
         this.board = board;
         frame = new JFrame("GUI");
         boardPanel = new JPanel();
-        guiBoardMap = new HashMap<>();
-        imageHashMap = new HashMap<>();
         createBoard();
 
         boardPanel.setBackground(Color.yellow);
@@ -40,16 +35,11 @@ public class GUI {
      * at the end of this method.
      */
     public void createBoard() {
-        guiBoardMap = new HashMap<>();
         for (int xCol = 1; xCol <= board.getSize(); ++xCol) {
             for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                TileAction action = new TileAction(board, client);
-                ImageIcon icon = action.chooseIcon(board.getValue(pair));
-                Tile button = new Tile(pair, icon);
-                button.addActionListener(action);
-                guiBoardMap.put(pair, button);
-                boardPanel.add(button);
+                Tile tile = new Tile(client, board, pair);
+                boardPanel.add(tile);
             }
         }
     }
