@@ -15,9 +15,8 @@ public class Client {
 
     // Methods
     public static void main(String[] args) throws IOException {
-        Board ticTacToeBoard = new Board(3);
         Client client = new Client();
-        GUI gui = new GUI(ticTacToeBoard, client);
+        GUI gui = new GUI(client);
     }
 
     public Client() throws IOException {

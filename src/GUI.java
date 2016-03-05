@@ -12,9 +12,9 @@ public class GUI {
     private Client client;
 
     // Methods
-    public GUI(Board board, Client client) {
+    public GUI(Client client) {
         this.client = client;
-        this.board = board;
+        this.board = new Board(3);
         frame = new JFrame("GUI");
         boardPanel = new JPanel();
         createBoard();
