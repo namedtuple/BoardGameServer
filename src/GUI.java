@@ -1,11 +1,8 @@
 import org.javatuples.Pair;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 public class GUI {
@@ -25,7 +22,6 @@ public class GUI {
         boardPanel = new JPanel();
         guiBoardMap = new HashMap<>();
         imageHashMap = new HashMap<>();
-        loadImages();
         createBoard();
 
         boardPanel.setBackground(Color.yellow);
@@ -36,16 +32,6 @@ public class GUI {
         frame.setSize(450, 300);
         frame.setVisible(true);
         frame.setResizable(true);
-    }
-
-    public void loadImages() {
-        try {
-            imageHashMap.put('X', ImageIO.read(new File("img/x.png")));
-            imageHashMap.put('O', ImageIO.read(new File("img/o.png")));
-            imageHashMap.put('_', ImageIO.read(new File("img/blank.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /*
