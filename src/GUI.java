@@ -57,9 +57,9 @@ public class GUI {
         for (int xCol = 1; xCol <= board.getSize(); ++xCol) {
             for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                BoardButtonAction action = new BoardButtonAction(board);
+                TileAction action = new TileAction(board);
                 ImageIcon icon = action.chooseIcon(board.getValue(pair));
-                BoardButton button = new BoardButton(pair, icon);
+                Tile button = new Tile(pair, icon);
                 button.addActionListener(action);
                 guiBoardMap.put(pair, button);
                 boardPanel.add(button);

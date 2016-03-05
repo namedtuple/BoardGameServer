@@ -3,13 +3,13 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class BoardGameServer {
+public class Server {
 
     public static final short PORT_NUM = 6666;
 
     private ServerSocket serverSocket;
 
-    public BoardGameServer() throws IOException {
+    public Server() throws IOException {
         serverSocket = new ServerSocket();
         serverSocket.setReuseAddress(true);
         serverSocket.bind(new InetSocketAddress(PORT_NUM));
@@ -20,7 +20,7 @@ public class BoardGameServer {
             Socket newConnectionSocket = serverSocket.accept();
             System.out.println("New connection from: " + newConnectionSocket.getRemoteSocketAddress());
 
-            new BoardGameServerThread(newConnectionSocket).start();
+            new ServerThread(newConnectionSocket).start();
         }
     }
 
@@ -33,9 +33,9 @@ public class BoardGameServer {
     }
 
     public static void main(String[] args) {
-        BoardGameServer server = null;
+        Server server = null;
         try {
-            server = new BoardGameServer();
+            server = new Server();
             server.run();
         } catch (IOException e) {
             e.printStackTrace();

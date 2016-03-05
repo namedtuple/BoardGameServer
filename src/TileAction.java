@@ -6,14 +6,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class BoardButtonAction implements ActionListener {
+public class TileAction implements ActionListener {
 
     // Fields
     private Board board;
     private HashMap<Character, ImageIcon> imageHashMap;
 
     // Methods
-    public BoardButtonAction(Board board) {
+    public TileAction(Board board) {
         this.board = board;
         loadImages();
     }
@@ -34,7 +34,7 @@ public class BoardButtonAction implements ActionListener {
      * This will execute when a button object is clicked on the game board.
      * Gameboard will be properly updated to what is clicked as well.
      */ public void actionPerformed(ActionEvent e) {
-        BoardButton command = (BoardButton) e.getSource();
+        Tile command = (Tile) e.getSource();
         char iconChar = board.getTurn() == 0 ? 'X' : 'O';
         command.setIcon(chooseIcon(iconChar));
         command.setDisabledIcon(chooseIcon(iconChar));

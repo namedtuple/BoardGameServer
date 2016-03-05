@@ -4,14 +4,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class BoardGameServerThread extends Thread {
+public class ServerThread extends Thread {
 
     private Socket socket;
 
     private BufferedReader in;
     private PrintWriter out;
 
-    public BoardGameServerThread(Socket socket) throws IOException {
+    public ServerThread(Socket socket) throws IOException {
         this.socket = socket;
         in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         out = new PrintWriter(this.socket.getOutputStream(), true);
