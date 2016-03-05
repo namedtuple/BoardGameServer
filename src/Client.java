@@ -12,11 +12,11 @@ public class Client {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    private GUI gui;
 
     // Methods
     public static void main(String[] args) throws IOException {
         Client client = new Client();
-        GUI gui = new GUI(client);
         client.go();
     }
 
@@ -24,6 +24,8 @@ public class Client {
         socket = new Socket(SERVER_ADDRESS, PORT);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+        GUI gui = new GUI(this);
+
     }
 
     public void go() throws IOException {
@@ -45,4 +47,7 @@ public class Client {
         return msg;
     }
 
+    public GUI getSlave() {
+        return gui;
+    }
 }
