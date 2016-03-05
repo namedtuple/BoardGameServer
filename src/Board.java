@@ -6,14 +6,14 @@ import java.util.HashMap;
 public class Board extends JPanel {
 
     // Fields
-    private Client client;
+    private GUI gui;
     private HashMap<Pair<Integer, Integer>, Character> guiBoardMap;
     private int length;     // size of board
     private int turn;       // 0 is player one turn, 1 is player two turn
 
     // Methods
-    public Board(Client client, int length) {
-        this.client = client;
+    public Board(GUI gui, int length) {
+        this.gui = gui;
         this.length = length;
         setupBoard();
     }
@@ -29,7 +29,7 @@ public class Board extends JPanel {
             for (int yRow = 1; yRow <= length; ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
                 guiBoardMap.put(pair, '_');
-                Tile tile = new Tile(client, this, pair);
+                Tile tile = new Tile(this, pair);
                 add(tile);
             }
         }
@@ -61,5 +61,9 @@ public class Board extends JPanel {
 
     public void switchTurn() {
         turn = ((turn == 0) ? 1 : 0);
+    }
+
+    public GUI getMaster() {
+        return gui;
     }
 }

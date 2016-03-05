@@ -11,14 +11,12 @@ import java.util.HashMap;
 public class Tile extends JButton implements ActionListener {
 
     // Fields
-    private Client client;
     private Board board;
     private Pair<Integer, Integer> coordinates; //saves button coordinates
     private HashMap<Character, ImageIcon> imageHashMap;
 
     // Methods
-    public Tile(Client client, Board board, Pair<Integer, Integer> coordinates) {
-        this.client = client;
+    public Tile(Board board, Pair<Integer, Integer> coordinates) {
         this.board = board;
         this.coordinates = coordinates;
         loadImages();
@@ -53,7 +51,7 @@ public class Tile extends JButton implements ActionListener {
         board.switchTurn();
         System.out.println("You clicked '" + getCoordinates().toString() + "'");
         //client.send("You clicked " + getCoordinates().toString());
-        client.send("MOVE " + coordinates);
+        getMaster().getMaster().getMaster().send("MOVE " + coordinates);
     }
 
     // Helper method that will return an X or O icon
@@ -63,5 +61,9 @@ public class Tile extends JButton implements ActionListener {
 
     public Pair<Integer, Integer> getCoordinates() {
         return coordinates;
+    }
+
+    public Board getMaster() {
+        return board;
     }
 }
