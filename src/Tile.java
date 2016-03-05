@@ -52,6 +52,7 @@ public class Tile extends JButton implements ActionListener {
         board.debugPrintBoardContents();
         board.debugPrintBoardContentsBetter();
         board.switchTurn();
+        client.send("You clicked " + getCoordinates().toString());
     }
 
     // Helper method that will return an X or O icon

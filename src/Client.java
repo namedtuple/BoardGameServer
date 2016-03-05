@@ -29,7 +29,7 @@ public class Client {
         send("Applesauce is tasty.");
     }
 
-    private void send(String message) {
+    public void send(String message) {
         out.println(message);
     }
 
