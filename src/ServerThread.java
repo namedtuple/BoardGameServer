@@ -12,9 +12,12 @@ public class ServerThread extends Thread {
 
     private BufferedReader in;
     private PrintWriter out;
+    private char name;
 
-    public ServerThread(Socket socket) throws IOException {
+    public ServerThread(Socket socket, char name) throws IOException {
         this.socket = socket;
+        this.name = name;
+
         in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         out = new PrintWriter(this.socket.getOutputStream(), true);
     }
