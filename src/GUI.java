@@ -1,46 +1,25 @@
-import org.javatuples.Pair;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class GUI {
+public class GUI extends JFrame {
 
     // Fields
-    private JFrame frame;
-    private JPanel boardPanel;
     private Board board;
     private Client client;
 
     // Methods
     public GUI(Client client) {
         this.client = client;
-        this.board = new Board(3);
-        frame = new JFrame("GUI");
-        boardPanel = new JPanel();
-        createBoard();
+        this.board = new Board(client, 3);
 
-        boardPanel.setBackground(Color.yellow);
-        boardPanel.setLayout(new GridLayout(3, 3, 2, 2));
+        board.setBackground(Color.yellow);
+        board.setLayout(new GridLayout(3, 3, 2, 2));
 
-        frame.add(boardPanel, "Center");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(450, 300);
-        frame.setVisible(true);
-        frame.setResizable(true);
+        add(board, "Center");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(450, 300);
+        setVisible(true);
+        setResizable(true);
     }
 
-    /*
-     * This method will create a hashmap with keys being a button's coordinates,
-     * and the values are Button objects. Buttons are also added to the panel
-     * at the end of this method.
-     */
-    public void createBoard() {
-        for (int xCol = 1; xCol <= board.getSize(); ++xCol) {
-            for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
-                Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                Tile tile = new Tile(client, board, pair);
-                boardPanel.add(tile);
-            }
-        }
-    }
 }
