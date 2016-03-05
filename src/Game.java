@@ -27,12 +27,29 @@ public class Game {
         }
     }
 
-    public void makeMove(Pair<Integer, Integer> location, char piece) {
-        boardMap.put(location, piece);
+    public void makeMove(Pair<Integer, Integer> location) {
+        boardMap.put(location, getTurnAsChar());
+        switchTurn();
+        debugPrintBoardContentsBetter();
     }
 
     public void switchTurn() {
         turn = turn == 0 ? 1 : 0;
     }
 
+    public char getTurnAsChar() {
+        return turn == 0 ? 'X' : 'O';
+    }
+
+    public void debugPrintBoardContentsBetter() {
+        System.out.print("\n\n");
+        System.out.println("GAME CLASS");
+        for (int xCol = 1; xCol <= LENGTH; ++xCol) {
+            for (int yRow = 1; yRow <= LENGTH; ++yRow) {
+                char val = boardMap.get(Pair.with(xCol, yRow));
+                System.out.print(val + " ");
+            }
+            System.out.println();
+        }
+    }
 }

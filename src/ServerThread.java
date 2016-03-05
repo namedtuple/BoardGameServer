@@ -1,3 +1,5 @@
+import org.javatuples.Pair;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -39,6 +41,8 @@ public class ServerThread extends Thread {
 
                         System.out.println(x);
                         System.out.println(y);
+
+                        game.makeMove(Pair.with(x, y));
                     }
                 }
                 //send("You said: " + receive());
