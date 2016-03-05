@@ -21,7 +21,9 @@ public class ServerThread extends Thread {
         send("Hello new client!");
         while (true) {
             try {
-                send("You said: " + recv());
+                String msg = receive();
+                send("You said: " + msg);
+                //send("You said: " + receive());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -34,7 +36,9 @@ public class ServerThread extends Thread {
     }
 
     //returns the next line of stream
-    private String recv() throws IOException {
-        return in.readLine();
+    private String receive() throws IOException {
+        String msg = in.readLine();
+        System.out.println("Client says:  " + msg);
+        return msg;
     }
 }

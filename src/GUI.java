@@ -14,11 +14,12 @@ public class GUI {
     private JFrame frame;
     private JPanel boardPanel;
     private Board board;
+    private Client client;
     private HashMap<Pair<Integer, Integer>, JButton> guiBoardMap;
     private HashMap<Character, BufferedImage> imageHashMap;
 
     // Methods
-    public GUI(Board board) {
+    public GUI(Board board, Client client) {
         this.board = board;
         frame = new JFrame("GUI");
         boardPanel = new JPanel();
@@ -57,7 +58,7 @@ public class GUI {
         for (int xCol = 1; xCol <= board.getSize(); ++xCol) {
             for (int yRow = 1; yRow <= board.getSize(); ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                TileAction action = new TileAction(board);
+                TileAction action = new TileAction(board, client);
                 ImageIcon icon = action.chooseIcon(board.getValue(pair));
                 Tile button = new Tile(pair, icon);
                 button.addActionListener(action);

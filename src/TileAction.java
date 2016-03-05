@@ -10,11 +10,13 @@ public class TileAction implements ActionListener {
 
     // Fields
     private Board board;
+    private Client client;
     private HashMap<Character, ImageIcon> imageHashMap;
 
     // Methods
-    public TileAction(Board board) {
+    public TileAction(Board board, Client client) {
         this.board = board;
+        this.client = client;
         loadImages();
     }
 
