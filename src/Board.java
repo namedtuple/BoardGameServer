@@ -30,14 +30,8 @@ public class Board {
         boardMap.put(Pair.with(xCol, yRow), piece);
     }
 
-    public void debugPrintBoardContents() {
-        for (Map.Entry<Pair<Integer, Integer>, Character> entry : boardMap.entrySet()) {
-            System.out.println(entry.getKey() + " -> " + entry.getValue());
-        }
-        System.out.println();
-    }
-
     public void debugPrintBoardContentsBetter() {
+        System.out.print("\n\n");
         for (int xCol = 1; xCol <= size; ++xCol) {
             for (int yRow = 1; yRow <= size; ++yRow) {
                 char val = boardMap.get(Pair.with(xCol, yRow));
@@ -45,7 +39,6 @@ public class Board {
             }
             System.out.println();
         }
-        System.out.print("\n\n");
     }
 
     public int getSize() {

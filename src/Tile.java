@@ -49,7 +49,6 @@ public class Tile extends JButton implements ActionListener {
         command.setDisabledIcon(chooseIcon(iconChar));
         command.setEnabled(false);
         board.makeMove(command.getCoordinates(), iconChar);
-        board.debugPrintBoardContents();
         board.debugPrintBoardContentsBetter();
         board.switchTurn();
         client.send("You clicked " + getCoordinates().toString());
