@@ -24,8 +24,8 @@ public class Client {
         socket = new Socket(SERVER_ADDRESS, PORT);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        GUI gui = new GUI(this);
-        LoginScreen loginScreen = new LoginScreen("Login Screen");
+        GUI gui = new GUI(this, "GUI");
+        //LoginScreen loginScreen = new LoginScreen("Login Screen");
     }
 
     public void go() throws IOException {

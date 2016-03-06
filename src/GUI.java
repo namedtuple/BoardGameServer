@@ -8,7 +8,8 @@ public class GUI extends JFrame {
     private Client client;
 
     // Methods
-    public GUI(Client client) {
+    public GUI(Client client, String name) {
+        super(name);
         this.client = client;
         this.board = new Board(this, 3);
 
