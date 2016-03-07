@@ -2,14 +2,12 @@ import org.javatuples.Pair;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Board extends JPanel {
 
     // Fields
     private GUI gui;
-    private HashMap<Pair<Integer, Integer>, Character> guiBoardMap;
     private int length;     // size of board
     private List<Tile> slaves;
     private char ID;
@@ -29,11 +27,9 @@ public class Board extends JPanel {
      * at the end of this method.
      */
     private void setupBoard() {
-        guiBoardMap = new HashMap<>();
         for (int xCol = 1; xCol <= length; ++xCol) {
             for (int yRow = 1; yRow <= length; ++yRow) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                guiBoardMap.put(pair, '_');
                 Tile tile = new Tile(this, pair);
                 add(tile);
                 slaves.add(tile);
