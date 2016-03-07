@@ -33,8 +33,8 @@ public class Board extends JPanel {
      * at the end of this method.
      */
     private void setupBoard() {
-        for (int xCol = 1; xCol <= length; ++xCol) {
-            for (int yRow = 1; yRow <= length; ++yRow) {
+        for (int yRow = 1; yRow <= length; ++yRow) {
+            for (int xCol = 1; xCol <= length; ++xCol) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
                 Tile tile = new Tile(this, pair);
                 add(tile);

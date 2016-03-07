@@ -1,6 +1,7 @@
 import org.javatuples.Pair;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +16,14 @@ public class Tile extends JButton implements ActionListener {
         this.board = board;
         this.coordinates = coordinates;
         this.addActionListener(this);
+    }
+
+    // Constructor helpful for debugging
+    public Tile(Board board, Pair<Integer, Integer> coordinates, Color color) {
+        this.board = board;
+        this.coordinates = coordinates;
+        this.addActionListener(this);
+        this.setBackground(color);
     }
 
     /*

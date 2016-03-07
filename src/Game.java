@@ -38,8 +38,26 @@ public class Game {
     }
 
     public boolean hasWinner() {
-        //TODO: implement
-        return false;
+        // TL TM TR
+        // ML MM MR
+        // BL BM BR
+        char TL = boardMap.get(Pair.with(1,1));
+        char TM = boardMap.get(Pair.with(2,1));
+        char TR = boardMap.get(Pair.with(3,1));
+        char ML = boardMap.get(Pair.with(1,2));
+        char MM = boardMap.get(Pair.with(2,2));
+        char MR = boardMap.get(Pair.with(3,2));
+        char BL = boardMap.get(Pair.with(1,3));
+        char BM = boardMap.get(Pair.with(2,3));
+        char BR = boardMap.get(Pair.with(3,3));
+        return  (TL != '_' && TL == TM && TM == TR) ||  // top row
+                (ML != '_' && ML == MM && MM == MR) ||  // middle row
+                (BL != '_' && BL == BM && BM == BR) ||  // bottom row
+                (TL != '_' && TL == ML && ML == BL) ||  // left column
+                (TM != '_' && TM == MM && MM == BM) ||  // middle column
+                (TR != '_' && TR == MR && MR == BR) ||  // right column
+                (TL != '_' && TL == MM && MM == BR) ||  // top-left to bottom-right diagonal
+                (TR != '_' && TR == MM && MM == BL);    // top-right to bottom-left diagonal
     }
 
     public boolean boardFilledUp() {
@@ -48,9 +66,9 @@ public class Game {
     }
 
     public void debugPrintBoard() {
-        for (int xCol = 1; xCol <= LENGTH; ++xCol) {
+        for (int yRow = 1; yRow <= LENGTH; ++yRow) {
             System.out.print("  ");
-            for (int yRow = 1; yRow <= LENGTH; ++yRow) {
+            for (int xCol = 1; xCol <= LENGTH; ++xCol) {
                 char val = boardMap.get(Pair.with(xCol, yRow));
                 System.out.print(val + " ");
             }
