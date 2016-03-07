@@ -15,12 +15,12 @@ public class GUI extends JFrame {
 
         board.setBackground(Color.yellow);
         board.setLayout(new GridLayout(3, 3, 2, 2));
-
         add(board, "Center");
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
         setVisible(true);
-        setResizable(true);
+        setResizable(false);
     }
 
     public Client getMaster() {
