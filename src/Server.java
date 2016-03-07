@@ -5,11 +5,7 @@ import java.net.Socket;
 
 public class Server {
 
-    // Fields
-    public static final short PORT_NUM = 6666;
-    private ServerSocket serverSocket;
-
-    // Methods
+    // Main
     public static void main(String[] args) {
         Server server = null;
         try {
@@ -24,6 +20,11 @@ public class Server {
         }
     }
 
+    // Fields
+    public static final short PORT_NUM = 6666;
+    private ServerSocket serverSocket;
+
+    // Methods
     public Server() throws IOException {
         serverSocket = new ServerSocket();
         serverSocket.setReuseAddress(true);

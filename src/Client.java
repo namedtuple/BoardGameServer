@@ -8,6 +8,12 @@ import java.net.Socket;
 
 public class Client {
 
+    // Main
+    public static void main(String[] args) throws IOException {
+        Client client = new Client();
+        client.run();
+    }
+
     // Fields
     private final static String SERVER_ADDRESS = "localhost";
     private final static int PORT = 6666;
@@ -16,11 +22,6 @@ public class Client {
     private GUI gui;
 
     // Methods
-    public static void main(String[] args) throws IOException {
-        Client client = new Client();
-        client.run();
-    }
-
     public Client() throws IOException {
         Socket socket = new Socket(SERVER_ADDRESS, PORT);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
