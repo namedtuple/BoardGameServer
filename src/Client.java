@@ -47,6 +47,10 @@ public class Client {
             }
             else if (msg.startsWith("OPPONENT_MOVED")) {
                 getSlave().getSlave().getSlave(extractPosition(msg)).setOpponentIcon();
+                getSlave().appendToTitle("your turn");
+            }
+            else if (msg.startsWith("MESSAGE")) {
+                getSlave().appendToTitle(msg.substring(8));
             }
         }
     }
