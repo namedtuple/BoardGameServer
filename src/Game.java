@@ -7,16 +7,11 @@ public class Game {
     // Fields
     private final static int LENGTH = 3;
     private HashMap<Pair<Integer, Integer>, Character> boardMap;
-    private int turn;
-    private ServerThread serverThread1;
-    private ServerThread serverThread2;
     private ServerThread currentPlayer;
 
     // Methods
-    public Game(ServerThread serverThread1, ServerThread serverThread2) {
-        this.serverThread1 = serverThread1;
-        this.serverThread2 = serverThread2;
-        this.currentPlayer = serverThread1;
+    public Game(ServerThread currentPlayer) {
+        this.currentPlayer = currentPlayer;
         setupBoardMap();
         System.out.println("Game created!");
     }
@@ -36,23 +31,10 @@ public class Game {
             boardMap.put(location, currentPlayer.getID());
             currentPlayer = currentPlayer.getOpponent();
             currentPlayer.opponentMoved(location);
+            debugPrintBoardContentsBetter();
             return true;
         }
         return false;
-    }
-
-    public void makeMove(Pair<Integer, Integer> location) {
-        boardMap.put(location, getTurnAsChar());
-        switchTurn();
-        debugPrintBoardContentsBetter();
-    }
-
-    public void switchTurn() {
-        turn = turn == 0 ? 1 : 0;
-    }
-
-    public char getTurnAsChar() {
-        return turn == 0 ? 'X' : 'O';
     }
 
     public void debugPrintBoardContentsBetter() {
@@ -67,10 +49,6 @@ public class Game {
         }
     }
 
-    public ServerThread getCurrentPlayer() {
-        return currentPlayer;
-    }
-
     public boolean hasWinner() {
         //TODO: implement
         return false;
@@ -80,4 +58,5 @@ public class Game {
         //TODO: implement
         return false;
     }
+
 }

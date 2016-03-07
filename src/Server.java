@@ -5,10 +5,11 @@ import java.net.Socket;
 
 public class Server {
 
+    // Fields
     public static final short PORT_NUM = 6666;
-
     private ServerSocket serverSocket;
 
+    // Methods
     public Server() throws IOException {
         serverSocket = new ServerSocket();
         serverSocket.setReuseAddress(true);
@@ -29,12 +30,10 @@ public class Server {
             serverThread1.setOpponent(serverThread2);
             serverThread2.setOpponent(serverThread1);
 
-            Game game = new Game(serverThread1, serverThread2);
+            Game game = new Game(serverThread1);
 
             serverThread1.start(game);
             serverThread2.start(game);
-
-
         }
     }
 
@@ -59,4 +58,5 @@ public class Server {
             }
         }
     }
+
 }

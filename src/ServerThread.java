@@ -8,6 +8,7 @@ import java.net.Socket;
 
 public class ServerThread extends Thread {
 
+    // Fields
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
@@ -15,6 +16,7 @@ public class ServerThread extends Thread {
     private ServerThread opponentServerThread;
     private Game game;
 
+    // Methods
     public ServerThread(Socket socket, char ID) throws IOException {
         this.socket = socket;
         this.ID = ID;
@@ -50,9 +52,7 @@ public class ServerThread extends Thread {
                         send("VALID_MOVE");
                         send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
                     }
-                    //game.makeMove(Pair.with(x, y));
                 }
-                //send("You said: " + receive());
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
@@ -87,4 +87,5 @@ public class ServerThread extends Thread {
         send("OPPONENT_MOVED " + location);
         send(game.hasWinner() ? "DEFEAT" : game.boardFilledUp() ? "TIE" : "");
     }
+
 }
