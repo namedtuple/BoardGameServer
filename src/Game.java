@@ -61,8 +61,12 @@ public class Game {
     }
 
     public boolean boardFilledUp() {
-        //TODO: implement
-        return false;
+        for (Character c : boardMap.values()) {
+            if (c == '_') {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void debugPrintBoard() {
@@ -74,7 +78,6 @@ public class Game {
             }
             System.out.println();
         }
-        System.out.print("\n\n");
     }
 
 }

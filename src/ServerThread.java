@@ -66,6 +66,7 @@ public class ServerThread extends Thread {
     // Returns the next line of stream from Client
     private String receive() throws IOException {
         String msg = in.readLine();
+        System.out.println("-----------------------------------------------------------------------------");
         System.out.println("Client " + ID + " says:  " + msg);
         return msg;
     }
