@@ -49,6 +49,7 @@ public class ServerThread extends Thread {
     }
 
     // Helper method to obtain position Pair from received String message
+    @SuppressWarnings("Duplicates")
     public Pair<Integer, Integer> extractPosition(String message) {
         int i = message.indexOf('[');
         int j = message.indexOf(',');

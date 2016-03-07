@@ -70,6 +70,7 @@ public class Client {
     }
 
     // Helper method to obtain position Pair from received String message
+    @SuppressWarnings("Duplicates")
     private Pair<Integer, Integer> extractPosition(String message) {
         int i = message.indexOf('[');
         int j = message.indexOf(',');
