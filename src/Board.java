@@ -8,6 +8,7 @@ public class Board extends JPanel {
     private GUI gui;
     private int length;     // size of board
     private char ID;
+    private Tile tile;
 
     // Methods
     public Board(GUI gui, int length) {
@@ -26,6 +27,7 @@ public class Board extends JPanel {
             for (int xCol = 1; xCol <= length; ++xCol) {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
                 Tile tile = new Tile(this, pair);
+                this.tile = tile; // any Tile instance works here
                 add(tile);
             }
         }
@@ -47,10 +49,10 @@ public class Board extends JPanel {
             ID = request.charAt(8);
         }
         else if (request.startsWith("VALID_MOVE")){
-            Tile.handleRequest(request);
+            tile.handleRequest(request);
         }
         else if (request.startsWith("OPPONENT_MOVED")) {
-            Tile.handleRequest(request);
+            tile.handleRequest(request);
         }
     }
 

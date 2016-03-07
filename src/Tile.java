@@ -82,7 +82,7 @@ public class Tile extends JButton implements ActionListener {
         return Pair.with(x, y);
     }
 
-    public static void handleRequest(String request) {
+    public void handleRequest(String request) {
         if (request.startsWith("MOVE")) {
             board.handleRequest(request);
         }
