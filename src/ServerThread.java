@@ -48,34 +48,6 @@ public class ServerThread extends Thread {
         }
     }
 
-    //sends message to client
-    private void send(String message) {
-        out.println(message);
-    }
-
-    //returns the next line of stream
-    private String receive() throws IOException {
-        String msg = in.readLine();
-        System.out.println("Client " + ID + " says:  " + msg);
-        return msg;
-    }
-
-    public ServerThread getOpponent() {
-        return opponentServerThread;
-    }
-    public void setOpponent(ServerThread opponentServerThread) {
-        this.opponentServerThread = opponentServerThread;
-    }
-
-    public char getID() {
-        return ID;
-    }
-
-    public void opponentMoved(Pair<Integer, Integer> location) {
-        send("OPPONENT_MOVED " + location);
-        send(game.hasWinner() ? "DEFEAT" : game.boardFilledUp() ? "TIE" : "");
-    }
-
     // Helper method to obtain position Pair from received String message
     public Pair<Integer, Integer> extractPosition(String message) {
         int i = message.indexOf('[');
@@ -85,4 +57,34 @@ public class ServerThread extends Thread {
         int y = Integer.parseInt(message.substring(j+1, k).trim());
         return Pair.with(x, y);
     }
+
+    // Sends message to Client
+    private void send(String message) {
+        out.println(message);
+    }
+
+    // Returns the next line of stream from Client
+    private String receive() throws IOException {
+        String msg = in.readLine();
+        System.out.println("Client " + ID + " says:  " + msg);
+        return msg;
+    }
+
+    public void opponentMoved(Pair<Integer, Integer> location) {
+        send("OPPONENT_MOVED " + location);
+        send(game.hasWinner() ? "DEFEAT" : game.boardFilledUp() ? "TIE" : "");
+    }
+
+    public char getID() {
+        return ID;
+    }
+
+    public ServerThread getOpponent() {
+        return opponentServerThread;
+    }
+
+    public void setOpponent(ServerThread opponentServerThread) {
+        this.opponentServerThread = opponentServerThread;
+    }
+
 }

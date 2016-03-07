@@ -31,22 +31,10 @@ public class Game {
             boardMap.put(location, currentPlayer.getID());
             currentPlayer = currentPlayer.getOpponent();
             currentPlayer.opponentMoved(location);
-            debugPrintBoardContentsBetter();
+            debugPrintBoard();
             return true;
         }
         return false;
-    }
-
-    public void debugPrintBoardContentsBetter() {
-        for (int xCol = 1; xCol <= LENGTH; ++xCol) {
-            System.out.print("  ");
-            for (int yRow = 1; yRow <= LENGTH; ++yRow) {
-                char val = boardMap.get(Pair.with(xCol, yRow));
-                System.out.print(val + " ");
-            }
-            System.out.println();
-        }
-        System.out.print("\n\n");
     }
 
     public boolean hasWinner() {
@@ -57,6 +45,18 @@ public class Game {
     public boolean boardFilledUp() {
         //TODO: implement
         return false;
+    }
+
+    public void debugPrintBoard() {
+        for (int xCol = 1; xCol <= LENGTH; ++xCol) {
+            System.out.print("  ");
+            for (int yRow = 1; yRow <= LENGTH; ++yRow) {
+                char val = boardMap.get(Pair.with(xCol, yRow));
+                System.out.print(val + " ");
+            }
+            System.out.println();
+        }
+        System.out.print("\n\n");
     }
 
 }

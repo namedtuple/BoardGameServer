@@ -10,6 +10,20 @@ public class Server {
     private ServerSocket serverSocket;
 
     // Methods
+    public static void main(String[] args) {
+        Server server = null;
+        try {
+            server = new Server();
+            server.run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (server != null) {
+                server.close();
+            }
+        }
+    }
+
     public Server() throws IOException {
         serverSocket = new ServerSocket();
         serverSocket.setReuseAddress(true);
@@ -43,20 +57,6 @@ public class Server {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        Server server = null;
-        try {
-            server = new Server();
-            server.run();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (server != null) {
-                server.close();
-            }
         }
     }
 

@@ -19,7 +19,7 @@ public class Client {
     // Methods
     public static void main(String[] args) throws IOException {
         Client client = new Client();
-        client.go();
+        client.run();
     }
 
     public Client() throws IOException {
@@ -30,7 +30,7 @@ public class Client {
         //LoginScreen loginScreen = new LoginScreen("Login Screen");
     }
 
-    public void go() throws IOException {
+    public void run() throws IOException {
         System.out.println("Client running");
         String msg;
         while (true) {
@@ -61,10 +61,12 @@ public class Client {
         return Pair.with(x, y);
     }
 
+    // Sends message to Server
     public void send(String message) {
         out.println(message);
     }
 
+    // Returns the next line of stream from Server
     private String receive() throws IOException {
         String msg = in.readLine();
         if (!msg.equals("")) {
