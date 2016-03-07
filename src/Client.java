@@ -32,6 +32,7 @@ public class Client {
     }
 
     public void go() throws IOException {
+        System.out.println("Client running");
         String msg;
         while (true) {
             msg = receive();
@@ -54,11 +55,7 @@ public class Client {
                 int x = Integer.parseInt(msg.substring(i+1, j).trim());
                 int y = Integer.parseInt(msg.substring(j+1, k).trim());
 
-                System.out.println(x);
-                System.out.println(y);
-
                 getSlave().getSlave().getSlave(Pair.with(x, y)).setOpponentIcon();
-
             }
         }
     }
@@ -69,7 +66,9 @@ public class Client {
 
     private String receive() throws IOException {
         String msg = in.readLine();
-        System.out.println("Server says:  " + msg);
+        if (!msg.equals("")) {
+            System.out.println("Server says:  " + msg);
+        }
         return msg;
     }
 

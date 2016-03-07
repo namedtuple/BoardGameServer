@@ -13,7 +13,7 @@ public class Game {
     public Game(ServerThread currentPlayer) {
         this.currentPlayer = currentPlayer;
         setupBoardMap();
-        System.out.println("Game created!");
+        System.out.println("Game created");
     }
 
     private void setupBoardMap() {
@@ -38,15 +38,15 @@ public class Game {
     }
 
     public void debugPrintBoardContentsBetter() {
-        System.out.print("\n\n");
-        System.out.println("GAME CLASS");
         for (int xCol = 1; xCol <= LENGTH; ++xCol) {
+            System.out.print("  ");
             for (int yRow = 1; yRow <= LENGTH; ++yRow) {
                 char val = boardMap.get(Pair.with(xCol, yRow));
                 System.out.print(val + " ");
             }
             System.out.println();
         }
+        System.out.print("\n\n");
     }
 
     public boolean hasWinner() {

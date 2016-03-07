@@ -17,6 +17,7 @@ public class Server {
     }
 
     public void run() throws IOException {
+        System.out.println("Server running");
         while (true) {
 
             Socket newConnectionSocket1 = serverSocket.accept();

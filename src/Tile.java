@@ -23,7 +23,6 @@ public class Tile extends JButton implements ActionListener {
      * Gameboard will be properly updated to what is clicked as well.
      */
     public void actionPerformed(ActionEvent e) {
-        System.out.println("You clicked '" + getCoordinates().toString() + "'");
         getMaster().setLastClickedTile(this);
         getMaster().getMaster().getMaster().send("MOVE " + coordinates);
     }

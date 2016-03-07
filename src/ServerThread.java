@@ -9,7 +9,6 @@ import java.net.Socket;
 public class ServerThread extends Thread {
 
     // Fields
-    private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
     private char ID;
@@ -18,11 +17,9 @@ public class ServerThread extends Thread {
 
     // Methods
     public ServerThread(Socket socket, char ID) throws IOException {
-        this.socket = socket;
         this.ID = ID;
-
-        in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        out = new PrintWriter(this.socket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(), true);
     }
 
     public void start(Game game) {
@@ -45,9 +42,6 @@ public class ServerThread extends Thread {
                     int x = Integer.parseInt(msg.substring(i+1, j).trim());
                     int y = Integer.parseInt(msg.substring(j+1, k).trim());
 
-                    System.out.println(x);
-                    System.out.println(y);
-
                     if (game.legalMove(Pair.with(x, y), this)) {
                         send("VALID_MOVE");
                         send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
@@ -68,7 +62,7 @@ public class ServerThread extends Thread {
     //returns the next line of stream
     private String receive() throws IOException {
         String msg = in.readLine();
-        System.out.println("Client says:  " + msg);
+        System.out.println("Client " + ID + " says:  " + msg);
         return msg;
     }
 
