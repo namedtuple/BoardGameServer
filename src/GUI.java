@@ -17,7 +17,7 @@ public class GUI extends JFrame {
         board.setLayout(new GridLayout(3, 3, 2, 2));
 
         add(board, "Center");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
         setVisible(true);
         setResizable(true);

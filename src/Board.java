@@ -54,37 +54,18 @@ public class Board extends JPanel {
         }
     }
 
+    // Called by Tile, returns an ImageIcon for the X or O icon
+    public ImageIcon chooseIcon(char piece) {
+        return imageHashMap.get(piece);
+    }
+
     public GUI getMaster() {
         return gui;
     }
 
-    public List<Tile> getSlaves() {
-        return slaves;
-    }
-
-    public void setID(char ID) {
-        this.ID = ID;
-    }
-
-    public char getID() {
-        return ID;
-    }
-
-    public char getOpponentID() {
-        return ID == 'X' ? 'O' : 'X';
-    }
-
-    public void setLastClickedTile(Tile lastClickedTile) {
-        this.lastClickedTile = lastClickedTile;
-    }
-
-    public Tile getLastClickedTile() {
-        return lastClickedTile;
-    }
-
     public Tile getSlave(Pair<Integer, Integer> location) {
         Tile returnTile = null;
-        for (Tile tile : getSlaves()) {
+        for (Tile tile : slaves) {
             if (tile.getCoordinates().equals(location)) {
                 returnTile = tile;
                 break;
@@ -93,9 +74,24 @@ public class Board extends JPanel {
         return returnTile;
     }
 
-    // Helper method that will return an X or O icon
-    public ImageIcon chooseIcon(char piece) {
-        return imageHashMap.get(piece);
+    public char getID() {
+        return ID;
+}
+
+    public void setID(char ID) {
+        this.ID = ID;
+    }
+
+    public char getOpponentID() {
+        return ID == 'X' ? 'O' : 'X';
+    }
+
+    public Tile getLastClickedTile() {
+        return lastClickedTile;
+    }
+
+    public void setLastClickedTile(Tile lastClickedTile) {
+        this.lastClickedTile = lastClickedTile;
     }
 
 }

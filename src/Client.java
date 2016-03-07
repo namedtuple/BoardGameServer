@@ -15,7 +15,6 @@ public class Client {
     private BufferedReader in;
     private PrintWriter out;
     private GUI gui;
-    private char ID;
 
     // Methods
     public static void main(String[] args) throws IOException {
@@ -37,7 +36,7 @@ public class Client {
         while (true) {
             msg = receive();
             if (msg.startsWith("WELCOME")) {
-                ID = msg.charAt(8);
+                char ID = msg.charAt(8);
                 getSlave().getSlave().setID(ID);
             }
             else if (msg.startsWith("VALID_MOVE")) {
@@ -50,6 +49,16 @@ public class Client {
                 getSlave().getSlave().getSlave(extractPosition(msg)).setOpponentIcon();
             }
         }
+    }
+
+    // Helper method to obtain position Pair from received String message
+    private Pair<Integer, Integer> extractPosition(String message) {
+        int i = message.indexOf('[');
+        int j = message.indexOf(',');
+        int k = message.indexOf(']');
+        int x = Integer.parseInt(message.substring(i+1, j).trim());
+        int y = Integer.parseInt(message.substring(j+1, k).trim());
+        return Pair.with(x, y);
     }
 
     public void send(String message) {
@@ -68,13 +77,4 @@ public class Client {
         return gui;
     }
 
-    // Helper method to obtain position Pair from received String message
-    public Pair<Integer, Integer> extractPosition(String message) {
-        int i = message.indexOf('[');
-        int j = message.indexOf(',');
-        int k = message.indexOf(']');
-        int x = Integer.parseInt(message.substring(i+1, j).trim());
-        int y = Integer.parseInt(message.substring(j+1, k).trim());
-        return Pair.with(x, y);
-    }
 }

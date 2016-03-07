@@ -17,22 +17,22 @@ public class Tile extends JButton implements ActionListener {
         this.addActionListener(this);
     }
 
-    @Override
     /*
      * This will execute when a button object is clicked on the game board.
      * Gameboard will be properly updated to what is clicked as well.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         getMaster().setLastClickedTile(this);
         getMaster().getMaster().getMaster().send("MOVE " + coordinates);
     }
 
-    public Pair<Integer, Integer> getCoordinates() {
-        return coordinates;
-    }
-
     public Board getMaster() {
         return board;
+    }
+
+    public Pair<Integer, Integer> getCoordinates() {
+        return coordinates;
     }
 
     public void setIcon() {
