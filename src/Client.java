@@ -1,5 +1,3 @@
-import org.javatuples.Pair;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,48 +34,30 @@ public class Client {
         while (true) {
             msg = receive();
             if (msg.startsWith("WELCOME")) {
-                char ID = msg.charAt(8);
-                getSlave().getSlave().setID(ID);
-                getSlave().setTitle("" + ID);
+                handleRequest(msg);
             }
             else if (msg.startsWith("VALID_MOVE")) {
-                // Set position to appropriate icon.
-                // How do we know which icon to set?
-                //   Because this is VALID_MOVE and not OPPONENT_MOVED; so, use ID of Board.
-                getSlave().getSlave().getLastClickedTile().setIcon();
-                getSlave().appendToTitle("Opponent's turn");
+                handleRequest(msg);
             }
             else if (msg.startsWith("OPPONENT_MOVED")) {
-                getSlave().getSlave().getSlave(extractPosition(msg)).setOpponentIcon();
-                getSlave().appendToTitle("Your turn");
+                handleRequest(msg);
             }
             else if (msg.startsWith("VICTORY")) {
-                getSlave().appendToTitle("You win");
+                handleRequest(msg);
                 break;
             }
             else if (msg.startsWith("DEFEAT")) {
-                getSlave().appendToTitle("You lose");
+                handleRequest(msg);
                 break;
             }
             else if (msg.startsWith("TIE")) {
-                getSlave().appendToTitle("You tied");
+                handleRequest(msg);
                 break;
             }
             else if (msg.startsWith("MESSAGE")) {
-                getSlave().appendToTitle(msg.substring(8));
+                handleRequest(msg);
             }
         }
-    }
-
-    // Helper method to obtain position Pair from received String message
-    @SuppressWarnings("Duplicates")
-    private Pair<Integer, Integer> extractPosition(String message) {
-        int i = message.indexOf('[');
-        int j = message.indexOf(',');
-        int k = message.indexOf(']');
-        int x = Integer.parseInt(message.substring(i+1, j).trim());
-        int y = Integer.parseInt(message.substring(j+1, k).trim());
-        return Pair.with(x, y);
     }
 
     // Sends message to Server
@@ -94,8 +74,12 @@ public class Client {
         return msg;
     }
 
-    public GUI getSlave() {
-        return gui;
+    public void handleRequest(String request) {
+        if (request.startsWith("MOVE")) {
+            send(request);
+        }
+        else {
+            gui.handleRequest(request);
+        }
     }
-
 }

@@ -1,23 +1,18 @@
 import org.javatuples.Pair;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Board extends JPanel {
 
     // Fields
     private GUI gui;
     private int length;     // size of board
-    private List<Tile> slaves;
     private char ID;
-    private Tile lastClickedTile;
 
     // Methods
     public Board(GUI gui, int length) {
         this.gui = gui;
         this.length = length;
-        this.slaves = new ArrayList<>();
         setupBoard();
     }
 
@@ -32,44 +27,31 @@ public class Board extends JPanel {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
                 Tile tile = new Tile(this, pair);
                 add(tile);
-                slaves.add(tile);
             }
         }
-    }
-
-    public GUI getMaster() {
-        return gui;
-    }
-
-    public Tile getSlave(Pair<Integer, Integer> location) {
-        Tile returnTile = null;
-        for (Tile tile : slaves) {
-            if (tile.getCoordinates().equals(location)) {
-                returnTile = tile;
-                break;
-            }
-        }
-        return returnTile;
     }
 
     public char getID() {
         return ID;
-}
-
-    public void setID(char ID) {
-        this.ID = ID;
     }
 
     public char getOpponentID() {
         return ID == 'X' ? 'O' : 'X';
     }
 
-    public Tile getLastClickedTile() {
-        return lastClickedTile;
-    }
-
-    public void setLastClickedTile(Tile lastClickedTile) {
-        this.lastClickedTile = lastClickedTile;
+    public void handleRequest(String request) {
+        if (request.startsWith("MOVE")) {
+            gui.handleRequest(request);
+        }
+        else if (request.startsWith("WELCOME")) {
+            ID = request.charAt(8);
+        }
+        else if (request.startsWith("VALID_MOVE")){
+            Tile.handleRequest(request);
+        }
+        else if (request.startsWith("OPPONENT_MOVED")) {
+            Tile.handleRequest(request);
+        }
     }
 
 }

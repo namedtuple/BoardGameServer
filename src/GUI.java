@@ -4,8 +4,8 @@ import java.awt.*;
 public class GUI extends JFrame {
 
     // Fields
-    private Board board;
     private Client client;
+    private Board board;
     private int numTitleChanges = 0;
     private String baseTitle;
 
@@ -25,14 +25,6 @@ public class GUI extends JFrame {
         setResizable(false);
     }
 
-    public Client getMaster() {
-        return client;
-    }
-
-    public Board getSlave() {
-        return board;
-    }
-
     @Override
     public void setTitle(String title) {
         if (numTitleChanges < 1) {
@@ -44,6 +36,39 @@ public class GUI extends JFrame {
 
     public void appendToTitle(String toAppend) {
         setTitle(baseTitle + " - \"" + toAppend + "\"");
+    }
+
+    public void handleRequest(String request) {
+        if (request.startsWith("MOVE")) {
+            client.handleRequest(request);
+        }
+        else if (request.startsWith("WELCOME")) {
+            setTitle("" + request.charAt(8));
+            board.handleRequest(request);
+        }
+        else if (request.startsWith("VALID_MOVE")){
+            appendToTitle("Opponent's turn");
+            board.handleRequest(request);
+        }
+        else if (request.startsWith("OPPONENT_MOVED")) {
+            appendToTitle("Your turn");
+            board.handleRequest(request);
+        }
+        else if (request.startsWith("VICTORY")) {
+            appendToTitle("You win");
+        }
+        else if (request.startsWith("DEFEAT")) {
+            appendToTitle("You lose");
+        }
+        else if (request.startsWith("TIE")) {
+            appendToTitle("You tie");
+        }
+        else if (request.startsWith("MESSAGE")) {
+            appendToTitle(request.substring(8));
+        }
+        else {
+            board.handleRequest(request);
+        }
     }
 
 }
