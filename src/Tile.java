@@ -20,7 +20,6 @@ public class Tile extends JButton implements ActionListener {
         this.board = board;
         this.coordinates = coordinates;
         loadImages();
-        chooseIcon(board.getValue(coordinates));
         this.addActionListener(this);
     }
 
