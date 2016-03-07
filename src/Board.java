@@ -1,11 +1,7 @@
 import org.javatuples.Pair;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Board extends JPanel {
@@ -16,7 +12,6 @@ public class Board extends JPanel {
     private List<Tile> slaves;
     private char ID;
     private Tile lastClickedTile;
-    private HashMap<Character, ImageIcon> imageHashMap;
 
     // Methods
     public Board(GUI gui, int length) {
@@ -24,7 +19,6 @@ public class Board extends JPanel {
         this.length = length;
         this.slaves = new ArrayList<>();
         setupBoard();
-        loadImages();
     }
 
     /*
@@ -41,22 +35,6 @@ public class Board extends JPanel {
                 slaves.add(tile);
             }
         }
-    }
-
-    public void loadImages() {
-        imageHashMap = new HashMap<>();
-        try {
-            imageHashMap.put('X', new ImageIcon(ImageIO.read(new File("img/x.png"))));
-            imageHashMap.put('O', new ImageIcon(ImageIO.read(new File("img/o.png"))));
-            imageHashMap.put('_', new ImageIcon(ImageIO.read(new File("img/blank.png"))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Called by Tile, returns an ImageIcon for the X or O icon
-    public ImageIcon chooseIcon(char piece) {
-        return imageHashMap.get(piece);
     }
 
     public GUI getMaster() {
