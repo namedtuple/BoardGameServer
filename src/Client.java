@@ -1,3 +1,5 @@
+import org.javatuples.Pair;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +15,7 @@ public class Client {
     private BufferedReader in;
     private PrintWriter out;
     private GUI gui;
+    private char ID;
 
     // Methods
     public static void main(String[] args) throws IOException {
@@ -24,15 +27,38 @@ public class Client {
         socket = new Socket(SERVER_ADDRESS, PORT);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        GUI gui = new GUI(this, "GUI");
+        gui = new GUI(this, "GUI");
         //LoginScreen loginScreen = new LoginScreen("Login Screen");
     }
 
     public void go() throws IOException {
+        String msg;
         while (true) {
-            if (receive().equals("WELCOME")) {
-                send("TIC-TAC-TOE");
-                // create Board here, as opposed to in GUI constructor?
+            msg = receive();
+            if (msg.startsWith("WELCOME")) {
+                ID = msg.charAt(8);
+                getSlave().getSlave().setID(ID);
+            }
+            else if (msg.startsWith("VALID_MOVE")) {
+                // Set position to appropriate icon.
+                // How do we know which icon to set?
+                //   Because this is VALID_MOVE and not OPPONENT_MOVED; so, use ID of Board.
+                getSlave().getSlave().getLastClickedTile().setIcon();
+            }
+            else if (msg.startsWith("OPPONENT_MOVED")) {
+
+                int i = msg.indexOf('[');
+                int j = msg.indexOf(',');
+                int k = msg.indexOf(']');
+
+                int x = Integer.parseInt(msg.substring(i+1, j).trim());
+                int y = Integer.parseInt(msg.substring(j+1, k).trim());
+
+                System.out.println(x);
+                System.out.println(y);
+
+                getSlave().getSlave().getSlave(Pair.with(x, y)).setOpponentIcon();
+
             }
         }
     }

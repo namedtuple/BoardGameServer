@@ -41,16 +41,9 @@ public class Tile extends JButton implements ActionListener {
      * Gameboard will be properly updated to what is clicked as well.
      */
     public void actionPerformed(ActionEvent e) {
-        Tile command = (Tile) e.getSource();
-        char iconChar = board.getTurn() == 0 ? 'X' : 'O';
-        command.setIcon(chooseIcon(iconChar));
-        command.setDisabledIcon(chooseIcon(iconChar));
-        command.setEnabled(false);
-        board.makeMove(command.getCoordinates(), iconChar);
-        board.debugPrintBoardContentsBetter();
-        board.switchTurn();
         System.out.println("You clicked '" + getCoordinates().toString() + "'");
         //client.send("You clicked " + getCoordinates().toString());
+        getMaster().setLastClickedTile(this);
         getMaster().getMaster().getMaster().send("MOVE " + coordinates);
     }
 
@@ -65,5 +58,19 @@ public class Tile extends JButton implements ActionListener {
 
     public Board getMaster() {
         return board;
+    }
+
+    public void setIcon() {
+        char ID = board.getID();
+        this.setIcon(chooseIcon(ID));
+        this.setDisabledIcon(chooseIcon(ID));
+        this.setEnabled(false);
+    }
+
+    public void setOpponentIcon() {
+        char ID = board.getOpponentID();
+        this.setIcon(chooseIcon(ID));
+        this.setDisabledIcon(chooseIcon(ID));
+        this.setEnabled(false);
     }
 }

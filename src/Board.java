@@ -13,6 +13,8 @@ public class Board extends JPanel {
     private int length;     // size of board
     private int turn;       // 0 is player one turn, 1 is player two turn
     private List<Tile> slaves;
+    private char ID;
+    private Tile lastClickedTile;
 
     // Methods
     public Board(GUI gui, int length) {
@@ -75,4 +77,36 @@ public class Board extends JPanel {
     public List<Tile> getSlaves() {
         return slaves;
     }
+
+    public void setID(char ID) {
+        this.ID = ID;
+    }
+
+    public char getID() {
+        return ID;
+    }
+
+    public char getOpponentID() {
+        return ID == 'X' ? 'O' : 'X';
+    }
+
+    public void setLastClickedTile(Tile lastClickedTile) {
+        this.lastClickedTile = lastClickedTile;
+    }
+
+    public Tile getLastClickedTile() {
+        return lastClickedTile;
+    }
+
+    public Tile getSlave(Pair<Integer, Integer> location) {
+        Tile returnTile = null;
+        for (Tile tile : getSlaves()) {
+            if (tile.getCoordinates().equals(location)) {
+                returnTile = tile;
+                break;
+            }
+        }
+        return returnTile;
+    }
+
 }

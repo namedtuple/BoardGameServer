@@ -8,11 +8,15 @@ public class Game {
     private final static int LENGTH = 3;
     private HashMap<Pair<Integer, Integer>, Character> boardMap;
     private int turn;
-    private ServerThread serverThread;
+    private ServerThread serverThread1;
+    private ServerThread serverThread2;
+    private ServerThread currentPlayer;
 
     // Methods
-    public Game(ServerThread serverThread) {
-        this.serverThread = serverThread;
+    public Game(ServerThread serverThread1, ServerThread serverThread2) {
+        this.serverThread1 = serverThread1;
+        this.serverThread2 = serverThread2;
+        this.currentPlayer = serverThread1;
         setupBoardMap();
         System.out.println("Game created!");
     }
@@ -25,6 +29,16 @@ public class Game {
                 boardMap.put(pair, '_');
             }
         }
+    }
+
+    public synchronized boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
+        if (player == currentPlayer && boardMap.get(location) == '_' ) {
+            boardMap.put(location, currentPlayer.getID());
+            currentPlayer = currentPlayer.getOpponent();
+            currentPlayer.opponentMoved(location);
+            return true;
+        }
+        return false;
     }
 
     public void makeMove(Pair<Integer, Integer> location) {
@@ -51,5 +65,19 @@ public class Game {
             }
             System.out.println();
         }
+    }
+
+    public ServerThread getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public boolean hasWinner() {
+        //TODO: implement
+        return false;
+    }
+
+    public boolean boardFilledUp() {
+        //TODO: implement
+        return false;
     }
 }
