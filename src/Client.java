@@ -37,6 +37,7 @@ public class Client {
             if (msg.startsWith("WELCOME")) {
                 char ID = msg.charAt(8);
                 getSlave().getSlave().setID(ID);
+                getSlave().setTitle("GUI: " + ID);
             }
             else if (msg.startsWith("VALID_MOVE")) {
                 // Set position to appropriate icon.
