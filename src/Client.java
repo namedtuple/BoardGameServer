@@ -37,17 +37,30 @@ public class Client {
             if (msg.startsWith("WELCOME")) {
                 char ID = msg.charAt(8);
                 getSlave().getSlave().setID(ID);
-                getSlave().setTitle("GUI: " + ID);
+                getSlave().setTitle("" + ID);
             }
             else if (msg.startsWith("VALID_MOVE")) {
                 // Set position to appropriate icon.
                 // How do we know which icon to set?
                 //   Because this is VALID_MOVE and not OPPONENT_MOVED; so, use ID of Board.
                 getSlave().getSlave().getLastClickedTile().setIcon();
+                getSlave().appendToTitle("Opponent's turn");
             }
             else if (msg.startsWith("OPPONENT_MOVED")) {
                 getSlave().getSlave().getSlave(extractPosition(msg)).setOpponentIcon();
-                getSlave().appendToTitle("your turn");
+                getSlave().appendToTitle("Your turn");
+            }
+            else if (msg.startsWith("VICTORY")) {
+                getSlave().appendToTitle("You win");
+                break;
+            }
+            else if (msg.startsWith("DEFEAT")) {
+                getSlave().appendToTitle("You lose");
+                break;
+            }
+            else if (msg.startsWith("TIE")) {
+                getSlave().appendToTitle("You tied");
+                break;
             }
             else if (msg.startsWith("MESSAGE")) {
                 getSlave().appendToTitle(msg.substring(8));

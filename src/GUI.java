@@ -35,7 +35,6 @@ public class GUI extends JFrame {
 
     @Override
     public void setTitle(String title) {
-        System.out.println("setTitle(): " + title);
         if (numTitleChanges < 1) {
             baseTitle = title;
         }
@@ -44,7 +43,7 @@ public class GUI extends JFrame {
     }
 
     public void appendToTitle(String toAppend) {
-        setTitle(baseTitle + ": " + toAppend);
+        setTitle(baseTitle + " - \"" + toAppend + "\"");
     }
 
 }

@@ -38,7 +38,6 @@ public class ServerThread extends Thread {
                 if (msg.startsWith("MOVE")) {
                     if (game.legalMove(extractPosition(msg), this)) {
                         send("VALID_MOVE");
-                        send("MESSAGE opponent's turn");
                         send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
                     }
                 }
