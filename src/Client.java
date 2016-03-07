@@ -47,15 +47,7 @@ public class Client {
                 getSlave().getSlave().getLastClickedTile().setIcon();
             }
             else if (msg.startsWith("OPPONENT_MOVED")) {
-
-                int i = msg.indexOf('[');
-                int j = msg.indexOf(',');
-                int k = msg.indexOf(']');
-
-                int x = Integer.parseInt(msg.substring(i+1, j).trim());
-                int y = Integer.parseInt(msg.substring(j+1, k).trim());
-
-                getSlave().getSlave().getSlave(Pair.with(x, y)).setOpponentIcon();
+                getSlave().getSlave().getSlave(extractPosition(msg)).setOpponentIcon();
             }
         }
     }
@@ -74,5 +66,15 @@ public class Client {
 
     public GUI getSlave() {
         return gui;
+    }
+
+    // Helper method to obtain position Pair from received String message
+    public Pair<Integer, Integer> extractPosition(String message) {
+        int i = message.indexOf('[');
+        int j = message.indexOf(',');
+        int k = message.indexOf(']');
+        int x = Integer.parseInt(message.substring(i+1, j).trim());
+        int y = Integer.parseInt(message.substring(j+1, k).trim());
+        return Pair.with(x, y);
     }
 }

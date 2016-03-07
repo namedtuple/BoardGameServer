@@ -27,22 +27,16 @@ public class ServerThread extends Thread {
         super.start();
     }
 
+    @Override
     public void run() {
         send("WELCOME " + this.ID);
         while (true) {
             try {
                 String msg = receive();
                 send("You said: " + msg);
+
                 if (msg.startsWith("MOVE")) {
-
-                    int i = msg.indexOf('[');
-                    int j = msg.indexOf(',');
-                    int k = msg.indexOf(']');
-
-                    int x = Integer.parseInt(msg.substring(i+1, j).trim());
-                    int y = Integer.parseInt(msg.substring(j+1, k).trim());
-
-                    if (game.legalMove(Pair.with(x, y), this)) {
+                    if (game.legalMove(extractPosition(msg), this)) {
                         send("VALID_MOVE");
                         send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
                     }
@@ -82,4 +76,13 @@ public class ServerThread extends Thread {
         send(game.hasWinner() ? "DEFEAT" : game.boardFilledUp() ? "TIE" : "");
     }
 
+    // Helper method to obtain position Pair from received String message
+    public Pair<Integer, Integer> extractPosition(String message) {
+        int i = message.indexOf('[');
+        int j = message.indexOf(',');
+        int k = message.indexOf(']');
+        int x = Integer.parseInt(message.substring(i+1, j).trim());
+        int y = Integer.parseInt(message.substring(j+1, k).trim());
+        return Pair.with(x, y);
+    }
 }
