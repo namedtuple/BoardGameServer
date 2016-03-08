@@ -13,16 +13,18 @@ public class GUI extends JFrame {
     public GUI(Client client, String title) {
         super(title);
         this.client = client;
-        this.board = new Board(this, 3);
+
+        int sz = 10;
+        this.board = new Board(this, sz);
 
         board.setBackground(Color.yellow);
-        board.setLayout(new GridLayout(3, 3, 2, 2));
+        board.setLayout(new GridLayout(sz, sz, 2, 2));
         add(board, "Center");
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
         setVisible(true);
-        setResizable(false);
+        setResizable(true);
     }
 
     @Override
