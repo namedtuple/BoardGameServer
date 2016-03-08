@@ -1,3 +1,4 @@
+package server;
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;

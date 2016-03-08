@@ -1,3 +1,4 @@
+package client;
 import org.javatuples.Pair;
 
 import java.awt.BorderLayout;
