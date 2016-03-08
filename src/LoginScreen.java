@@ -6,15 +6,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class LoginScreen extends JFrame implements ActionListener{
+public class LoginScreen extends JPanel implements ActionListener{
 
 	private JButton loginBtn;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	JLabel usernameLabel, passwordLabel, programLogo;
+	private JLabel usernameLabel, passwordLabel, programLogo;
 
-	public LoginScreen(String name){
-		super(name);
+	public LoginScreen(){
+
 		createLoginButton();
 		createUsernameLabel();
 		createPasswordLabel();
@@ -22,7 +22,6 @@ public class LoginScreen extends JFrame implements ActionListener{
 		createPasswordField();
 		createLogo();
 		this.setLayout(null);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.setSize(500, 240);
 		this.setVisible(true);
