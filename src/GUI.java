@@ -13,18 +13,13 @@ public class GUI extends JFrame {
     public GUI(Client client, String title) {
         super(title);
         this.client = client;
+        this.board = new Board(this, 3);
 
-        int sz = 10;
-        this.board = new Board(this, sz);
-
-        board.setBackground(Color.yellow);
-        board.setLayout(new GridLayout(sz, sz, 2, 2));
         add(board, "Center");
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
         setVisible(true);
-        setResizable(true);
+        setResizable(false);
     }
 
     @Override
@@ -46,24 +41,25 @@ public class GUI extends JFrame {
         }
         else if (request.startsWith("WELCOME")) {
             setTitle("" + request.charAt(8));
+            board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
         }
         else if (request.startsWith("VALID_MOVE")){
-            appendToTitle("Opponent's turn");
+            board.setTurnLabel("It is the opponent's turn");
             board.handleRequest(request);
         }
         else if (request.startsWith("OPPONENT_MOVED")) {
-            appendToTitle("Your turn");
+            board.setTurnLabel("It is your turn");
             board.handleRequest(request);
         }
         else if (request.startsWith("VICTORY")) {
-            appendToTitle("You win");
+            board.setTurnLabel("You win!");
         }
         else if (request.startsWith("DEFEAT")) {
-            appendToTitle("You lose");
+            board.setTurnLabel("You lose!");
         }
         else if (request.startsWith("TIE")) {
-            appendToTitle("You tie");
+            board.setTurnLabel("You tied!");
         }
         else if (request.startsWith("MESSAGE")) {
             appendToTitle(request.substring(8));
