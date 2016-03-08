@@ -1,5 +1,9 @@
 import org.javatuples.Pair;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+
 import javax.swing.*;
 
 public class Board extends JPanel {
@@ -9,11 +13,20 @@ public class Board extends JPanel {
     private int length;     // size of board
     private char ID;
     private Tile tile;
-
+    private JLabel turnLabel;
+    private JPanel boardPanel, turnPanel;
+    
     // Methods
     public Board(GUI gui, int length) {
         this.gui = gui;
         this.length = length;
+        setBackground(Color.yellow);
+        setLayout(new BorderLayout());
+        //JPanel for the game board
+        boardPanel = new JPanel();
+        boardPanel.setLayout(new GridLayout(length, length, 2, 2));
+        //JPanel for the turn label
+        turnPanel = new JPanel();
         setupBoard();
     }
 
@@ -28,9 +41,14 @@ public class Board extends JPanel {
                 Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
                 Tile tile = new Tile(this, pair);
                 this.tile = tile; // any Tile instance works here
-                add(tile);
+                boardPanel.add(tile);
             }
         }
+        add(boardPanel,BorderLayout.CENTER);
+        turnLabel = new JLabel();
+        turnLabel.setVerticalAlignment(JLabel.BOTTOM);
+        turnPanel.add(turnLabel);
+        add(turnPanel,BorderLayout.SOUTH);
     }
 
     public char getID() {
@@ -41,6 +59,11 @@ public class Board extends JPanel {
         return ID == 'X' ? 'O' : 'X';
     }
 
+    public void setTurnLabel(String text)
+    {
+    	turnLabel.setText(text);
+    }
+    
     public void handleRequest(String request) {
         if (request.startsWith("MOVE")) {
             gui.handleRequest(request);
