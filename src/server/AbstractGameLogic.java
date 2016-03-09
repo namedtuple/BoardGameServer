@@ -5,7 +5,7 @@ import org.javatuples.Pair;
 import java.util.HashMap;
 
 
-public abstract class AbstractGameLogic {
+public abstract class AbstractGameLogic implements GameLogicInterface {
 
     // Fields
     protected HashMap<Pair<Integer, Integer>, AbstractBoardTile> boardMap;  // change to new 'Board' class later
