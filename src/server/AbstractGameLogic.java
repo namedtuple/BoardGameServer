@@ -1,4 +1,5 @@
 
+// This is a comment
 public abstract class AbstractGameLogic {
 	public ServerThread currentPlayer;
 	public ServerThread opponent;
