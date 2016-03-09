@@ -1,11 +1,8 @@
 package client;
 import org.javatuples.Pair;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-
 import javax.swing.*;
+import java.awt.*;
 
 public class Board extends JPanel {
 
@@ -13,10 +10,11 @@ public class Board extends JPanel {
     private GUI gui;
     private int length;     // size of board
     private char ID;
+    private char opponentID;
     private Tile tile;
     private JLabel turnLabel;
     private JPanel boardPanel, turnPanel;
-    
+
     // Methods
     public Board(GUI gui, int length) {
         this.gui = gui;
@@ -57,20 +55,21 @@ public class Board extends JPanel {
     }
 
     public char getOpponentID() {
-        return ID == 'X' ? 'O' : 'X';
+        return opponentID;
     }
 
     public void setTurnLabel(String text)
     {
     	turnLabel.setText(text);
     }
-    
+
     public void handleRequest(String request) {
         if (request.startsWith("MOVE")) {
             gui.handleRequest(request);
         }
         else if (request.startsWith("WELCOME")) {
             ID = request.charAt(8);
+            opponentID = request.charAt(10);
         }
         else if (request.startsWith("VALID_MOVE")){
             tile.handleRequest(request);

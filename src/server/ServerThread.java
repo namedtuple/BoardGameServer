@@ -30,7 +30,7 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        send("WELCOME " + this.ID);
+        send("WELCOME " + this.ID + " " + getOpponent().getID());
         while (true) {
             try {
                 String msg = receive();
