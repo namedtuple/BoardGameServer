@@ -16,7 +16,6 @@ public class ServerThread extends Thread {
 
     private char ID;
     private ServerThread opponentServerThread;
-    //private Game game;
     private AbstractGameLogic game;
 
     private String username;
@@ -25,12 +24,6 @@ public class ServerThread extends Thread {
     private GameLobby lobby; //lobby that the user is currently in
 
     // Methods
-    /*public ServerThread(Socket socket, char ID) throws IOException {
-        this.ID = ID;
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
-    }*/
-
     public ServerThread(Socket socket, Server server) throws IOException {
         //this.ID = ID;
     	this.socket = socket;
@@ -38,19 +31,6 @@ public class ServerThread extends Thread {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
     }
-
-    /*public void start(Game game) {
-=======
-    //public void start(Game game) {
-    //    this.game = game;
-    //    super.start();
-    //}
-
-    public void start(TicTacToeLogic game) {
->>>>>>> Stashed changes
-        this.game = game;
-        super.start();
-    }*/
 
     @Override
     public void run() {
@@ -60,13 +40,6 @@ public class ServerThread extends Thread {
             try {
                 String msg = receive();
                 send("You said: " + msg);
-
-                /*if (msg.startsWith("MOVE")) {
-                    if (game.legalMove(extractPosition(msg), this)) {
-                        send("VALID_MOVE");
-                        send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
-                    }
-                }*/
 
                 // logging in
                 String[] splitMsg = msg.split(" ");
