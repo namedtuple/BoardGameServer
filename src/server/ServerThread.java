@@ -17,7 +17,7 @@ public class ServerThread extends Thread {
     private char ID;
     private ServerThread opponentServerThread;
     //private Game game;
-    private TicTacToeLogic game;
+    private AbstractGameLogic game;
 
     private String username;
     private Server server; //reference to the owning server
@@ -89,7 +89,16 @@ public class ServerThread extends Thread {
                 else if (firstToken.equals("MOVE")) {
                     if (game.legalMove(extractPosition(msg), this)) {
                         send("VALID_MOVE");
-                        send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
+
+                        if (game.hasWinner()) {
+                            if ((game instanceof TicTacToeLogic) && ((TicTacToeLogic) game).boardFilledUp()) {
+                                send("TIE");
+                            } else {
+                                send("VICTORY");
+                            }
+                        } else {
+                            send("");
+                        }
                     }
                 }
 
@@ -126,7 +135,16 @@ public class ServerThread extends Thread {
 
     public void opponentMoved(Pair<Integer, Integer> location) {
         send("OPPONENT_MOVED " + location);
-        send(game.hasWinner() ? "DEFEAT" : game.boardFilledUp() ? "TIE" : "");
+
+        if (game.hasWinner()) {
+            if ((game instanceof TicTacToeLogic) && ((TicTacToeLogic) game).boardFilledUp()) {
+                send("TIE");
+            } else {
+                send("DEFEAT");
+            }
+        } else {
+            send("");
+        }
     }
 
     public void setID(char ID) {
@@ -154,7 +172,7 @@ public class ServerThread extends Thread {
     	lobby = null;
     }
 
-    public void setGame(TicTacToeLogic game){
+    public void setGame(AbstractGameLogic game){
     	this.game = game;
     }
 
