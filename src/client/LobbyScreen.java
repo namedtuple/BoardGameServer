@@ -1,17 +1,15 @@
 package client;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LobbyScreen extends JPanel implements ActionListener{
 
-	
+
 	//method variables
 	private JComboBox gameSelection;
 	private String currentGameSelection;
@@ -20,17 +18,19 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	private JPanel selectionPanel;
 	private DefaultListModel waitList; //changes made to this will update GUI waiting list
 	private JList uiList;
-	
-	public LobbyScreen()
-	{	
+    private GUI gui;
+
+	public LobbyScreen(GUI gui)
+	{
 		super(new BorderLayout());
+        this.gui = gui;
 		waitList = new DefaultListModel();
 
 		createSelectionPanel();
 		createJoinGameButton();
 		createUIList();
-     
-		JScrollPane scrollPane = new JScrollPane();	
+
+		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(uiList);
 
 		add(selectionPanel,BorderLayout.NORTH);
@@ -38,7 +38,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		add(joinGameButton,BorderLayout.SOUTH);
 		setVisible(true);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -49,29 +49,30 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		}
 		else if(e.getSource() == newGameButton)
 		{
+            gui.toBoard();
 			//create a new game instance depending on what game is selected
 		}
 		else if(e.getSource() == joinGameButton)
 		{
 			//join an opponents game based on what opponent is chosen
 		}
-		
+
 	}
-	
+
 	public void createUIList(){
 		uiList = new JList(waitList);
         uiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         uiList.addListSelectionListener(new playerSelectionListener());
-        uiList.setVisibleRowCount(5);		
-        uiList.setFixedCellHeight(44);		
+        uiList.setVisibleRowCount(5);
+        uiList.setFixedCellHeight(44);
 	}
-	
+
 	public void createJoinGameButton(){
 		joinGameButton = new JButton("Join Opponent's Game");
 		joinGameButton.addActionListener(this);
-		joinGameButton.setEnabled(false);		
+		joinGameButton.setEnabled(false);
 	}
-	
+
 	public void createSelectionPanel(){
 		selectionPanel = new JPanel();
 		selectionPanel.setLayout(new BoxLayout(selectionPanel,BoxLayout.LINE_AXIS));
@@ -79,9 +80,9 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		selectionPanel.add(Box.createHorizontalStrut(5));
 		selectionPanel.add(Box.createHorizontalStrut(5));
 		createnewGameButton();
-		selectionPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));		
+		selectionPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
-	
+
 	public void createGameSelectionBox(){
 		gameSelection = new JComboBox(gameList);
 		gameSelection.addActionListener(this);
@@ -89,7 +90,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		currentGameSelection = gameList[0];
 		selectionPanel.add(gameSelection);
 	}
-	
+
 	public void createnewGameButton(){
 		newGameButton = new JButton("Start New Game");
 		newGameButton.addActionListener(this);
@@ -100,19 +101,19 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	public void addToWaitList(String player){
 		waitList.addElement(player);
 	}
-	
+
 	//call this to remove from the lobby
 	public void removeFromWaitList(String player){
 		waitList.removeElement(player);
 	}
-	
+
 	class playerSelectionListener implements ListSelectionListener
 	{
 	    public void valueChanged(ListSelectionEvent e) {
 	        if (e.getValueIsAdjusting() == false) {
 	            joinGameButton.setEnabled(true);
 	            }
-	        }		
+	        }
 
 	}
 }

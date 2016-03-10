@@ -16,15 +16,15 @@ public class GUI extends JFrame {
         super(title);
         this.client = client;
         this.loginScreen = new LoginScreen(this);
-        this.lobbyScreen = new LobbyScreen();
+        this.lobbyScreen = new LobbyScreen(this);
         this.board = new Board(this, 3);
 
         add(loginScreen, "Center");
-        add(lobbyScreen, "Center");
-        add(board, "Center");
+        //add(lobbyScreen, "Center");
+        //add(board, "Center");
         loginScreen.setVisible(true);
-        lobbyScreen.setVisible(false);
-        board.setVisible(false);
+        //lobbyScreen.setVisible(false);
+        //board.setVisible(false);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
@@ -66,22 +66,19 @@ public class GUI extends JFrame {
             String message = "You win!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            board.setVisible(false);
-            remove(board);
+            returnToLobby();
         }
         else if (request.startsWith("DEFEAT")) {
             String message = "You lose!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            board.setVisible(false);
-            remove(board);
+            returnToLobby();
         }
         else if (request.startsWith("TIE")) {
             String message = "You tied!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            board.setVisible(false);
-            remove(board);
+            returnToLobby();
         }
         else if (request.startsWith("MESSAGE")) {
             appendToTitle(request.substring(8));
@@ -91,9 +88,28 @@ public class GUI extends JFrame {
         }
     }
 
-    public void toBoard() {
-        board.setVisible(true);
+    public void toLobby() {
+        System.out.println("toLobby");
+        add(lobbyScreen);
+        lobbyScreen.setVisible(true);
+        loginScreen.setVisible(false);
         remove(loginScreen);
+    }
+
+    public void toBoard() {
+        System.out.println("toBoard");
+        add(board);
+        board.setVisible(true);
+        lobbyScreen.setVisible(false);
+        remove(lobbyScreen);
+    }
+
+    public void returnToLobby() {
+        System.out.println("returnToLobby");
+        add(lobbyScreen);
+        lobbyScreen.setVisible(true);
+        board.setVisible(false);
+        remove(board);
     }
 
 

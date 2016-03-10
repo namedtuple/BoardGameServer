@@ -79,7 +79,7 @@ public class LoginScreen extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
 		if(button == loginBtn){
-			gui.toBoard();
+			gui.toLobby();
 		}
 
 	}
