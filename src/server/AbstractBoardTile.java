@@ -1,4 +1,5 @@
 package server;
+import org.javatuples.Pair;
 
 public abstract class AbstractBoardTile {
     private ServerThread occupant1;
