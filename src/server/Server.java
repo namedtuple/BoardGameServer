@@ -70,7 +70,8 @@ public class Server {
             serverThread1.setOpponent(serverThread2);
             serverThread2.setOpponent(serverThread1);
 
-            Game game = new Game(serverThread1);
+            //Game game = new Game(serverThread1);
+            TicTacToeLogic game = new TicTacToeLogic(serverThread1, serverThread2, 3);
 
             serverThread1.start(game);
             serverThread2.start(game);

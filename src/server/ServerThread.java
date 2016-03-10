@@ -13,16 +13,16 @@ public class ServerThread extends Thread {
     // Fields
     private BufferedReader in;
     private PrintWriter out;
-    
+
     private char ID;
     private ServerThread opponentServerThread;
-    private Game game;
-    
+    //private Game game;
+    private TicTacToeLogic game;
+
     private String username;
     private Server server; //reference to the owning server
     private Socket socket;
     private GameLobby lobby; //lobby that the user is currently in
-    
 
     // Methods
     /*public ServerThread(Socket socket, char ID) throws IOException {
@@ -30,7 +30,7 @@ public class ServerThread extends Thread {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
     }*/
-    
+
     public ServerThread(Socket socket, Server server) throws IOException {
         //this.ID = ID;
     	this.socket = socket;
@@ -40,6 +40,14 @@ public class ServerThread extends Thread {
     }
 
     /*public void start(Game game) {
+=======
+    //public void start(Game game) {
+    //    this.game = game;
+    //    super.start();
+    //}
+
+    public void start(TicTacToeLogic game) {
+>>>>>>> Stashed changes
         this.game = game;
         super.start();
     }*/
@@ -59,7 +67,7 @@ public class ServerThread extends Thread {
                         send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
                     }
                 }*/
-                
+
                 // logging in
                 String[] splitMsg = msg.split(" ");
                 String firstToken = splitMsg[0];
@@ -84,7 +92,7 @@ public class ServerThread extends Thread {
                         send(game.hasWinner() ? "VICTORY" : game.boardFilledUp() ? "TIE" : "");
                     }
                 }
-                
+
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
@@ -124,7 +132,7 @@ public class ServerThread extends Thread {
     public void setID(char ID) {
     	this.ID = ID;
     }
-    
+
     public char getID() {
         return ID;
     }
@@ -136,17 +144,17 @@ public class ServerThread extends Thread {
     public void setOpponent(ServerThread opponentServerThread) {
         this.opponentServerThread = opponentServerThread;
     }
-    
+
     public String getUserName(){
     	return this.username;
     }
-    
+
     public void removeFromLobby(){
     	lobby.removeUser(username);
     	lobby = null;
     }
-    
-    public void setGame(Game game){
+
+    public void setGame(TicTacToeLogic game){
     	this.game = game;
     }
 
