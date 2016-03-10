@@ -10,6 +10,7 @@ public class ChutesLogic extends AbstractGameLogic {
         super(currentPlayer, otherPlayer, length);
     }
 
+<<<<<<< HEAD
     public boolean legalMove(Pair<Integer, Integer> location, int roll) {
         if(location.getValue1()!=1){
             if(location.getValue0()-roll<1){
@@ -20,12 +21,17 @@ public class ChutesLogic extends AbstractGameLogic {
     }
 
     @Override
+=======
+>>>>>>> origin/master
     public boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
         return false;
     }
 
     public boolean hasWinner() {
         char hundred = boardMap.get(Pair.with(1,1));
+<<<<<<< HEAD
         return (hundred!='_');
+=======
+>>>>>>> origin/master
     }
 }
