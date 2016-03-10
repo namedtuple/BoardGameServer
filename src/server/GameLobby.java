@@ -33,12 +33,12 @@ public class GameLobby {
 		
 		//create game, giving it necessary parameters
 		Game newGame = new Game(player1, player2);
-		player1.send("WELCOME " + 'X');
+		player1.send("WELCOME " + "X O");
 		player1.setID('X');
 		player1.setOpponent(player2);
 		player1.setGame(newGame);
 		
-		player2.send("WELCOME " + 'O');
+		player2.send("WELCOME " + "O X");
 		player2.setID('O');
 		player2.setOpponent(player1);
 		player2.setGame(newGame);
