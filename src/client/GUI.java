@@ -1,11 +1,12 @@
 package client;
 import javax.swing.*;
-import java.awt.*;
 
 public class GUI extends JFrame {
 
     // Fields
     private Client client;
+    private LoginScreen loginScreen;
+    private LobbyScreen lobbyScreen;
     private Board board;
     private int numTitleChanges = 0;
     private String baseTitle;
@@ -14,9 +15,17 @@ public class GUI extends JFrame {
     public GUI(Client client, String title) {
         super(title);
         this.client = client;
+        this.loginScreen = new LoginScreen();
+        this.lobbyScreen = new LobbyScreen();
         this.board = new Board(this, 3);
 
+        add(loginScreen, "Center");
+        add(lobbyScreen, "Center");
         add(board, "Center");
+        loginScreen.setVisible(false);
+        lobbyScreen.setVisible(false);
+        board.setVisible(true);
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
         setVisible(true);
@@ -54,13 +63,25 @@ public class GUI extends JFrame {
             board.handleRequest(request);
         }
         else if (request.startsWith("VICTORY")) {
-            board.setTurnLabel("You win!");
+            String message = "You win!";
+            board.setTurnLabel(message);
+            JOptionPane.showMessageDialog(this, message);
+            board.setVisible(false);
+            remove(board);
         }
         else if (request.startsWith("DEFEAT")) {
-            board.setTurnLabel("You lose!");
+            String message = "You lose!";
+            board.setTurnLabel(message);
+            JOptionPane.showMessageDialog(this, message);
+            board.setVisible(false);
+            remove(board);
         }
         else if (request.startsWith("TIE")) {
-            board.setTurnLabel("You tied!");
+            String message = "You tied!";
+            board.setTurnLabel(message);
+            JOptionPane.showMessageDialog(this, message);
+            board.setVisible(false);
+            remove(board);
         }
         else if (request.startsWith("MESSAGE")) {
             appendToTitle(request.substring(8));
@@ -69,5 +90,10 @@ public class GUI extends JFrame {
             board.handleRequest(request);
         }
     }
+
+    //public void toBoard() {
+    //    add()
+    //}
+
 
 }
