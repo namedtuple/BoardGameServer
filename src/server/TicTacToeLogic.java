@@ -51,7 +51,7 @@ public class TicTacToeLogic extends AbstractGameLogic {
                 (TR != null && TR == MM && MM == BL);    // top-right to bottom-left diagonal
     }
 
-    public boolean boardFilledUp() {
+    public boolean tied() {
         for (AbstractBoardTile tile : boardMap.values()) {
             if (tile.getOccupant() == null) {
                 return false;

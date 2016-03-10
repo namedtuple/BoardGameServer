@@ -62,16 +62,7 @@ public class ServerThread extends Thread {
                 else if (firstToken.equals("MOVE")) {
                     if (game.legalMove(extractPosition(msg), this)) {
                         send("VALID_MOVE");
-
-                        if (game.hasWinner()) {
-                            if ((game instanceof TicTacToeLogic) && ((TicTacToeLogic) game).boardFilledUp()) {
-                                send("TIE");
-                            } else {
-                                send("VICTORY");
-                            }
-                        } else {
-                            send("");
-                        }
+                        send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
                     }
                 }
 
@@ -108,16 +99,7 @@ public class ServerThread extends Thread {
 
     public void opponentMoved(Pair<Integer, Integer> location) {
         send("OPPONENT_MOVED " + location);
-
-        if (game.hasWinner()) {
-            if ((game instanceof TicTacToeLogic) && ((TicTacToeLogic) game).boardFilledUp()) {
-                send("TIE");
-            } else {
-                send("DEFEAT");
-            }
-        } else {
-            send("");
-        }
+        send(game.hasWinner() ? "DEFEAT" : game.tied() ? "TIE" : "");
     }
 
     public void setID(char ID) {
