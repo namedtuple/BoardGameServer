@@ -69,9 +69,3 @@ local.properties
 
 # Code Recommenders
 .recommenders/
-
-src/server/ChutesLogic.java
-
-src/server/CheckersLogic.java
-
-src/server/ChutesLogic.java
