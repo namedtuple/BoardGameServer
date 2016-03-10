@@ -1,9 +1,24 @@
 package server;
+
 import java.sql.*;
 
 public class AccountAuthenticator {
 	
 	private Connection con;
+	
+	
+	//Creates table if it doesn't exist
+	//Adds two dummy users to database
+	public AccountAuthenticator()
+	{
+		if(!tableExists())
+		{	
+			createTable();
+		}
+		
+		addUser("test","test");
+		addUser("user","user");
+	}
 	
 	//Checks if userName/password combo exists in database
 	public boolean userExists(String userName, String password)
@@ -39,10 +54,14 @@ public class AccountAuthenticator {
 	}
 	
 	//Adds userName/password combo to database
-	//Note: Will throw an exception if userName already exists so let me know if you 
-	//guys want me to do something out of that
-	public void addUser(String userName, String password)
+	//Returns true if add was successful, false otherwise
+	public boolean addUser(String userName, String password)
 	{
+		if(userExists(userName,password))
+		{
+			return false;
+		}
+		
 		connect();
 		
 		try {
@@ -57,15 +76,17 @@ public class AccountAuthenticator {
 			stmt.close();
 			con.close();
 			
+			return true;
+			
 		} catch(SQLException ex) {
 			
-			ex.printStackTrace();
+			return false;
 		}
 	}
 	
 	//Creates Users table if it doesn't exist
 	//Can add more fields if needed
-	public void createTable() {
+	private void createTable() {
 			
 		connect();
 		
@@ -83,6 +104,37 @@ public class AccountAuthenticator {
 			
 			ex.printStackTrace();
 		}
+	}
+	
+	private boolean tableExists() {
+		
+		connect();
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT name " +
+							"FROM sqlite_master " +
+							"WHERE type='table' " +
+							"AND name='USERS';";
+			
+			ResultSet rs = stmt.executeQuery(query);
+			
+			if(rs.next())
+			{
+				rs.close();
+				stmt.close();
+				con.close();
+				return true;
+			}
+			
+			rs.close();
+			stmt.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 	//Connects to database if it exists
