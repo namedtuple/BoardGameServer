@@ -31,26 +31,27 @@ public class TicTacToeLogic extends AbstractGameLogic {
         // TL TM TR
         // ML MM MR
         // BL BM BR
-        AbstractBoardTile TL = boardMap.get(Pair.with(1,1));
-        AbstractBoardTile TM = boardMap.get(Pair.with(2,1));
-        AbstractBoardTile TR = boardMap.get(Pair.with(3,1));
-        AbstractBoardTile ML = boardMap.get(Pair.with(1,2));
-        AbstractBoardTile MM = boardMap.get(Pair.with(2,2));
-        AbstractBoardTile MR = boardMap.get(Pair.with(3,2));
-        AbstractBoardTile BL = boardMap.get(Pair.with(1,3));
-        AbstractBoardTile BM = boardMap.get(Pair.with(2,3));
-        AbstractBoardTile BR = boardMap.get(Pair.with(3,3));
-        return  (TL.getOccupant() != null && TL == TM && TM == TR) ||  // top row
-                (ML.getOccupant() != null && ML == MM && MM == MR) ||  // middle row
-                (BL.getOccupant() != null && BL == BM && BM == BR) ||  // bottom row
-                (TL.getOccupant() != null && TL == ML && ML == BL) ||  // left column
-                (TM.getOccupant() != null && TM == MM && MM == BM) ||  // middle column
-                (TR.getOccupant() != null && TR == MR && MR == BR) ||  // right column
-                (TL.getOccupant() != null && TL == MM && MM == BR) ||  // top-left to bottom-right diagonal
-                (TR.getOccupant() != null && TR == MM && MM == BL);    // top-right to bottom-left diagonal
+        ServerThread TL = boardMap.get(Pair.with(1,1)).getOccupant();
+        ServerThread TM = boardMap.get(Pair.with(2,1)).getOccupant();
+        ServerThread TR = boardMap.get(Pair.with(3,1)).getOccupant();
+        ServerThread ML = boardMap.get(Pair.with(1,2)).getOccupant();
+        ServerThread MM = boardMap.get(Pair.with(2,2)).getOccupant();
+        ServerThread MR = boardMap.get(Pair.with(3,2)).getOccupant();
+        ServerThread BL = boardMap.get(Pair.with(1,3)).getOccupant();
+        ServerThread BM = boardMap.get(Pair.with(2,3)).getOccupant();
+        ServerThread BR = boardMap.get(Pair.with(3,3)).getOccupant();
+
+        return  (TL != null && TL == TM && TM == TR) ||  // top row
+                (ML != null && ML == MM && MM == MR) ||  // middle row
+                (BL != null && BL == BM && BM == BR) ||  // bottom row
+                (TL != null && TL == ML && ML == BL) ||  // left column
+                (TM != null && TM == MM && MM == BM) ||  // middle column
+                (TR != null && TR == MR && MR == BR) ||  // right column
+                (TL != null && TL == MM && MM == BR) ||  // top-left to bottom-right diagonal
+                (TR != null && TR == MM && MM == BL);    // top-right to bottom-left diagonal
     }
 
-    public boolean boardFilledUp() {
+    public boolean tied() {
         for (AbstractBoardTile tile : boardMap.values()) {
             if (tile.getOccupant() == null) {
                 return false;

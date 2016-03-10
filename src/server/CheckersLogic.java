@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import org.javatuples.Pair;
 import server.AbstractGameLogic;
 import server.ServerThread;
@@ -29,3 +30,28 @@ public class CheckersLogic extends AbstractGameLogic {
 	}
 
 }
+=======
+//package server;
+//
+//public class CheckersLogic extends AbstractGameLogic{
+//
+//	@Override
+//	public boolean makeMove() {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean hasWinner() {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean legalMove() {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+//
+//}
+>>>>>>> origin/master

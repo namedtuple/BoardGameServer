@@ -20,9 +20,12 @@ public class Client {
     private PrintWriter out;
     private GUI gui;
 
+    private Socket socket;
+    
     // Methods
     public Client() throws IOException {
         Socket socket = new Socket(SERVER_ADDRESS, PORT);
+        this.socket = socket;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         gui = new GUI(this, "GUI");
@@ -31,9 +34,30 @@ public class Client {
 
     public void run() throws IOException {
         System.out.println("Client running");
+        
+        //testing Lobby functionality!
+        //using local port as a unique ID, logging in doesn't work with multiple users of same name
+        send("LOGIN testUser" + Integer.toString(socket.getLocalPort()));
+        //
+        
         String msg;
         while (true) {
             msg = receive();
+            
+            //for testing lobby functionality
+            String[] splitMsg = msg.split(" ");
+            if (splitMsg[0].equals("LOBBY")){ //"LOBBY user1 user2" <- server sends list of members in the lobby
+            	if (splitMsg.length == 1){ //a hack just for testing purposes only
+            		System.out.println("LOGIN LENGTH IS 1");
+            	}
+            	else {
+            		System.out.println("Sending JOIN");
+            		send("JOIN " + splitMsg[1]); //client sends "JOIN user1" to start a game, forcing them to play
+            	}
+            }
+            //
+            
+            
             if (msg.startsWith("WELCOME")) {
                 handleRequest(msg);
             }

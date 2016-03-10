@@ -14,11 +14,12 @@ public abstract class AbstractGameLogic implements GameLogicInterface {
     protected final int LENGTH;
 
     // Constructor
-    public AbstractGameLogic(ServerThread currentPlayer, ServerThread otherPlayer, int length) {
-        this.currentPlayer = currentPlayer;
-        this.otherPlayer = otherPlayer;
+    public AbstractGameLogic(ServerThread player1, ServerThread player2, int length) {
+        this.currentPlayer = player1;
+        this.otherPlayer = player2;
         this.LENGTH = length;
         setupBoardMap();
+        System.out.println("Game created: " + player1.getUserName() + " " + player2.getUserName());
     }
 
     private void setupBoardMap() {
