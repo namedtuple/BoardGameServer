@@ -1,4 +1,5 @@
 package server;
+
 import org.javatuples.Pair;
 
 import java.util.HashMap;
@@ -11,10 +12,16 @@ public class Game {
     private ServerThread currentPlayer;
 
     // Methods
-    public Game(ServerThread currentPlayer) {
+    /*public Game(ServerThread currentPlayer) {
         this.currentPlayer = currentPlayer;
         setupBoardMap();
         System.out.println("Game created");
+    }*/
+    
+    public Game(ServerThread player1, ServerThread player2){
+    	this.currentPlayer = player1;
+    	setupBoardMap();
+    	System.out.println("Game created: " + player1.getUserName() + " " + player2.getUserName());
     }
 
     private void setupBoardMap() {
