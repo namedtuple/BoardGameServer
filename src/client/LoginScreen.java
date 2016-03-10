@@ -13,9 +13,10 @@ public class LoginScreen extends JPanel implements ActionListener{
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JLabel usernameLabel, passwordLabel, programLogo;
+    private GUI gui;
 
-	public LoginScreen(){
-
+	public LoginScreen(GUI gui) {
+        this.gui = gui;
 		createLoginButton();
 		createUsernameLabel();
 		createPasswordLabel();
@@ -78,7 +79,7 @@ public class LoginScreen extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
 		if(button == loginBtn){
-			//insert logic for button press
+			gui.toBoard();
 		}
 
 	}

@@ -15,16 +15,16 @@ public class GUI extends JFrame {
     public GUI(Client client, String title) {
         super(title);
         this.client = client;
-        this.loginScreen = new LoginScreen();
+        this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen();
         this.board = new Board(this, 3);
 
         add(loginScreen, "Center");
         add(lobbyScreen, "Center");
         add(board, "Center");
-        loginScreen.setVisible(false);
+        loginScreen.setVisible(true);
         lobbyScreen.setVisible(false);
-        board.setVisible(true);
+        board.setVisible(false);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
@@ -91,9 +91,10 @@ public class GUI extends JFrame {
         }
     }
 
-    //public void toBoard() {
-    //    add()
-    //}
+    public void toBoard() {
+        board.setVisible(true);
+        remove(loginScreen);
+    }
 
 
 }
