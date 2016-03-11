@@ -49,6 +49,9 @@ public class GUI extends JFrame {
         if (request.startsWith("MOVE")) {
             client.handleRequest(request);
         }
+        else if (request.startsWith("LOGIN ")) {
+            client.attemptLogin(request);
+        }
         else if (request.startsWith("LOGIN-SUCCESS")) {
             loginScreen.handleRequest(request);
         }
@@ -120,10 +123,6 @@ public class GUI extends JFrame {
         lobbyScreen.setVisible(true);
         board.setVisible(false);
         remove(board);
-    }
-
-    public void attemptLogin(String message){
-    	client.attemptLogin(message);
     }
 
 }
