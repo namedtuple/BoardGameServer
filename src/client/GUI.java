@@ -54,7 +54,7 @@ public class GUI extends JFrame {
         else if (request.startsWith("LOGIN_SUCCESS")) {
             String[] splitMsg = request.split(" ");
             lobbyScreen.setUsername(splitMsg[1]);
-            changePanel(loginScreen, lobbyScreen);
+            changePanel(loginScreen, Direction.FORWARD);
         }
         else if (request.startsWith("WELCOME")) {
             setTitle("" + request.charAt(8));
@@ -73,19 +73,19 @@ public class GUI extends JFrame {
             String message = "You win!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            changePanel(board, lobbyScreen);
+            changePanel(board, Direction.BACKWARD);
         }
         else if (request.startsWith("DEFEAT")) {
             String message = "You lose!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            changePanel(board, lobbyScreen);
+            changePanel(board, Direction.BACKWARD);
         }
         else if (request.startsWith("TIE")) {
             String message = "You tied!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            changePanel(board, lobbyScreen);
+            changePanel(board, Direction.BACKWARD);
         }
         else if (request.startsWith("MESSAGE")) {
             appendToTitle(request.substring(8));
@@ -98,7 +98,19 @@ public class GUI extends JFrame {
         }
     }
 
-    public void changePanel(JPanel currentPanel, JPanel nextPanel) {
+    public void changePanel(JPanel currentPanel, Direction direction) {
+        if (currentPanel == loginScreen && direction == Direction.FORWARD) {
+            changePanel(currentPanel, lobbyScreen);
+        }
+        else if (currentPanel == lobbyScreen && direction == Direction.FORWARD) {
+            changePanel(currentPanel, board);
+        }
+        else if (currentPanel == board && direction == Direction.BACKWARD) {
+            changePanel(currentPanel, lobbyScreen);
+        }
+    }
+
+    private void changePanel(JPanel currentPanel, JPanel nextPanel) {
         add(nextPanel);
         nextPanel.setVisible(true);
         currentPanel.setVisible(false);
@@ -107,13 +119,6 @@ public class GUI extends JFrame {
         repaint();
     }
 
-    public void toBoard() {
-        add(board);
-        board.setVisible(true);
-        lobbyScreen.setVisible(false);
-        remove(lobbyScreen);
-        validate();
-        repaint();
-    }
+
 
 }

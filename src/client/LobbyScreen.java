@@ -50,7 +50,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		}
 		else if(e.getSource() == newGameButton)
 		{
-            gui.toBoard();
+            gui.changePanel(this, Direction.FORWARD);
 			//create a new game instance depending on what game is selected
 		}
 		else if(e.getSource() == joinGameButton)
