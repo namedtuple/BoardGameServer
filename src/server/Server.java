@@ -31,6 +31,7 @@ public class Server {
     public static final String CHECKERS = "Checkers";
     public static final String CHUTES_AND_LADDERS = "Chutes and Ladders";
     private ServerSocket serverSocket;
+    private AccountAuthenticator accountAuthenticator;
 
     private Map<String, GameLobby> gameLobbies; //stores a Lobby for each game, where String is name of game
     private Map<String, ServerThread> connectionHandlers; //stores connection handler for each user
@@ -40,6 +41,8 @@ public class Server {
         serverSocket = new ServerSocket();
         serverSocket.setReuseAddress(true);
         serverSocket.bind(new InetSocketAddress(PORT_NUM));
+        
+        accountAuthenticator = new AccountAuthenticator();
 
         gameLobbies = new HashMap<String, GameLobby>();
         gameLobbies.put(TIC_TAC_TOE, new GameLobby());
@@ -71,6 +74,15 @@ public class Server {
 
     public ServerThread getConnection(String userName){
     	return connectionHandlers.get(userName);
+    }
+    
+    public boolean login(String enteredName, String enteredPassword){
+    	if (accountAuthenticator.userExists(enteredName)){ //if user exists
+    		return accountAuthenticator.isValidLogin(enteredName, enteredPassword); //check password
+    	}
+    	else { //create account, should return true and login the user
+    		return accountAuthenticator.addUser(enteredName, enteredPassword);
+    	}
     }
 
     public void close() {

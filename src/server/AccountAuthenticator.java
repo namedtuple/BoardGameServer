@@ -21,7 +21,7 @@ public class AccountAuthenticator {
 	}
 	
 	//Checks if userName/password combo exists in database
-	public boolean userExists(String userName, String password)
+	public boolean isValidLogin(String userName, String password)
 	{
 		connect();
 		
@@ -53,11 +53,43 @@ public class AccountAuthenticator {
 		return false;
 	}
 	
+	//Checks just if user exists
+	public boolean userExists(String userName)
+	{
+		connect();
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM USERS " +
+						   "WHERE USERNAME = '" + userName + "' ";
+			ResultSet rs = stmt.executeQuery(query);			
+			
+			if(rs.next())
+			{
+				rs.close();
+				stmt.close();
+				con.close();
+				
+				return true;
+			}
+			
+			rs.close();
+			stmt.close();
+			con.close();
+		
+		} catch(SQLException ex) {
+			
+			ex.printStackTrace();
+		} 
+		
+		return false;
+	}
+	
 	//Adds userName/password combo to database
 	//Returns true if add was successful, false otherwise
 	public boolean addUser(String userName, String password)
 	{
-		if(userExists(userName,password))
+		if(userExists(userName))
 		{
 			return false;
 		}

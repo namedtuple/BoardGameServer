@@ -25,7 +25,6 @@ public class ServerThread extends Thread {
 
     // Methods
     public ServerThread(Socket socket, Server server) throws IOException {
-        //this.ID = ID;
     	this.socket = socket;
     	this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -45,12 +44,17 @@ public class ServerThread extends Thread {
                 String[] splitMsg = msg.split(" ");
                 String firstToken = splitMsg[0];
                 if (firstToken.equals("LOGIN")) {
-                	//should verify user here
-                	username = splitMsg[1];
-                	server.addConnection(username, this);
-                	lobby = server.getLobby(Server.TIC_TAC_TOE);
-                	send("LOBBY " + lobby.toString()); //send contents of lobby before adding them!
-                	lobby.addUser(username);
+                	if (server.login(splitMsg[1], splitMsg[2])){
+	                	username = splitMsg[1];
+	                	server.addConnection(username, this);
+	                	lobby = server.getLobby(Server.TIC_TAC_TOE);
+	                	//send a confirmation of login message?
+	                	send("LOBBY " + lobby.toString()); //send contents of lobby before adding them!
+	                	lobby.addUser(username);
+                	}
+                	else{
+                		send("LOGIN-FAIL");
+                	}
                 }
                 // possible thread-safety issue, but does not matter for this project
                 else if (firstToken.equals("JOIN")) {
