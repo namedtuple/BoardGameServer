@@ -103,7 +103,7 @@ public class Client {
         }
     }
 
-    public boolean attemptLogin(String message){
+    public void attemptLogin(String message){
     	send(message);
         String msg = null;
     	try {
@@ -112,15 +112,14 @@ public class Client {
     		e.printStackTrace();
     	}
     	if (msg.equals("LOGIN-SUCCESS")){
-    		return true;
+    		handleRequest(msg);
     	}
     	else if (msg.equals("LOGIN-FAIL")){
-    		return false;
+    		handleRequest(msg);
     	}
     	else {
     		//for sanity
     		System.out.println("Unexpected Response for LOGIN");
-    		return false;
     	}
     }
 }

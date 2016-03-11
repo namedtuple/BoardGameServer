@@ -49,6 +49,9 @@ public class GUI extends JFrame {
         if (request.startsWith("MOVE")) {
             client.handleRequest(request);
         }
+        else if (request.startsWith("LOGIN-SUCCESS")) {
+            loginScreen.handleRequest(request);
+        }
         else if (request.startsWith("WELCOME")) {
             setTitle("" + request.charAt(8));
             board.setTurnLabel("Player X starts first");
@@ -119,8 +122,8 @@ public class GUI extends JFrame {
         remove(board);
     }
 
-    public boolean attemptLogin(String message){
-    	return client.attemptLogin(message);
+    public void attemptLogin(String message){
+    	client.attemptLogin(message);
     }
 
 }
