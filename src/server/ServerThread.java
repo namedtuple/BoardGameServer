@@ -50,10 +50,10 @@ public class ServerThread extends Thread {
 	                	server.addConnection(username, this);
 	                	lobby = server.getLobby(Server.TIC_TAC_TOE);
 	                	//send a confirmation of login message?
-	                	send("LOBBY " + lobby.toString()); //send contents of lobby before adding them!
 	                	lobby.addUser(username);
+                        server.sendToAll("LOBBY " + lobby.toString());
                 	}
-                	else{
+                	else {
                 		send("LOGIN_FAIL");
                 	}
                 }

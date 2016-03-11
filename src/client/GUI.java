@@ -45,6 +45,9 @@ public class GUI extends JFrame {
         if (request.startsWith("MOVE")) {
             client.handleRequest(request);
         }
+        else if (request.startsWith("JOIN")) {
+            client.handleRequest(request);
+        }
         else if (request.startsWith("LOGIN ")) {
             client.handleRequest(request);
         }

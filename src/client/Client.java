@@ -38,16 +38,10 @@ public class Client {
         while (true) {
             msg = receive();
 
-            //for testing lobby functionality
-            String[] splitMsg = msg.split(" ");
-            if (splitMsg[0].equals("LOBBY")){ //"LOBBY user1 user2" <- server sends list of members in the lobby
-            	if (splitMsg.length != 1){ //a hack just for testing purposes only
-            		send("JOIN " + splitMsg[1]); //client sends "JOIN user1" to start a game, forcing them to play
-            	}
+            if (msg.startsWith("LOBBY")) { //"LOBBY user1 user2" <- server sends list of members in the lobby
                 handleRequest(msg);
             }
-
-            if (msg.startsWith("WELCOME")) {
+            else if (msg.startsWith("WELCOME")) {
                 handleRequest(msg);
             }
             else if (msg.startsWith("LOGIN_SUCCESS")) {
@@ -97,6 +91,9 @@ public class Client {
 
     public void handleRequest(String request) {
         if (request.startsWith("MOVE")) {
+            send(request);
+        }
+        else if (request.startsWith("JOIN")) {
             send(request);
         }
         else if (request.startsWith("LOGIN ")) {
