@@ -75,20 +75,20 @@ public class LoginScreen extends JPanel implements ActionListener{
 		this.add(passwordField);
 	}
 
-	
+
 	public String getUsername(){
 		return usernameField.getText();
 	}
-	
+
 	public String getPassword() {
 		return String.valueOf(passwordField.getPassword());
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
 		if(button == loginBtn){
-			if (gui.attemptLogin(getUsername(), getPassword())){
+			if (gui.attemptLogin("LOGIN " + getUsername() + " " + getPassword())) {
 				gui.toLobby();
 			}
 		}

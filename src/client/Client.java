@@ -102,10 +102,10 @@ public class Client {
             gui.handleRequest(request);
         }
     }
-    
-    public boolean attemptLogin(String enteredName, String enteredPassword){
-    	send("LOGIN " + enteredName + " " + enteredPassword);
-    	String msg = null;
+
+    public boolean attemptLogin(String message){
+    	send(message);
+        String msg = null;
     	try {
     		msg = receive();
     	} catch (IOException e){
