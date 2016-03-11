@@ -50,45 +50,47 @@ public class GUI extends JFrame {
     }
 
     public void handleRequest(String request) {
-        if (request.startsWith("MOVE")) {
+        String[] splitRequest = request.split(" ");
+        String firstToken = splitRequest[0];
+
+        // UP (Client)
+        if (Arrays.asList(new String[]{"MOVE", "JOIN", "LOGIN"}).contains(firstToken)) {
             client.handleRequest(request);
         }
-        else if (request.startsWith("JOIN")) {
-            client.handleRequest(request);
-        }
-        else if (request.startsWith("LOGIN ")) {
-            client.handleRequest(request);
-        }
+        // HERE and DOWN (LobbyScreen)
         else if (request.startsWith("LOGIN_SUCCESS")) {
             String[] splitMsg = request.split(" ");
             lobbyScreen.setUsername(splitMsg[1]);
             changePanel(loginScreen, Direction.FORWARD);
         }
+        // HERE and DOWN (Board)
         else if (request.startsWith("WELCOME")) {
             setTitle("" + request.charAt(8));
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
         }
+        // DOWN (Board)
         else if (request.startsWith("VALID_MOVE")){
             board.setTurnLabel("It is the opponent's turn");
             board.handleRequest(request);
         }
+        // DOWN (Board)
         else if (request.startsWith("OPPONENT_MOVED")) {
             board.setTurnLabel("It is your turn");
             board.handleRequest(request);
         }
+        // HERE and DOWN (Board)
         else if (Arrays.asList(new String[]{"VICTORY", "DEFEAT", "TIE"}).contains(request)) {
             String message = requestMessageMap.get(request);
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
             changePanel(board, Direction.BACKWARD);
         }
-        else if (request.startsWith("MESSAGE")) {
-            appendToTitle(request.substring(8));
-        }
+        // DOWN (LobbyScreen)
         else if (request.startsWith("LOBBY")) {
             lobbyScreen.addAllToWaitList(request);
         }
+        // DEL this one??
         else {
             board.handleRequest(request);
         }

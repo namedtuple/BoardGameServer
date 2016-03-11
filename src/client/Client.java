@@ -68,9 +68,6 @@ public class Client {
                 handleRequest(msg);
                 break;
             }
-            else if (msg.startsWith("MESSAGE")) {
-                handleRequest(msg);
-            }
         }
     }
 
