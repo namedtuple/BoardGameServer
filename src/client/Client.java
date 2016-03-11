@@ -35,11 +35,6 @@ public class Client {
     public void run() throws IOException {
         System.out.println("Client running");
 
-        //testing Lobby functionality!
-        //using local port as a unique ID, logging in doesn't work with multiple users of same name
-        send("LOGIN testUser" + Integer.toString(socket.getLocalPort()) + " password");
-        //
-
         String msg;
         while (true) {
             msg = receive();
@@ -106,5 +101,26 @@ public class Client {
         else {
             gui.handleRequest(request);
         }
+    }
+    
+    public boolean attemptLogin(String enteredName, String enteredPassword){
+    	send("LOGIN " + enteredName + " " + enteredPassword);
+    	String msg = null;
+    	try {
+    		msg = receive();
+    	} catch (IOException e){
+    		e.printStackTrace();
+    	}
+    	if (msg.equals("LOGIN-SUCCESS")){
+    		return true;
+    	}
+    	else if (msg.equals("LOGIN-FAIL")){
+    		return false;
+    	}
+    	else {
+    		//for sanity
+    		System.out.println("Unexpected Response for LOGIN");
+    		return false;
+    	}
     }
 }

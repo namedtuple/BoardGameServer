@@ -119,5 +119,8 @@ public class GUI extends JFrame {
         remove(board);
     }
 
+    public boolean attemptLogin(String enteredName, String enteredPassword){
+    	return client.attemptLogin(enteredName, enteredPassword);
+    }
 
 }
