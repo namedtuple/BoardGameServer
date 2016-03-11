@@ -45,7 +45,7 @@ public class ServerThread extends Thread {
                 String firstToken = splitMsg[0];
                 if (firstToken.equals("LOGIN")) {
                 	if (server.login(splitMsg[1], splitMsg[2])){
-                		send("LOGIN-SUCCESS");
+                		send("LOGIN_SUCCESS");
 	                	username = splitMsg[1];
 	                	server.addConnection(username, this);
 	                	lobby = server.getLobby(Server.TIC_TAC_TOE);
@@ -54,7 +54,7 @@ public class ServerThread extends Thread {
 	                	lobby.addUser(username);
                 	}
                 	else{
-                		send("LOGIN-FAIL");
+                		send("LOGIN_FAIL");
                 	}
                 }
                 // possible thread-safety issue, but does not matter for this project

@@ -91,5 +91,5 @@ public class LoginScreen extends JPanel implements ActionListener{
             gui.handleRequest("LOGIN " + getUsername() + " " + getPassword());
 		}
 	}
-    
+
 }

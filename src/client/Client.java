@@ -55,10 +55,10 @@ public class Client {
             if (msg.startsWith("WELCOME")) {
                 handleRequest(msg);
             }
-            else if (msg.startsWith("LOGIN-SUCCESS")) {
+            else if (msg.startsWith("LOGIN_SUCCESS")) {
                 handleRequest(msg);
             }
-            else if (msg.startsWith("LOGIN-FAIL")) {
+            else if (msg.startsWith("LOGIN_FAIL")) {
                 handleRequest(msg);
             }
             else if (msg.startsWith("VALID_MOVE")) {

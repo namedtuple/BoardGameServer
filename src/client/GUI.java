@@ -48,7 +48,7 @@ public class GUI extends JFrame {
         else if (request.startsWith("LOGIN ")) {
             client.handleRequest(request);
         }
-        else if (request.startsWith("LOGIN-SUCCESS")) {
+        else if (request.startsWith("LOGIN_SUCCESS")) {
             toLobby();
         }
         else if (request.startsWith("WELCOME")) {
