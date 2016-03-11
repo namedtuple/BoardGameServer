@@ -105,6 +105,15 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		waitList.addElement(player);
 	}
 
+    public void addAllToWaitList(String players) {
+        String[] splitMsg = players.split(" ");
+        for (int i=1; i<splitMsg.length; ++i) {
+            if (!waitList.contains(splitMsg[i])) {
+                addToWaitList(splitMsg[i]);
+            }
+        }
+    }
+
 	//call this to remove from the lobby
 	public void removeFromWaitList(String player){
 		waitList.removeElement(player);
