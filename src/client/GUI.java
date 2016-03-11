@@ -20,11 +20,7 @@ public class GUI extends JFrame {
         this.board = new Board(this, 3);
 
         add(loginScreen, "Center");
-        //add(lobbyScreen, "Center");
-        //add(board, "Center");
         loginScreen.setVisible(true);
-        //lobbyScreen.setVisible(false);
-        //board.setVisible(false);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
@@ -50,10 +46,10 @@ public class GUI extends JFrame {
             client.handleRequest(request);
         }
         else if (request.startsWith("LOGIN ")) {
-            client.attemptLogin(request);
+            client.handleRequest(request);
         }
         else if (request.startsWith("LOGIN-SUCCESS")) {
-            loginScreen.handleRequest(request);
+            toLobby();
         }
         else if (request.startsWith("WELCOME")) {
             setTitle("" + request.charAt(8));
@@ -107,6 +103,8 @@ public class GUI extends JFrame {
         lobbyScreen.setVisible(true);
         loginScreen.setVisible(false);
         remove(loginScreen);
+        validate();
+        repaint();
     }
 
     public void toBoard() {
@@ -115,6 +113,8 @@ public class GUI extends JFrame {
         board.setVisible(true);
         lobbyScreen.setVisible(false);
         remove(lobbyScreen);
+        validate();
+        repaint();
     }
 
     public void returnToLobby() {
@@ -123,6 +123,8 @@ public class GUI extends JFrame {
         lobbyScreen.setVisible(true);
         board.setVisible(false);
         remove(board);
+        validate();
+        repaint();
     }
 
 }

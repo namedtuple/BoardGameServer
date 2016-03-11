@@ -29,7 +29,6 @@ public class Client {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         gui = new GUI(this, "GUI");
-        //LoginScreen loginScreen = new LoginScreen("Login Screen");
     }
 
     public void run() throws IOException {
@@ -38,6 +37,7 @@ public class Client {
         String msg;
         while (true) {
             msg = receive();
+            System.out.println("WHILE LOOP......" + msg);
 
             //for testing lobby functionality
             String[] splitMsg = msg.split(" ");
@@ -52,8 +52,13 @@ public class Client {
                 handleRequest(msg);
             }
 
-
             if (msg.startsWith("WELCOME")) {
+                handleRequest(msg);
+            }
+            else if (msg.startsWith("LOGIN-SUCCESS")) {
+                handleRequest(msg);
+            }
+            else if (msg.startsWith("LOGIN-FAIL")) {
                 handleRequest(msg);
             }
             else if (msg.startsWith("VALID_MOVE")) {
@@ -98,28 +103,12 @@ public class Client {
         if (request.startsWith("MOVE")) {
             send(request);
         }
+        else if (request.startsWith("LOGIN ")) {
+            send(request);
+        }
         else {
             gui.handleRequest(request);
         }
     }
 
-    public void attemptLogin(String message){
-    	send(message);
-        String msg = null;
-    	try {
-    		msg = receive();
-    	} catch (IOException e){
-    		e.printStackTrace();
-    	}
-    	if (msg.equals("LOGIN-SUCCESS")){
-    		handleRequest(msg);
-    	}
-    	else if (msg.equals("LOGIN-FAIL")){
-    		handleRequest(msg);
-    	}
-    	else {
-    		//for sanity
-    		System.out.println("Unexpected Response for LOGIN");
-    	}
-    }
 }
