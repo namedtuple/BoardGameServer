@@ -21,7 +21,7 @@ public class Client {
     private GUI gui;
 
     private Socket socket;
-    
+
     // Methods
     public Client() throws IOException {
         Socket socket = new Socket(SERVER_ADDRESS, PORT);
@@ -34,16 +34,16 @@ public class Client {
 
     public void run() throws IOException {
         System.out.println("Client running");
-        
+
         //testing Lobby functionality!
         //using local port as a unique ID, logging in doesn't work with multiple users of same name
         send("LOGIN testUser" + Integer.toString(socket.getLocalPort()));
         //
-        
+
         String msg;
         while (true) {
             msg = receive();
-            
+
             //for testing lobby functionality
             String[] splitMsg = msg.split(" ");
             if (splitMsg[0].equals("LOBBY")){ //"LOBBY user1 user2" <- server sends list of members in the lobby
@@ -54,10 +54,10 @@ public class Client {
             		System.out.println("Sending JOIN");
             		send("JOIN " + splitMsg[1]); //client sends "JOIN user1" to start a game, forcing them to play
             	}
+                handleRequest(msg);
             }
-            //
-            
-            
+
+
             if (msg.startsWith("WELCOME")) {
                 handleRequest(msg);
             }

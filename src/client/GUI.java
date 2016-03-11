@@ -83,6 +83,13 @@ public class GUI extends JFrame {
         else if (request.startsWith("MESSAGE")) {
             appendToTitle(request.substring(8));
         }
+        else if (request.startsWith("LOBBY")) {
+            String[] splitMsg = request.split(" ");
+            System.out.println(request);
+            for (int i=1; i<splitMsg.length; ++i) {
+                lobbyScreen.addToWaitList(splitMsg[i]);
+            }
+        }
         else {
             board.handleRequest(request);
         }
