@@ -37,7 +37,7 @@ public class Client {
 
         //testing Lobby functionality!
         //using local port as a unique ID, logging in doesn't work with multiple users of same name
-        send("LOGIN testUser" + Integer.toString(socket.getLocalPort()));
+        send("LOGIN testUser" + Integer.toString(socket.getLocalPort()) + " password");
         //
 
         String msg;
