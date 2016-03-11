@@ -87,7 +87,6 @@ public class GUI extends JFrame {
         }
         else if (request.startsWith("LOBBY")) {
             String[] splitMsg = request.split(" ");
-            System.out.println(request);
             for (int i=1; i<splitMsg.length; ++i) {
                 lobbyScreen.addToWaitList(splitMsg[i]);
             }
@@ -107,7 +106,6 @@ public class GUI extends JFrame {
     }
 
     public void toBoard() {
-        System.out.println("toBoard");
         add(board);
         board.setVisible(true);
         lobbyScreen.setVisible(false);

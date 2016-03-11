@@ -37,16 +37,11 @@ public class Client {
         String msg;
         while (true) {
             msg = receive();
-            System.out.println("WHILE LOOP......" + msg);
 
             //for testing lobby functionality
             String[] splitMsg = msg.split(" ");
             if (splitMsg[0].equals("LOBBY")){ //"LOBBY user1 user2" <- server sends list of members in the lobby
-            	if (splitMsg.length == 1){ //a hack just for testing purposes only
-            		System.out.println("LOGIN LENGTH IS 1");
-            	}
-            	else {
-            		System.out.println("Sending JOIN");
+            	if (splitMsg.length != 1){ //a hack just for testing purposes only
             		send("JOIN " + splitMsg[1]); //client sends "JOIN user1" to start a game, forcing them to play
             	}
                 handleRequest(msg);
@@ -94,6 +89,7 @@ public class Client {
     private String receive() throws IOException {
         String msg = in.readLine();
         if (!msg.equals("")) {
+            System.out.println("-----------------------------------------------------------------------------");
             System.out.println("Server says:  " + msg);
         }
         return msg;

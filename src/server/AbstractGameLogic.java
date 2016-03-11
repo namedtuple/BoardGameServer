@@ -33,7 +33,7 @@ public abstract class AbstractGameLogic implements GameLogicInterface {
     }
 
     public void debugPrintBoard() {
-        System.out.println("debugPrintBoard");
+        //System.out.println("debugPrintBoard");
         //for (int yRow = 1; yRow <= LENGTH; ++yRow) {
         //    System.out.print("  ");
         //    for (int xCol = 1; xCol <= LENGTH; ++xCol) {
