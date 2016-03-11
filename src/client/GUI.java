@@ -49,7 +49,7 @@ public class GUI extends JFrame {
             client.handleRequest(request);
         }
         else if (request.startsWith("LOGIN_SUCCESS")) {
-            toLobby();
+            changePanel(loginScreen, lobbyScreen);
         }
         else if (request.startsWith("WELCOME")) {
             setTitle("" + request.charAt(8));
@@ -68,19 +68,19 @@ public class GUI extends JFrame {
             String message = "You win!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            returnToLobby();
+            changePanel(board, lobbyScreen);
         }
         else if (request.startsWith("DEFEAT")) {
             String message = "You lose!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            returnToLobby();
+            changePanel(board, lobbyScreen);
         }
         else if (request.startsWith("TIE")) {
             String message = "You tied!";
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            returnToLobby();
+            changePanel(board, lobbyScreen);
         }
         else if (request.startsWith("MESSAGE")) {
             appendToTitle(request.substring(8));
@@ -97,12 +97,11 @@ public class GUI extends JFrame {
         }
     }
 
-    public void toLobby() {
-        System.out.println("toLobby");
-        add(lobbyScreen);
-        lobbyScreen.setVisible(true);
-        loginScreen.setVisible(false);
-        remove(loginScreen);
+    public void changePanel(JPanel currentPanel, JPanel nextPanel) {
+        add(nextPanel);
+        nextPanel.setVisible(true);
+        currentPanel.setVisible(false);
+        remove(currentPanel);
         validate();
         repaint();
     }
@@ -113,16 +112,6 @@ public class GUI extends JFrame {
         board.setVisible(true);
         lobbyScreen.setVisible(false);
         remove(lobbyScreen);
-        validate();
-        repaint();
-    }
-
-    public void returnToLobby() {
-        System.out.println("returnToLobby");
-        add(lobbyScreen);
-        lobbyScreen.setVisible(true);
-        board.setVisible(false);
-        remove(board);
         validate();
         repaint();
     }
