@@ -1,5 +1,7 @@
 package client;
 import javax.swing.*;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class GUI extends JFrame {
 
@@ -10,6 +12,7 @@ public class GUI extends JFrame {
     private Board board;
     private int numTitleChanges = 0;
     private String baseTitle;
+    private HashMap<String, String> requestMessageMap;
 
     // Methods
     public GUI(Client client, String title) {
@@ -26,6 +29,11 @@ public class GUI extends JFrame {
         setSize(450, 300);
         setVisible(true);
         setResizable(false);
+
+        requestMessageMap = new HashMap<>();
+        requestMessageMap.put("VICTORY", "You win!");
+        requestMessageMap.put("DEFEAT", "You lose!");
+        requestMessageMap.put("TIE", "You tied!");
     }
 
     @Override
@@ -69,20 +77,8 @@ public class GUI extends JFrame {
             board.setTurnLabel("It is your turn");
             board.handleRequest(request);
         }
-        else if (request.startsWith("VICTORY")) {
-            String message = "You win!";
-            board.setTurnLabel(message);
-            JOptionPane.showMessageDialog(this, message);
-            changePanel(board, Direction.BACKWARD);
-        }
-        else if (request.startsWith("DEFEAT")) {
-            String message = "You lose!";
-            board.setTurnLabel(message);
-            JOptionPane.showMessageDialog(this, message);
-            changePanel(board, Direction.BACKWARD);
-        }
-        else if (request.startsWith("TIE")) {
-            String message = "You tied!";
+        else if (Arrays.asList(new String[]{"VICTORY", "DEFEAT", "TIE"}).contains(request)) {
+            String message = requestMessageMap.get(request);
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
             changePanel(board, Direction.BACKWARD);
@@ -118,7 +114,5 @@ public class GUI extends JFrame {
         validate();
         repaint();
     }
-
-
 
 }
