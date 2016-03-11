@@ -52,6 +52,8 @@ public class GUI extends JFrame {
             client.handleRequest(request);
         }
         else if (request.startsWith("LOGIN_SUCCESS")) {
+            String[] splitMsg = request.split(" ");
+            lobbyScreen.setUsername(splitMsg[1]);
             changePanel(loginScreen, lobbyScreen);
         }
         else if (request.startsWith("WELCOME")) {

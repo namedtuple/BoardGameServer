@@ -19,6 +19,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	private DefaultListModel waitList; //changes made to this will update GUI waiting list
 	private JList uiList;
     private GUI gui;
+    private String username;
 
 	public LobbyScreen(GUI gui)
 	{
@@ -108,8 +109,10 @@ public class LobbyScreen extends JPanel implements ActionListener{
     public void addAllToWaitList(String players) {
         String[] splitMsg = players.split(" ");
         for (int i=1; i<splitMsg.length; ++i) {
-            if (!waitList.contains(splitMsg[i])) {
-                addToWaitList(splitMsg[i]);
+            String playerName = splitMsg[i];
+            if (!waitList.contains(playerName) && !playerName.equals(username)) {
+            //if (!waitList.contains(playerName)) {
+                addToWaitList(playerName);
             }
         }
     }
@@ -128,4 +131,8 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	        }
 
 	}
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

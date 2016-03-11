@@ -45,8 +45,8 @@ public class ServerThread extends Thread {
                 String firstToken = splitMsg[0];
                 if (firstToken.equals("LOGIN")) {
                 	if (server.login(splitMsg[1], splitMsg[2])){
-                		send("LOGIN_SUCCESS");
 	                	username = splitMsg[1];
+                		send("LOGIN_SUCCESS " + username);
 	                	server.addConnection(username, this);
 	                	lobby = server.getLobby(Server.TIC_TAC_TOE);
 	                	//send a confirmation of login message?
