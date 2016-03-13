@@ -3,13 +3,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Arrays;
 
 public class Client {
 
     // Main
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Client client = new Client();
         client.run();
     }
@@ -17,33 +18,56 @@ public class Client {
     // Fields
     private final static String SERVER_ADDRESS = "localhost";
     private final static int PORT = 6666;
+    private final static int RECONNECT_INTERVAL = 5000;
+    private final static int TOTAL_ALLOWED_RECONNECT_PERIOD = 600000; // 10 minutes
+
     private BufferedReader in;
     private PrintWriter out;
     private GUI gui;
 
-    private Socket socket;
-
     // Methods
-    public Client() throws IOException {
+    private Client() throws IOException {
+        gui = new GUI(this, "BoardGameServer");
+        refreshConnection();
+    }
+    private void refreshConnection() throws IOException {
         Socket socket = new Socket(SERVER_ADDRESS, PORT);
-        this.socket = socket;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        gui = new GUI(this, "BoardGameServer");
     }
 
-    public void run() throws IOException {
+    private void run() throws IOException, InterruptedException {
         System.out.println("Client running");
+        String message;
+        int totalDownTime = 0;
 
-        String msg;
         while (true) {
-            msg = receive();
-            handleRequest(msg);
+            try {
+                message = receive();
+                handleRequest(message);
+            }
+            catch (IOException e) {
+                try {
+                    System.out.println("No connection to server.  Will attempt to reconnect in " + RECONNECT_INTERVAL/1000 + " seconds.");
+                    Thread.sleep(RECONNECT_INTERVAL);
+                    totalDownTime += RECONNECT_INTERVAL;
+                    refreshConnection();
+                    System.out.println("  Reconnected!");
+                }
+                catch (ConnectException e2) {
+                    System.out.println("  Failed to reconnect...");
+                    System.out.println("");
+                    if (totalDownTime > TOTAL_ALLOWED_RECONNECT_PERIOD) {
+                       System.out.println("No connection made after " + TOTAL_ALLOWED_RECONNECT_PERIOD/1000 + " seconds.  Exiting program.");
+                        break;
+                    }
+                }
+            }
         }
     }
 
     // Sends message to Server
-    public void send(String message) {
+    private void send(String message) {
         out.println(message);
     }
 
