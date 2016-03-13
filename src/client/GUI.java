@@ -56,7 +56,7 @@ public class GUI extends JFrame {
         String firstToken = splitRequest[0];
 
         // UP (Client)
-        if (goingUp(request)) {
+        if (Arrays.asList(new String[]{"MOVE", "JOIN", "LOGIN"}).contains(firstToken)) {
             client.handleRequest(request);
         }
 
@@ -66,13 +66,13 @@ public class GUI extends JFrame {
             lobbyScreen.setUsername(splitMsg[1]);
             changePanel(loginScreen, Direction.FORWARD);
         }
+
         // HERE and DOWN (Board)
         else if (request.startsWith("WELCOME")) {
             setTitle("" + request.charAt(8));
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
         }
-
 
         // HERE and DOWN (Board)
         else if (Arrays.asList(new String[]{"VICTORY", "DEFEAT", "TIE"}).contains(request)) {
@@ -82,46 +82,21 @@ public class GUI extends JFrame {
             changePanel(board, Direction.BACKWARD);
         }
 
-
         // DOWN (Board) - VALID_MOVE, OPPONENT_MOVED
-        else if (goingDownToBoard(request)) {
+        else if (Arrays.asList(new String[]{"VALID_MOVE", "OPPONENT_MOVED"}).contains(request)) {
             board.setTurnLabel(requestMessageMap.get(firstToken));
             board.handleRequest(request);
         }
-
 
         // DOWN (LobbyScreen)
         else if (request.startsWith("LOBBY")) {
             lobbyScreen.addAllToWaitList(request);
         }
+
         // DEL this one??
         else {
             board.handleRequest(request);
         }
-    }
-
-    private boolean goingUp(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-        return Arrays.asList(new String[]{"MOVE", "JOIN", "LOGIN"}).contains(firstToken);
-    }
-
-    private boolean goingDownToLobbyScreen(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-        return Arrays.asList(new String[]{"LOGIN_SUCCESS", "LOBBY"}).contains(firstToken);
-    }
-
-    private boolean goingDownToBoard(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-        return Arrays.asList(new String[]{"WELCOME", "VALID_MOVE", "OPPONENT_MOVED", "VICTORY", "DEFEAT", "TIE"}).contains(firstToken);
-    }
-
-    private boolean endsHere(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-        return Arrays.asList(new String[]{"LOGIN_SUCCESS", "WELCOME", "VICTORY", "DEFEAT", "TIE"}).contains(firstToken);
     }
 
     public void changePanel(JPanel currentPanel, Direction direction) {
