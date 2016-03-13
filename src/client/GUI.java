@@ -70,7 +70,7 @@ public class GUI extends JFrame {
 
         // HERE and DOWN (Board)
         else if (request.startsWith("WELCOME")) {
-            setTitle("" + request.charAt(8));
+            setTitle(splitRequest[1]);
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
         }

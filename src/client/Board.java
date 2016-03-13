@@ -9,8 +9,8 @@ public class Board extends JPanel {
     // Fields
     private GUI gui;
     private int length;     // size of board
-    private char ID;
-    private char opponentID;
+    private String username;
+    private String opponentUsername;
     private Tile tile;
     private JLabel turnLabel;
     private JPanel boardPanel, turnPanel;
@@ -50,12 +50,12 @@ public class Board extends JPanel {
         add(turnPanel,BorderLayout.SOUTH);
     }
 
-    public char getID() {
-        return ID;
+    public String getUsername() {
+        return username;
     }
 
-    public char getOpponentID() {
-        return opponentID;
+    public String getOpponentUsername() {
+        return opponentUsername;
     }
 
     public void setTurnLabel(String text)
@@ -64,12 +64,15 @@ public class Board extends JPanel {
     }
 
     public void handleRequest(String request) {
+        String[] splitRequest = request.split(" ");
+
         if (request.startsWith("MOVE")) {
             gui.handleRequest(request);
         }
         else if (request.startsWith("WELCOME")) {
-            ID = request.charAt(8);
-            opponentID = request.charAt(10);
+            username = splitRequest[1];
+            opponentUsername = splitRequest[3];
+            tile.handleRequest(request);
         }
         else if (request.startsWith("VALID_MOVE")){
             tile.handleRequest(request);

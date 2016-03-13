@@ -15,7 +15,7 @@ public class Tile extends JButton implements ActionListener {
 
     // Fields
     private static Board board;
-    private static HashMap<Character, ImageIcon> imageHashMap;
+    private static HashMap<String, ImageIcon> imageHashMap;
     private static List<Tile> instances = new ArrayList<>();
     private static Tile lastClickedTile;
     private Pair<Integer, Integer> coordinates; //saves button coordinates
@@ -23,20 +23,18 @@ public class Tile extends JButton implements ActionListener {
     // Methods
     public Tile(Board board, Pair<Integer, Integer> coordinates) {
         Tile.board = board;
-        if (imageHashMap == null) {
-            loadImages();
-        }
         Tile.instances.add(this);
         this.coordinates = coordinates;
         this.addActionListener(this);
     }
 
-    private static void loadImages() {
+    private static void loadImages(String username, String opponentUsername) {
+        System.out.println("loadImages() on " + board.getUsername());
         imageHashMap = new HashMap<>();
         try {
-            imageHashMap.put('X', new ImageIcon(ImageIO.read(new File("img/x.png"))));
-            imageHashMap.put('O', new ImageIcon(ImageIO.read(new File("img/o.png"))));
-            imageHashMap.put('_', new ImageIcon(ImageIO.read(new File("img/blank.png"))));
+            imageHashMap.put(username, new ImageIcon(ImageIO.read(new File("img/x.png"))));
+            imageHashMap.put(opponentUsername, new ImageIcon(ImageIO.read(new File("img/o.png"))));
+            imageHashMap.put("_", new ImageIcon(ImageIO.read(new File("img/blank.png"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,8 +50,7 @@ public class Tile extends JButton implements ActionListener {
         handleRequest("MOVE " + coordinates);
     }
 
-    // Returns an ImageIcon for the X or O icon
-    private static ImageIcon chooseIcon(char piece) {
+    private static ImageIcon chooseIcon(String piece) {
         return imageHashMap.get(piece);
     }
 
@@ -87,15 +84,26 @@ public class Tile extends JButton implements ActionListener {
         if (request.startsWith("MOVE")) {
             board.handleRequest(request);
         }
+        else if (request.startsWith("WELCOME")) {
+            String[] splitRequest = request.split(" ");
+            if (imageHashMap == null) {
+                if (request.indexOf(" X ") < request.indexOf(" O ")) {
+                    loadImages(splitRequest[1], splitRequest[3]);
+                }
+                else {
+                    loadImages(splitRequest[3], splitRequest[1]);
+                }
+            }
+        }
         else if (request.startsWith("VALID_MOVE")) {
-            lastClickedTile.setIcon(chooseIcon(board.getID()));
-            lastClickedTile.setDisabledIcon(chooseIcon(board.getID()));
+            lastClickedTile.setIcon(chooseIcon(board.getUsername()));
+            lastClickedTile.setDisabledIcon(chooseIcon(board.getUsername()));
             lastClickedTile.setEnabled(false);
         }
         else if (request.startsWith("OPPONENT_MOVED")) {
             Tile tile = getTile(extractPosition(request));
-            tile.setIcon(chooseIcon(board.getOpponentID()));
-            tile.setDisabledIcon(chooseIcon(board.getOpponentID()));
+            tile.setIcon(chooseIcon(board.getOpponentUsername()));
+            tile.setDisabledIcon(chooseIcon(board.getOpponentUsername()));
             tile.setEnabled(false);
         }
     }

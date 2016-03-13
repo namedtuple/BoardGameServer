@@ -102,21 +102,13 @@ public class ServerThread extends Thread {
     public String receive() throws IOException {
         String msg = in.readLine();
         System.out.println("-----------------------------------------------------------------------------");
-        System.out.println("Client " + ID + " says:  " + msg);
+        System.out.println("Client " + username + " says:  " + msg);
         return msg;
     }
 
     public void opponentMoved(Pair<Integer, Integer> location) {
         send("OPPONENT_MOVED " + location);
         send(game.hasWinner() ? "DEFEAT" : game.tied() ? "TIE" : "");
-    }
-
-    public void setID(char ID) {
-    	this.ID = ID;
-    }
-
-    public char getID() {
-        return ID;
     }
 
     public ServerThread getOpponent() {
