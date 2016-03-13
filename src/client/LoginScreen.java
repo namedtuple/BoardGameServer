@@ -32,7 +32,8 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 	public void createLoginButton(){
 		loginBtn = new JButton("Login");
 		loginBtn.addActionListener(this);
-		loginBtn.setBounds(190,155,100,20);
+		loginBtn.addKeyListener(this);
+        loginBtn.setBounds(190,155,100,20);
 		this.add(loginBtn);
 	}
 
