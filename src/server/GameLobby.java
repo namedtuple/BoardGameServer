@@ -5,21 +5,26 @@ import java.util.List;
 
 public class GameLobby {
 
+    // Fields
 	private List<String> list;
 
+    // Methods
 	public GameLobby(){
-		list = new ArrayList<String>();
+		list = new ArrayList<>();
 	}
 
 	public void addUser(String userName){
 		list.add(userName);
+        debugPrintLobbyContents();
 	}
 
 	public void removeUser(String userName){
 		list.remove(userName);
+        debugPrintLobbyContents();
 	}
 
 	//Can be used to send contents of waiting list over socket
+    @Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
 		for(String userName : list){
@@ -46,7 +51,14 @@ public class GameLobby {
 		player1.removeFromLobby();
 		player2.removeFromLobby();
 		//start the game
-
-
 	}
+
+    private void debugPrintLobbyContents() {
+        System.out.println("-----------------------------------------------------------------------------");
+        System.out.println("Lobby contents updated: ");
+        for (String user : list) {
+            System.out.println("  " + user);
+        }
+    }
+
 }
