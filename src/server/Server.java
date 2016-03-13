@@ -45,9 +45,9 @@ public class Server {
         accountAuthenticator = new AccountAuthenticator();
 
         gameLobbies = new HashMap<String, GameLobby>();
-        gameLobbies.put(TIC_TAC_TOE, new GameLobby());
-        gameLobbies.put(CHECKERS, new GameLobby());
-        gameLobbies.put(CHUTES_AND_LADDERS, new GameLobby());
+        gameLobbies.put(TIC_TAC_TOE, new GameLobby(TIC_TAC_TOE));
+        gameLobbies.put(CHECKERS, new GameLobby(CHECKERS));
+        gameLobbies.put(CHUTES_AND_LADDERS, new GameLobby(CHUTES_AND_LADDERS));
 
         connectionHandlers = new HashMap<String, ServerThread>();
 

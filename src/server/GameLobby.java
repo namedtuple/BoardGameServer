@@ -6,11 +6,13 @@ import java.util.List;
 public class GameLobby {
 
     // Fields
-	private List<String> list;
+	private String lobbyName;
+    private List<String> list;
 
     // Methods
-	public GameLobby(){
-		list = new ArrayList<>();
+	public GameLobby(String lobbyName) {
+        this.lobbyName = lobbyName;
+        list = new ArrayList<>();
 	}
 
 	public void addUser(String userName){
@@ -57,7 +59,7 @@ public class GameLobby {
 
     private void debugPrintLobbyContents() {
         System.out.println("-----------------------------------------------------------------------------");
-        System.out.println("Lobby contents updated: ");
+        System.out.println(lobbyName + " Lobby contents updated: ");
         for (String user : list) {
             System.out.println("  " + user);
         }
