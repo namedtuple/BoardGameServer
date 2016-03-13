@@ -40,7 +40,7 @@ public class ServerThread extends Thread {
 
                 String[] splitMsg = msg.split(" ");
                 String firstToken = splitMsg[0];
-                if (firstToken.equals("LOGIN")) {
+                if (firstToken.equals("LOGGING_IN")) {
                 	if (server.login(splitMsg[1], splitMsg[2])){
 	                	username = splitMsg[1];
                 		send("LOGIN_SUCCESS " + username);
@@ -93,7 +93,9 @@ public class ServerThread extends Thread {
 
     // Sends message to Client
     public void send(String message) {
-        out.println(message);
+        if (!message.equals("")) {
+            out.println(message);
+        }
     }
 
     // Returns the next line of stream from Client

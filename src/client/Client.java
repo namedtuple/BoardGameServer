@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Client {
 
@@ -37,34 +38,7 @@ public class Client {
         String msg;
         while (true) {
             msg = receive();
-
-            if (msg.startsWith("LOBBY")) { //"LOBBY user1 user2" <- server sends list of members in the lobby
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("WELCOME")) {
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("LOGIN_SUCCESS")) {
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("LOGIN_FAIL")) {
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("VALID_MOVE")) {
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("OPPONENT_MOVED")) {
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("VICTORY")) {
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("DEFEAT")) {
-                handleRequest(msg);
-            }
-            else if (msg.startsWith("TIE")) {
-                handleRequest(msg);
-            }
+            handleRequest(msg);
         }
     }
 
@@ -76,27 +50,18 @@ public class Client {
     // Returns the next line of stream from Server
     private String receive() throws IOException {
         String msg = in.readLine();
-        if (!msg.equals("")) {
-            System.out.println("-----------------------------------------------------------------------------");
-            System.out.println("Server says:  " + msg);
-        }
+        System.out.println("-----------------------------------------------------------------------------");
+        System.out.println("Server says:  " + msg);
         return msg;
     }
 
     public void handleRequest(String request) {
-        if (request.startsWith("MOVE")) {
+        String[] splitRequest = request.split(" ");
+        String firstToken = splitRequest[0];
+        if (Arrays.asList(new String[]{"MOVE", "JOIN", "LOGGING_IN", "GOTO_LOBBY"}).contains(firstToken)) {
             send(request);
         }
-        else if (request.startsWith("JOIN")) {
-            send(request);
-        }
-        else if (request.startsWith("LOGIN ")) {
-            send(request);
-        }
-        else if (request.startsWith("GOTO_LOBBY")) {
-            send(request);
-        }
-        else {
+        else if (!request.startsWith("You said: ")) {
             gui.handleRequest(request);
         }
     }

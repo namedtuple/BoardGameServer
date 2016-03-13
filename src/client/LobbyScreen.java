@@ -126,7 +126,6 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	}
 
  	public void requestWaitlist(){
-        System.out.println("LobbyScreen.requestWaitlist()");
  		waitList.clear(); //clear contents
  		currentGameSelection = (String) gameSelection.getSelectedItem();
  		gui.handleRequest("GOTO_LOBBY " + currentGameSelection);
