@@ -72,12 +72,21 @@ public class Server {
     	connectionHandlers.put(userName, connection);
     }
 
+    public void removeConnection(String userName) {
+        connectionHandlers.remove(userName);
+    }
+
     public ServerThread getConnection(String userName){
     	return connectionHandlers.get(userName);
     }
 
     public boolean login(String enteredName, String enteredPassword){
-    	if (accountAuthenticator.userExists(enteredName)){ //if user exists
+
+        if (connectionHandlers.containsKey(enteredName)) { // prevent multiple connections from the same account
+            System.out.println(enteredName + " is already connected!");
+            return false;
+        }
+        else if (accountAuthenticator.userExists(enteredName)){ //if user exists
     		return accountAuthenticator.isValidLogin(enteredName, enteredPassword); //check password
     	}
     	else { //create account, should return true and login the user
