@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class LoginScreen extends JPanel implements ActionListener{
+public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 
 	private JButton loginBtn;
 	private JTextField usernameField;
@@ -63,14 +63,16 @@ public class LoginScreen extends JPanel implements ActionListener{
 		this.add(passwordLabel);
 	}
 
-	public void createUsernameField(){
+	public void createUsernameField() {
 		usernameField = new JTextField();
+        usernameField.addKeyListener(this);
 		usernameField.setBounds(140, 110, 200, 20);
 		this.add(usernameField);
 	}
 
 	public void createPasswordField(){
 		passwordField = new JPasswordField();
+        passwordField.addKeyListener(this);
 		passwordField.setBounds(140,130,200,20);
 		this.add(passwordField);
 	}
@@ -84,12 +86,32 @@ public class LoginScreen extends JPanel implements ActionListener{
 		return String.valueOf(passwordField.getPassword());
 	}
 
+    // ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
-		if(button == loginBtn){
-            gui.handleRequest("LOGGING_IN " + getUsername() + " " + getPassword());
+		if (button == loginBtn){
+            attemptLogin();
 		}
 	}
+
+    // KeyListener
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+            attemptLogin();
+        }
+    }
+
+    // Helper method called by clicking Login button or pressing Enter
+    private void attemptLogin() {
+        gui.handleRequest("LOGGING_IN " + getUsername() + " " + getPassword());
+    }
 
 }
