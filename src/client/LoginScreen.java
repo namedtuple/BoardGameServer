@@ -117,4 +117,9 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+    public void clearFields() {
+        usernameField.setText("");
+        passwordField.setText("");
+    }
+
 }

@@ -59,6 +59,7 @@ public class GUI extends JFrame {
             lobbyScreen.setUsername(splitMsg[1]);
             lobbyScreen.requestWaitlist();
             changePanel(loginScreen, lobbyScreen);
+            loginScreen.clearFields();
         }
 
         // HERE and DOWN (Board)
