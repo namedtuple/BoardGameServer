@@ -45,8 +45,6 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
 		if(e.getSource() == gameSelection)
 		{
-			//JComboBox selection = (JComboBox) e.getSource();
-			//currentGameSelection = (String) selection.getSelectedItem();
             if (this.isVisible()) {
                 System.out.println("ABOUT TO CALL LobbyScreen.requestWaitlist() from actionPerformed()");
                 requestWaitlist();
@@ -54,8 +52,8 @@ public class LobbyScreen extends JPanel implements ActionListener{
         }
 		else if(e.getSource() == newGameButton)
 		{
-            gui.changePanel(this, Direction.FORWARD);
 			//create a new game instance depending on what game is selected
+            gui.handleRequest("TO_BOARD_SCREEN");
 		}
 		else if(e.getSource() == joinGameButton)
 		{

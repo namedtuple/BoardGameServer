@@ -12,6 +12,7 @@ public class GUI extends JFrame {
     private LobbyScreen lobbyScreen;
     private Board board;
     private HashMap<String, String> requestMessageMap;
+    private JPanel currentScreen;
 
     // Methods
     public GUI(Client client, String title) {
@@ -23,6 +24,7 @@ public class GUI extends JFrame {
 
         add(loginScreen, "Center");
         loginScreen.setVisible(true);
+        currentScreen = loginScreen;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 300);
@@ -55,7 +57,8 @@ public class GUI extends JFrame {
             String[] splitMsg = request.split(" ");
             appendToTitle(splitMsg[1]);
             lobbyScreen.setUsername(splitMsg[1]);
-            changePanel(loginScreen, Direction.FORWARD);
+            lobbyScreen.requestWaitlist();
+            changePanel(loginScreen, lobbyScreen);
         }
 
         // HERE and DOWN (Board)
@@ -70,7 +73,8 @@ public class GUI extends JFrame {
             String message = requestMessageMap.get(request);
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
-            changePanel(board, Direction.BACKWARD);
+            lobbyScreen.requestWaitlist();
+            changePanel(board, lobbyScreen);
         }
 
         // DOWN (Board) - VALID_MOVE, OPPONENT_MOVED
@@ -84,20 +88,19 @@ public class GUI extends JFrame {
             lobbyScreen.addAllToWaitList(request);
         }
 
-    }
+        else if (request.startsWith("TO_BOARD_SCREEN")) {
+            changePanel(lobbyScreen, board);
+        }
 
-    public void changePanel(JPanel currentPanel, Direction direction) {
-        if (currentPanel == loginScreen && direction == Direction.FORWARD) {
-            lobbyScreen.requestWaitlist();
-            changePanel(currentPanel, lobbyScreen);
+        else if (request.startsWith("DISCONNECTED")) {
+            if (currentScreen == lobbyScreen) {
+                changePanel(lobbyScreen, loginScreen);
+            }
+            else if (currentScreen == board) {
+                changePanel(board, loginScreen);
+            }
         }
-        else if (currentPanel == lobbyScreen && direction == Direction.FORWARD) {
-            changePanel(currentPanel, board);
-        }
-        else if (currentPanel == board && direction == Direction.BACKWARD) {
-            lobbyScreen.requestWaitlist();
-            changePanel(currentPanel, lobbyScreen);
-        }
+
     }
 
     private void changePanel(JPanel currentPanel, JPanel nextPanel) {
@@ -107,6 +110,7 @@ public class GUI extends JFrame {
         remove(currentPanel);
         validate();
         repaint();
+        currentScreen = nextPanel;
     }
 
 }

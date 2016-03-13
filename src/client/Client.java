@@ -48,6 +48,7 @@ public class Client {
             }
             catch (IOException e) {
                 try {
+                    handleRequest("DISCONNECTED");
                     System.out.println("No connection to server.  Will attempt to reconnect in " + RECONNECT_INTERVAL/1000 + " seconds.");
                     Thread.sleep(RECONNECT_INTERVAL);
                     totalDownTime += RECONNECT_INTERVAL;
