@@ -38,7 +38,13 @@ public class Client {
         while (true) {
             msg = receive();
 
+<<<<<<< HEAD
             if (msg.startsWith("LOBBY")) { //"LOBBY user1 user2" <- server sends list of members in the lobby
+=======
+            //for testing lobby functionality
+            String[] splitMsg = msg.split(" ");
+            if (splitMsg[0].equals("LOBBY")){ //"LOBBY user1 user2" <- server sends list of members in the lobby
+>>>>>>> cf0f28260b3e87de3d485865022e444f79ccdedf
                 handleRequest(msg);
             }
             else if (msg.startsWith("WELCOME")) {
@@ -58,15 +64,12 @@ public class Client {
             }
             else if (msg.startsWith("VICTORY")) {
                 handleRequest(msg);
-                break;
             }
             else if (msg.startsWith("DEFEAT")) {
                 handleRequest(msg);
-                break;
             }
             else if (msg.startsWith("TIE")) {
                 handleRequest(msg);
-                break;
             }
         }
     }

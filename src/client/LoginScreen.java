@@ -88,7 +88,14 @@ public class LoginScreen extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
 		if(button == loginBtn){
+<<<<<<< HEAD
             gui.handleRequest("LOGIN " + getUsername() + " " + getPassword());
+=======
+			if (gui.attemptLogin(getUsername(), getPassword())){
+				gui.toLobby();
+			}
+			//else, show message to user saying log-in failed/invalid password
+>>>>>>> cf0f28260b3e87de3d485865022e444f79ccdedf
 		}
 	}
 
