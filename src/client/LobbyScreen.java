@@ -129,7 +129,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
         System.out.println("LobbyScreen.requestWaitlist()");
  		waitList.clear(); //clear contents
  		currentGameSelection = (String) gameSelection.getSelectedItem();
- 		gui.getClient().send("GOTO-LOBBY " + currentGameSelection);
+ 		gui.handleRequest("GOTO_LOBBY " + currentGameSelection);
  	}
 
 	class playerSelectionListener implements ListSelectionListener

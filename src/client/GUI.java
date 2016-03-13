@@ -56,7 +56,7 @@ public class GUI extends JFrame {
         String firstToken = splitRequest[0];
 
         // UP (Client)
-        if (Arrays.asList(new String[]{"MOVE", "JOIN", "LOGIN"}).contains(firstToken)) {
+        if (Arrays.asList(new String[]{"MOVE", "JOIN", "LOGIN", "GOTO_LOBBY"}).contains(firstToken)) {
             client.handleRequest(request);
         }
 
@@ -121,9 +121,5 @@ public class GUI extends JFrame {
         validate();
         repaint();
     }
-
-     public Client getClient(){
-        return this.client;
-     }
 
 }

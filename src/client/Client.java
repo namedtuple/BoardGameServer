@@ -93,6 +93,9 @@ public class Client {
         else if (request.startsWith("LOGIN ")) {
             send(request);
         }
+        else if (request.startsWith("GOTO_LOBBY")) {
+            send(request);
+        }
         else {
             gui.handleRequest(request);
         }
