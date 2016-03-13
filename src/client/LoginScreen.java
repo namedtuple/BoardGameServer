@@ -91,6 +91,7 @@ public class LoginScreen extends JPanel implements ActionListener{
 			if (gui.attemptLogin(getUsername(), getPassword())){
 				gui.toLobby();
 			}
+			//else, show message to user saying log-in failed/invalid password
 		}
 
 	}

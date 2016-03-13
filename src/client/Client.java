@@ -42,13 +42,6 @@ public class Client {
             //for testing lobby functionality
             String[] splitMsg = msg.split(" ");
             if (splitMsg[0].equals("LOBBY")){ //"LOBBY user1 user2" <- server sends list of members in the lobby
-            	if (splitMsg.length == 1){ //a hack just for testing purposes only
-            		System.out.println("LOGIN LENGTH IS 1");
-            	}
-            	else {
-            		System.out.println("Sending JOIN");
-            		send("JOIN " + splitMsg[1]); //client sends "JOIN user1" to start a game, forcing them to play
-            	}
                 handleRequest(msg);
             }
 

@@ -55,6 +55,8 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		else if(e.getSource() == joinGameButton)
 		{
 			//join an opponents game based on what opponent is chosen
+			String userToJoin = (String) uiList.getSelectedValue();
+			gui.getClient().send("JOIN " + userToJoin);
 		}
 
 	}
