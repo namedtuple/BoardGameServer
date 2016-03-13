@@ -59,10 +59,15 @@ public class GameLobby {
 
     private void debugPrintLobbyContents() {
         System.out.println("-----------------------------------------------------------------------------");
-        System.out.println(lobbyName + " Lobby contents updated: ");
-        for (String user : list) {
-            System.out.println("  " + user);
+        String lobbyContentsMessage = lobbyName + " lobby contents updated: ";
+        if (list.size() == 0) {
+            lobbyContentsMessage += "<empty>";
+        } else {
+            for (String user : list) {
+                lobbyContentsMessage += user + " ";
+            }
         }
+        System.out.println(lobbyContentsMessage);
     }
 
 }
