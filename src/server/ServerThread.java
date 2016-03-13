@@ -74,6 +74,11 @@ public class ServerThread extends Thread {
                     }
                 }
 
+                else if (firstToken.equals("LOGOUT")) {
+                    removeFromLobby();
+                    server.sendToAll("LOBBY " + lobby.toString());
+                }
+
             }
             catch (IOException e) {
                 server.debugPrintLostConnectionMessage(username, socketAddress);

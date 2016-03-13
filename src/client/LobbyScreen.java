@@ -64,7 +64,9 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		else if(e.getSource() == newGameButton)
 		{
 			//create a new game instance depending on what game is selected
-            gui.handleRequest("TO_BOARD_SCREEN");
+            gui.handleRequest("LOGOUT");
+            gui.handleRequest("DISCONNECTED");
+
 		}
 		else if(e.getSource() == joinGameButton)
 		{
@@ -84,7 +86,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	}
 
 	public void createJoinGameButton(){
-		joinGameButton = new JButton("Join Opponent's Game");
+		joinGameButton = new JButton("Challenge Opponent");
 		joinGameButton.addActionListener(this);
 		joinGameButton.setEnabled(false);
 	}
@@ -108,7 +110,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	}
 
 	public void createnewGameButton(){
-		newGameButton = new JButton("Start New Game");
+		newGameButton = new JButton("Log out");
 		newGameButton.addActionListener(this);
 		selectionPanel.add(newGameButton);
 	}

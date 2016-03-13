@@ -66,6 +66,7 @@ public class GUI extends JFrame {
             appendToTitle(splitRequest[2]);
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
+            changePanel(lobbyScreen, board);
         }
 
         // HERE and DOWN (Board)
@@ -90,6 +91,10 @@ public class GUI extends JFrame {
 
         else if (request.startsWith("TO_BOARD_SCREEN")) {
             changePanel(lobbyScreen, board);
+        }
+
+        else if (request.startsWith("LOGOUT")) {
+            client.handleRequest("LOGOUT");
         }
 
         else if (request.startsWith("DISCONNECTED")) {
