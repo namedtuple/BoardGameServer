@@ -33,11 +33,14 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
+        //send("WELCOME " + this.ID + " " + getOpponent().getID());
+        //send("WELCOME " + this.ID);
         while (true) {
             try {
                 String msg = receive();
                 send("You said: " + msg);
 
+                // logging in
                 String[] splitMsg = msg.split(" ");
                 String firstToken = splitMsg[0];
                 if (firstToken.equals("LOGIN")) {
@@ -45,24 +48,14 @@ public class ServerThread extends Thread {
 	                	username = splitMsg[1];
                 		send("LOGIN_SUCCESS " + username);
 	                	server.addConnection(username, this);
-<<<<<<< HEAD
 	                	lobby = server.getLobby(Server.TIC_TAC_TOE);
 	                	//send a confirmation of login message?
 	                	lobby.addUser(username);
                         server.sendToAll("LOBBY " + lobby.toString());
-=======
->>>>>>> cf0f28260b3e87de3d485865022e444f79ccdedf
                 	}
                 	else {
                 		send("LOGIN_FAIL");
                 	}
-                }
-                // received when client changes lobby from the dropdown menu
-                else if (firstToken.equals("GOTO-LOBBY")){
-                	removeFromLobby(); //remove from current lobby
-                	lobby = server.getLobby(splitMsg[1]);
-                	send("LOBBY " + lobby.toString());
-                	lobby.addUser(username); //add to new lobby
                 }
                 // possible thread-safety issue, but does not matter for this project
                 else if (firstToken.equals("JOIN")) {
@@ -135,11 +128,8 @@ public class ServerThread extends Thread {
     }
 
     public void removeFromLobby(){
-    	if (lobby != null)
-    	{
-    		lobby.removeUser(username);
-        	lobby = null;
-    	}
+    	lobby.removeUser(username);
+    	lobby = null;
     }
 
     public void setGame(AbstractGameLogic game){

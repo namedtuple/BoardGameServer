@@ -100,20 +100,10 @@ public class GUI extends JFrame {
         }
     }
 
-<<<<<<< HEAD
     private boolean goingUp(String request) {
         String[] splitRequest = request.split(" ");
         String firstToken = splitRequest[0];
         return Arrays.asList(new String[]{"MOVE", "JOIN", "LOGIN"}).contains(firstToken);
-=======
-    public void toLobby() {
-        System.out.println("toLobby");
-        add(lobbyScreen);
-        lobbyScreen.requestWaitlist();
-        lobbyScreen.setVisible(true);
-        loginScreen.setVisible(false);
-        remove(loginScreen);
->>>>>>> cf0f28260b3e87de3d485865022e444f79ccdedf
     }
 
     private boolean goingDownToLobbyScreen(String request) {
@@ -122,7 +112,6 @@ public class GUI extends JFrame {
         return Arrays.asList(new String[]{"LOGIN_SUCCESS", "LOBBY"}).contains(firstToken);
     }
 
-<<<<<<< HEAD
     private boolean goingDownToBoard(String request) {
         String[] splitRequest = request.split(" ");
         String firstToken = splitRequest[0];
@@ -145,15 +134,6 @@ public class GUI extends JFrame {
         else if (currentPanel == board && direction == Direction.BACKWARD) {
             changePanel(currentPanel, lobbyScreen);
         }
-=======
-    public void returnToLobby() {
-        System.out.println("returnToLobby");
-        add(lobbyScreen);
-        lobbyScreen.requestWaitlist();
-        lobbyScreen.setVisible(true);
-        board.setVisible(false);
-        remove(board);
->>>>>>> cf0f28260b3e87de3d485865022e444f79ccdedf
     }
 
     private void changePanel(JPanel currentPanel, JPanel nextPanel) {
@@ -163,10 +143,6 @@ public class GUI extends JFrame {
         remove(currentPanel);
         validate();
         repaint();
-    }
-    
-    public Client getClient(){
-    	return this.client;
     }
 
 }
