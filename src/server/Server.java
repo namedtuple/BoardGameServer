@@ -29,7 +29,7 @@ public class Server {
     public static final short PORT_NUM = 6666;
     public static final String TIC_TAC_TOE = "Tic-Tac-Toe";
     public static final String CHECKERS = "Checkers";
-    public static final String CHUTES_AND_LADDERS = "Chutes and Ladders";
+    public static final String CHUTES_AND_LADDERS = "Chutes-n-Ladders";
     private ServerSocket serverSocket;
     private AccountAuthenticator accountAuthenticator;
 

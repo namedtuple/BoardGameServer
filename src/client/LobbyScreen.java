@@ -13,7 +13,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	//method variables
 	private JComboBox gameSelection;
 	private String currentGameSelection;
-	private String[] gameList = {"Tic Tac Toe", "Chutes and Ladders", "Checkers"};
+	private String[] gameList = {"Tic-Tac-Toe", "Chutes-n-Ladders", "Checkers"};
 	private JButton newGameButton,joinGameButton;
 	private JPanel selectionPanel;
 	private DefaultListModel waitList; //changes made to this will update GUI waiting list
@@ -25,6 +25,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		super(new BorderLayout());
         this.gui = gui;
 		waitList = new DefaultListModel();
+		setVisible(false);
 
 		createSelectionPanel();
 		createJoinGameButton();
@@ -36,7 +37,6 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		add(selectionPanel,BorderLayout.NORTH);
 		add(scrollPane,BorderLayout.CENTER);
 		add(joinGameButton,BorderLayout.SOUTH);
-		setVisible(true);
 	}
 
 	@Override
@@ -44,8 +44,10 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
 		if(e.getSource() == gameSelection)
 		{
-			JComboBox selection = (JComboBox) e.getSource();
-			currentGameSelection = (String) selection.getSelectedItem();
+			if (this.isVisible())
+			{
+				requestWaitlist();
+			}
 		}
 		else if(e.getSource() == newGameButton)
 		{
@@ -107,6 +109,12 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	//call this to remove from the lobby
 	public void removeFromWaitList(String player){
 		waitList.removeElement(player);
+	}
+	
+	public void requestWaitlist(){
+		waitList.clear(); //clear contents
+		currentGameSelection = (String) gameSelection.getSelectedItem();
+		gui.getClient().send("GOTO-LOBBY " + currentGameSelection);
 	}
 
 	class playerSelectionListener implements ListSelectionListener

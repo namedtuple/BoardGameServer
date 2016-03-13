@@ -33,14 +33,11 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        //send("WELCOME " + this.ID + " " + getOpponent().getID());
-        //send("WELCOME " + this.ID);
         while (true) {
             try {
                 String msg = receive();
                 send("You said: " + msg);
 
-                // logging in
                 String[] splitMsg = msg.split(" ");
                 String firstToken = splitMsg[0];
                 if (firstToken.equals("LOGIN")) {
@@ -48,14 +45,17 @@ public class ServerThread extends Thread {
                 		send("LOGIN-SUCCESS");
 	                	username = splitMsg[1];
 	                	server.addConnection(username, this);
-	                	lobby = server.getLobby(Server.TIC_TAC_TOE);
-	                	//send a confirmation of login message?
-	                	send("LOBBY " + lobby.toString()); //send contents of lobby before adding them!
-	                	lobby.addUser(username);
                 	}
                 	else{
                 		send("LOGIN-FAIL");
                 	}
+                }
+                // received when client changes lobby from the dropdown menu
+                else if (firstToken.equals("GOTO-LOBBY")){
+                	removeFromLobby(); //remove from current lobby
+                	lobby = server.getLobby(splitMsg[1]);
+                	send("LOBBY " + lobby.toString());
+                	lobby.addUser(username); //add to new lobby
                 }
                 // possible thread-safety issue, but does not matter for this project
                 else if (firstToken.equals("JOIN")) {
@@ -128,8 +128,11 @@ public class ServerThread extends Thread {
     }
 
     public void removeFromLobby(){
-    	lobby.removeUser(username);
-    	lobby = null;
+    	if (lobby != null)
+    	{
+    		lobby.removeUser(username);
+        	lobby = null;
+    	}
     }
 
     public void setGame(AbstractGameLogic game){

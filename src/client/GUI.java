@@ -98,6 +98,7 @@ public class GUI extends JFrame {
     public void toLobby() {
         System.out.println("toLobby");
         add(lobbyScreen);
+        lobbyScreen.requestWaitlist();
         lobbyScreen.setVisible(true);
         loginScreen.setVisible(false);
         remove(loginScreen);
@@ -114,6 +115,7 @@ public class GUI extends JFrame {
     public void returnToLobby() {
         System.out.println("returnToLobby");
         add(lobbyScreen);
+        lobbyScreen.requestWaitlist();
         lobbyScreen.setVisible(true);
         board.setVisible(false);
         remove(board);
