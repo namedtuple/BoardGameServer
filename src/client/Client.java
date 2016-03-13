@@ -58,15 +58,12 @@ public class Client {
             }
             else if (msg.startsWith("VICTORY")) {
                 handleRequest(msg);
-                break;
             }
             else if (msg.startsWith("DEFEAT")) {
                 handleRequest(msg);
-                break;
             }
             else if (msg.startsWith("TIE")) {
                 handleRequest(msg);
-                break;
             }
         }
     }

@@ -126,12 +126,14 @@ public class GUI extends JFrame {
 
     public void changePanel(JPanel currentPanel, Direction direction) {
         if (currentPanel == loginScreen && direction == Direction.FORWARD) {
+            lobbyScreen.requestWaitlist();
             changePanel(currentPanel, lobbyScreen);
         }
         else if (currentPanel == lobbyScreen && direction == Direction.FORWARD) {
             changePanel(currentPanel, board);
         }
         else if (currentPanel == board && direction == Direction.BACKWARD) {
+            lobbyScreen.requestWaitlist();
             changePanel(currentPanel, lobbyScreen);
         }
     }
@@ -144,5 +146,9 @@ public class GUI extends JFrame {
         validate();
         repaint();
     }
+
+     public Client getClient(){
+        return this.client;
+     }
 
 }
