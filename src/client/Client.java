@@ -29,7 +29,7 @@ public class Client {
         this.socket = socket;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        gui = new GUI(this, "GUI");
+        gui = new GUI(this, "BoardGameServer");
     }
 
     public void run() throws IOException {

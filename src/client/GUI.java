@@ -11,8 +11,6 @@ public class GUI extends JFrame {
     private LoginScreen loginScreen;
     private LobbyScreen lobbyScreen;
     private Board board;
-    private int numTitleChanges = 0;
-    private String baseTitle;
     private HashMap<String, String> requestMessageMap;
 
     // Methods
@@ -39,17 +37,8 @@ public class GUI extends JFrame {
         requestMessageMap.put("OPPONENT_MOVED", "It is your turn");
     }
 
-    @Override
-    public void setTitle(String title) {
-        if (numTitleChanges < 1) {
-            baseTitle = title;
-        }
-        ++numTitleChanges;
-        super.setTitle(title);
-    }
-
     public void appendToTitle(String toAppend) {
-        setTitle(baseTitle + " - \"" + toAppend + "\"");
+        setTitle(getTitle() + " - " + toAppend);
     }
 
     public void handleRequest(String request) {
@@ -64,13 +53,14 @@ public class GUI extends JFrame {
         // HERE and DOWN (LobbyScreen)
         else if (request.startsWith("LOGIN_SUCCESS")) {
             String[] splitMsg = request.split(" ");
+            appendToTitle(splitMsg[1]);
             lobbyScreen.setUsername(splitMsg[1]);
             changePanel(loginScreen, Direction.FORWARD);
         }
 
         // HERE and DOWN (Board)
         else if (request.startsWith("WELCOME")) {
-            setTitle(splitRequest[1]);
+            appendToTitle(splitRequest[2]);
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
         }
