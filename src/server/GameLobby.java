@@ -29,6 +29,7 @@ public class GameLobby {
     @Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
+        str.append(lobbyName).append(" ");
 		for(String userName : list){
 			str.append(userName);
 			str.append(" ");

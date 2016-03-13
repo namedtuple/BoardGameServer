@@ -6,6 +6,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class LobbyScreen extends JPanel implements ActionListener{
 
@@ -13,6 +17,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	//method variables
 	private JComboBox gameSelection;
 	private String currentGameSelection;
+    private HashMap<String, List<String>> lobbyMap;
 	private String[] gameList = {"Tic-Tac-Toe", "Chutes-and-Ladders", "Checkers"};
 	private JButton newGameButton,joinGameButton;
 	private JPanel selectionPanel;
@@ -25,6 +30,12 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	{
 		super(new BorderLayout());
         this.gui = gui;
+
+        lobbyMap = new HashMap<>();
+        lobbyMap.put("Tic-Tac-Toe", new ArrayList<>());
+        lobbyMap.put("Chutes-and-Ladders", new ArrayList<>());
+        lobbyMap.put("Checkers", new ArrayList<>());
+
 		waitList = new DefaultListModel();
         setVisible(false);
 
@@ -107,14 +118,29 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		waitList.addElement(player);
 	}
 
-    public void addAllToWaitList(String players) {
-        waitList.clear();
-        String[] splitMsg = players.split(" ");
-        for (int i=1; i<splitMsg.length; ++i) {
-            String playerName = splitMsg[i];
-            if (!waitList.contains(playerName) && !playerName.equals(username)) {
-            //if (!waitList.contains(playerName)) {
-                addToWaitList(playerName);
+    public void addAllToWaitList(String request) {
+
+        String[] splitMsg = request.split(" ");
+
+        // update (model) list first:
+        String gameName = splitMsg[1];
+        List<String> lobbyList = lobbyMap.get(gameName);
+        lobbyList.clear();
+        for (int i=2; i<splitMsg.length; ++i) {
+            lobbyList.add(splitMsg[i]);
+        }
+
+        Collections.sort(lobbyList);
+
+
+        // Now update the GUI list if necessary.
+        if (gameName.equals(currentGameSelection)) {
+            waitList.clear();
+            List<String> currentlySelectedLobby = lobbyMap.get(currentGameSelection);
+            for (String playerName : currentlySelectedLobby) {
+                if (!playerName.equals(username)) { // don't add own username to lobby list
+                    addToWaitList(playerName);
+                }
             }
         }
     }

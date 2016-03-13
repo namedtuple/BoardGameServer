@@ -53,6 +53,7 @@ public class ServerThread extends Thread {
                 // received when client changes lobby from the dropdown menu
                 else if (firstToken.equals("GOTO_LOBBY")){
                     removeFromLobby(); //remove from current lobby
+                    server.sendToAll("LOBBY " + lobby.toString());
                     lobby = server.getLobby(splitMsg[1]);
                     lobby.addUser(username); //add to new lobby
                     server.sendToAll("LOBBY " + lobby.toString());
