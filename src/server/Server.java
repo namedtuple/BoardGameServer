@@ -99,4 +99,8 @@ public class Server {
         }
     }
 
+    public void debugPrintLostConnectionMessage(String username, String socketAddress) {
+        System.out.println("Lost connection from: " + username + " at " + socketAddress);
+    }
+
 }

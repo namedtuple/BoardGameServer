@@ -13,23 +13,21 @@ public class ServerThread extends Thread {
     // Fields
     private BufferedReader in;
     private PrintWriter out;
-
     private ServerThread opponentServerThread;
     private AbstractGameLogic game;
-
+    private String socketAddress;
     private String username;
     private Server server; //reference to the owning server
-    private Socket socket;
     private GameLobby lobby; //lobby that the user is currently in
     private static final String defaultLobby = "Tic-Tac-Toe";
 
     // Methods
     public ServerThread(Socket socket, Server server) throws IOException {
-    	this.socket = socket;
     	this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         lobby = server.getLobby(defaultLobby);
+        socketAddress = socket.getRemoteSocketAddress().toString();
     }
 
     @Override
@@ -75,8 +73,11 @@ public class ServerThread extends Thread {
                     }
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+            catch (IOException e) {
+                server.debugPrintLostConnectionMessage(username, socketAddress);
+                removeFromLobby();
+                server.sendToAll("LOBBY " + lobby.toString());
                 break;
             }
         }
@@ -122,12 +123,7 @@ public class ServerThread extends Thread {
     }
 
     public String getUserName() {
-        if (username == null) {
-            String socketAddr = socket.getRemoteSocketAddress().toString();
-            int i = socketAddr.indexOf(':') + 1;
-            return socketAddr.substring(i);
-        }
-        return username;
+        return username == null ? socketAddress : username;
     }
 
     public void removeFromLobby(){
