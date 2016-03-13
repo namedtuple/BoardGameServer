@@ -110,6 +110,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	}
 
     public void addAllToWaitList(String players) {
+        waitList.clear();
         String[] splitMsg = players.split(" ");
         for (int i=1; i<splitMsg.length; ++i) {
             String playerName = splitMsg[i];

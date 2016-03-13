@@ -21,6 +21,7 @@ public class ServerThread extends Thread {
     private Server server; //reference to the owning server
     private Socket socket;
     private GameLobby lobby; //lobby that the user is currently in
+    private static final String defaultLobby = "Tic-Tac-Toe";
 
     // Methods
     public ServerThread(Socket socket, Server server) throws IOException {
@@ -28,6 +29,7 @@ public class ServerThread extends Thread {
     	this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+        lobby = server.getLobby(defaultLobby);
     }
 
     @Override
@@ -63,6 +65,7 @@ public class ServerThread extends Thread {
                 	String otherUser = splitMsg[1];
                 	ServerThread otherConnection = server.getConnection(otherUser);
                 	lobby.startGame(this, otherConnection);
+                    server.sendToAll("LOBBY " + lobby.toString());
                 }
                 //handling moving for game
                 else if (firstToken.equals("MOVE")) {
@@ -128,10 +131,7 @@ public class ServerThread extends Thread {
     }
 
     public void removeFromLobby(){
-        if (lobby != null) {
-            lobby.removeUser(username);
-            lobby = null;
-        }
+        lobby.removeUser(username);
     }
 
     public void setGame(AbstractGameLogic game){
