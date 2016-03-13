@@ -57,7 +57,7 @@ public class GUI extends JFrame {
         String firstToken = splitRequest[0];
 
         // UP (Client)
-        if (Arrays.asList(new String[]{"MOVE", "JOIN", "LOGGING_IN", "GOTO_LOBBY"}).contains(firstToken)) {
+        if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY".split(", ")).contains(firstToken)) {
             client.handleRequest(request);
         }
 
@@ -76,7 +76,7 @@ public class GUI extends JFrame {
         }
 
         // HERE and DOWN (Board)
-        else if (Arrays.asList(new String[]{"VICTORY", "DEFEAT", "TIE"}).contains(firstToken)) {
+        else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
             String message = requestMessageMap.get(request);
             board.setTurnLabel(message);
             JOptionPane.showMessageDialog(this, message);
@@ -84,7 +84,7 @@ public class GUI extends JFrame {
         }
 
         // DOWN (Board) - VALID_MOVE, OPPONENT_MOVED
-        else if (Arrays.asList(new String[]{"VALID_MOVE", "OPPONENT_MOVED"}).contains(firstToken)) {
+        else if (Arrays.asList("VALID_MOVE, OPPONENT_MOVED".split(", ")).contains(firstToken)) {
             board.setTurnLabel(requestMessageMap.get(firstToken));
             board.handleRequest(request);
         }

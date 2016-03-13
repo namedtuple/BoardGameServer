@@ -58,7 +58,8 @@ public class Client {
     public void handleRequest(String request) {
         String[] splitRequest = request.split(" ");
         String firstToken = splitRequest[0];
-        if (Arrays.asList(new String[]{"MOVE", "JOIN", "LOGGING_IN", "GOTO_LOBBY"}).contains(firstToken)) {
+
+        if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY".split(", ")).contains(firstToken)) {
             send(request);
         }
         else if (!request.startsWith("You said: ")) {
