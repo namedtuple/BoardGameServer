@@ -14,7 +14,6 @@ public class ServerThread extends Thread {
     private BufferedReader in;
     private PrintWriter out;
 
-    private char ID;
     private ServerThread opponentServerThread;
     private AbstractGameLogic game;
 
@@ -102,7 +101,7 @@ public class ServerThread extends Thread {
     public String receive() throws IOException {
         String msg = in.readLine();
         System.out.println("-----------------------------------------------------------------------------");
-        System.out.println("Client " + username + " says:  " + msg);
+        System.out.println("Client " + getUserName() + " says:  " + msg);
         return msg;
     }
 
@@ -119,8 +118,13 @@ public class ServerThread extends Thread {
         this.opponentServerThread = opponentServerThread;
     }
 
-    public String getUserName(){
-    	return this.username;
+    public String getUserName() {
+        if (username == null) {
+            String socketAddr = socket.getRemoteSocketAddress().toString();
+            int i = socketAddr.indexOf(':') + 1;
+            return socketAddr.substring(i);
+        }
+        return username;
     }
 
     public void removeFromLobby(){
