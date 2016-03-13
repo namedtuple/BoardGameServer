@@ -29,12 +29,10 @@ public class Tile extends JButton implements ActionListener {
     }
 
     private static void loadImages(String username, String opponentUsername) {
-        System.out.println("loadImages() on " + board.getUsername());
         imageHashMap = new HashMap<>();
         try {
             imageHashMap.put(username, new ImageIcon(ImageIO.read(new File("img/x.png"))));
             imageHashMap.put(opponentUsername, new ImageIcon(ImageIO.read(new File("img/o.png"))));
-            imageHashMap.put("_", new ImageIcon(ImageIO.read(new File("img/blank.png"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,12 +83,11 @@ public class Tile extends JButton implements ActionListener {
             board.handleRequest(request);
         }
         else if (request.startsWith("WELCOME")) {
-            String[] splitRequest = request.split(" ");
             if (imageHashMap == null) {
+                String[] splitRequest = request.split(" ");
                 if (request.indexOf(" X ") < request.indexOf(" O ")) {
                     loadImages(splitRequest[1], splitRequest[3]);
-                }
-                else {
+                } else {
                     loadImages(splitRequest[3], splitRequest[1]);
                 }
             }
