@@ -13,10 +13,12 @@ public class GUI extends JFrame {
     private Board board;
     private HashMap<String, String> requestMessageMap;
     private JPanel currentScreen;
+    private final static String BASE_WINDOW_TITLE = "BoardGameServer";
+    private String username;
 
     // Methods
-    public GUI(Client client, String title) {
-        super(title);
+    public GUI(Client client) {
+        super(BASE_WINDOW_TITLE);
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
@@ -55,8 +57,9 @@ public class GUI extends JFrame {
         // HERE and DOWN (LobbyScreen)
         else if (request.startsWith("LOGIN_SUCCESS")) {
             String[] splitMsg = request.split(" ");
-            appendToTitle(splitMsg[1]);
-            lobbyScreen.setUsername(splitMsg[1]);
+            username = splitMsg[1];
+            appendToTitle(username);
+            lobbyScreen.setUsername(username);
             lobbyScreen.requestWaitlist();
             changePanel(loginScreen, lobbyScreen);
             loginScreen.clearFields();
@@ -77,6 +80,8 @@ public class GUI extends JFrame {
             JOptionPane.showMessageDialog(this, message);
             lobbyScreen.requestWaitlist();
             changePanel(board, lobbyScreen);
+            setTitle(BASE_WINDOW_TITLE);
+            appendToTitle(username);
         }
 
         // DOWN (Board) - VALID_MOVE, OPPONENT_MOVED
@@ -96,6 +101,7 @@ public class GUI extends JFrame {
 
         else if (request.startsWith("LOGOUT")) {
             client.handleRequest("LOGOUT");
+            setTitle(BASE_WINDOW_TITLE);
         }
 
         else if (request.startsWith("DISCONNECTED")) {

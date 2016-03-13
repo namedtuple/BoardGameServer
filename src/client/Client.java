@@ -27,7 +27,7 @@ public class Client {
 
     // Methods
     private Client() throws IOException {
-        gui = new GUI(this, "BoardGameServer");
+        gui = new GUI(this);
         refreshConnection();
     }
     private void refreshConnection() throws IOException {
