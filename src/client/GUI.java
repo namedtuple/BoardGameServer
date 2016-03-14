@@ -97,10 +97,6 @@ public class GUI extends JFrame {
             lobbyScreen.addAllToWaitList(request);
         }
 
-        else if (request.startsWith("TO_BOARD_SCREEN")) {
-            changePanel(lobbyScreen, board);
-        }
-
         else if (request.startsWith("LOGOUT")) {
             client.handleRequest("LOGOUT");
             setTitle(BASE_WINDOW_TITLE);
