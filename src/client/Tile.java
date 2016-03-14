@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,11 +29,11 @@ public class Tile extends JButton implements ActionListener {
         this.addActionListener(this);
     }
 
-    private static void loadImages(String username, String opponentUsername) {
-        imageHashMap = new HashMap<>();
+    private static void loadImages(String usernamePlayer1, String usernamePlayer2) {
+        Tile.imageHashMap = new HashMap<>();
         try {
-            imageHashMap.put(username, new ImageIcon(ImageIO.read(new File("img/x.png"))));
-            imageHashMap.put(opponentUsername, new ImageIcon(ImageIO.read(new File("img/o.png"))));
+            Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/x.png"))));
+            Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/o.png"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,17 +45,17 @@ public class Tile extends JButton implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        lastClickedTile = this;
+        Tile.lastClickedTile = this;
         handleRequest("MOVE " + coordinates);
     }
 
     private static ImageIcon chooseIcon(String piece) {
-        return imageHashMap.get(piece);
+        return Tile.imageHashMap.get(piece);
     }
 
     private static Tile getTile(Pair<Integer, Integer> location) {
         Tile returnTile = null;
-        for (Tile tile : instances) {
+        for (Tile tile : Tile.instances) {
             if (tile.getCoordinates().equals(location)) {
                 returnTile = tile;
                 break;
@@ -79,12 +80,13 @@ public class Tile extends JButton implements ActionListener {
     }
 
     public void handleRequest(String request) {
+        String[] splitRequest = request.split(" ");
+        String firstToken = splitRequest[0];
         if (request.startsWith("MOVE")) {
-            board.handleRequest(request);
+            Tile.board.handleRequest(request);
         }
         else if (request.startsWith("WELCOME")) {
-            if (imageHashMap == null) {
-                String[] splitRequest = request.split(" ");
+            if (Tile.imageHashMap == null) {
                 if (request.indexOf(" X ") < request.indexOf(" O ")) {
                     loadImages(splitRequest[1], splitRequest[3]);
                 } else {
@@ -93,15 +95,21 @@ public class Tile extends JButton implements ActionListener {
             }
         }
         else if (request.startsWith("VALID_MOVE")) {
-            lastClickedTile.setIcon(chooseIcon(board.getUsername()));
-            lastClickedTile.setDisabledIcon(chooseIcon(board.getUsername()));
-            lastClickedTile.setEnabled(false);
+            Tile.lastClickedTile.setIcon(chooseIcon(Tile.board.getUsername()));
+            Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.board.getUsername()));
+            Tile.lastClickedTile.setEnabled(false);
         }
         else if (request.startsWith("OPPONENT_MOVED")) {
             Tile tile = getTile(extractPosition(request));
-            tile.setIcon(chooseIcon(board.getOpponentUsername()));
-            tile.setDisabledIcon(chooseIcon(board.getOpponentUsername()));
+            tile.setIcon(chooseIcon(Tile.board.getOpponentUsername()));
+            tile.setDisabledIcon(chooseIcon(Tile.board.getOpponentUsername()));
             tile.setEnabled(false);
+        }
+        else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
+            Tile.board = null;
+            Tile.imageHashMap = null;
+            Tile.instances = new ArrayList<>();
+            Tile.lastClickedTile = null;
         }
     }
 }

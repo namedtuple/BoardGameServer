@@ -3,6 +3,7 @@ import org.javatuples.Pair;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class Board extends JPanel {
 
@@ -65,6 +66,7 @@ public class Board extends JPanel {
 
     public void handleRequest(String request) {
         String[] splitRequest = request.split(" ");
+        String firstToken = splitRequest[0];
 
         if (request.startsWith("MOVE")) {
             gui.handleRequest(request);
@@ -78,6 +80,9 @@ public class Board extends JPanel {
             tile.handleRequest(request);
         }
         else if (request.startsWith("OPPONENT_MOVED")) {
+            tile.handleRequest(request);
+        }
+        else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
             tile.handleRequest(request);
         }
     }

@@ -67,7 +67,7 @@ public class GUI extends JFrame {
 
         // HERE and DOWN (Board)
         else if (request.startsWith("WELCOME")) {
-            this.board = new Board(this, 3);
+            board = new Board(this, 3);
             appendToTitle(splitRequest[2]);
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
@@ -78,6 +78,7 @@ public class GUI extends JFrame {
         else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
             String message = requestMessageMap.get(request);
             board.setTurnLabel(message);
+            board.handleRequest(request);
             JOptionPane.showMessageDialog(this, message);
             lobbyScreen.requestWaitlist();
             changePanel(board, lobbyScreen);
