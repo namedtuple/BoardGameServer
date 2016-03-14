@@ -22,7 +22,7 @@ public class GUI extends JFrame {
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
-        this.board = new Board(this, 3);
+        //this.board = new Board(this, 3);
 
         add(loginScreen, "Center");
         loginScreen.setVisible(true);
@@ -67,6 +67,7 @@ public class GUI extends JFrame {
 
         // HERE and DOWN (Board)
         else if (request.startsWith("WELCOME")) {
+            this.board = new Board(this, 3);
             appendToTitle(splitRequest[2]);
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
