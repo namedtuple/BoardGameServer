@@ -42,10 +42,6 @@ public class ChutesLogic extends AbstractGameLogic {
         return true;
     }
 
-    public boolean legalMove(Pair<Integer, Integer> location, int roll) {
-
-
-    }
 
 
     public boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
@@ -62,8 +58,8 @@ public class ChutesLogic extends AbstractGameLogic {
     }
 
     public boolean hasWinner() {
-        char hundred = boardMap.get(Pair.with(1,1)).getOccupant().getID();
-        return (hundred!='_');
+        ServerThread winner = boardMap.get(Pair.with(1,1)).getOccupant();
+        return (winner!=null);
     }
 
     public boolean tied() {
