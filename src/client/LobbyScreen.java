@@ -19,7 +19,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	private String currentGameSelection;
     private HashMap<String, List<String>> lobbyMap;
 	private String[] gameList = {"Tic-Tac-Toe", "Chutes-and-Ladders", "Checkers"};
-	private JButton newGameButton,joinGameButton;
+	private JButton logoutButton, challengeOpponentButton;
 	private JPanel selectionPanel;
 	private DefaultListModel waitList; //changes made to this will update GUI waiting list
 	private JList uiList;
@@ -48,7 +48,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
 		add(selectionPanel,BorderLayout.NORTH);
 		add(scrollPane,BorderLayout.CENTER);
-		add(joinGameButton,BorderLayout.SOUTH);
+		add(challengeOpponentButton,BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -61,14 +61,14 @@ public class LobbyScreen extends JPanel implements ActionListener{
                 requestWaitlist();
             }
         }
-		else if(e.getSource() == newGameButton)
+		else if(e.getSource() == logoutButton)
 		{
 			//create a new game instance depending on what game is selected
             gui.handleRequest("LOGOUT");
             gui.handleRequest("DISCONNECTED");
 
 		}
-		else if(e.getSource() == joinGameButton)
+		else if(e.getSource() == challengeOpponentButton)
 		{
             String userToJoin = (String) uiList.getSelectedValue();
 			//join an opponents game based on what opponent is chosen
@@ -86,9 +86,9 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	}
 
 	public void createJoinGameButton(){
-		joinGameButton = new JButton("Challenge Opponent");
-		joinGameButton.addActionListener(this);
-		joinGameButton.setEnabled(false);
+		challengeOpponentButton = new JButton("Challenge Opponent");
+		challengeOpponentButton.addActionListener(this);
+		challengeOpponentButton.setEnabled(false);
 	}
 
 	public void createSelectionPanel(){
@@ -110,9 +110,9 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	}
 
 	public void createnewGameButton(){
-		newGameButton = new JButton("Log out");
-		newGameButton.addActionListener(this);
-		selectionPanel.add(newGameButton);
+		logoutButton = new JButton("Log out");
+		logoutButton.addActionListener(this);
+		selectionPanel.add(logoutButton);
 	}
 
 	//call this to add a player to the lobby
@@ -162,7 +162,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	{
 	    public void valueChanged(ListSelectionEvent e) {
 	        if (e.getValueIsAdjusting() == false) {
-	            joinGameButton.setEnabled(true);
+	            challengeOpponentButton.setEnabled(true);
 	            }
 	        }
 
