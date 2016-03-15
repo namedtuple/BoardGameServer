@@ -9,8 +9,6 @@ public class Board extends JPanel {
     // Fields
     private GUI gui;
     private int length;     // size of board
-    private String username;
-    private String opponentUsername;
     private Tile tile;
     private JLabel turnLabel;
     private JPanel boardPanel, turnPanel;
@@ -50,32 +48,23 @@ public class Board extends JPanel {
         add(turnPanel,BorderLayout.SOUTH);
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getOpponentUsername() {
-        return opponentUsername;
-    }
-
-    public void setTurnLabel(String text)
+    private void setTurnLabel(String text)
     {
     	turnLabel.setText(text);
     }
 
     public void handleRequest(Request request) {
-        String[] tokens = request.getTokens();
         Command command = request.getCommand();
         switch (command) {
             case MOVE:
                 gui.handleRequest(request);
                 break;
             case WELCOME:
-                username = tokens[1];
-                opponentUsername = tokens[3];
+                setTurnLabel("Player X starts first"); // TODO
                 tile.handleRequest(request);
                 break;
             case VALID_MOVE: case OPPONENT_MOVED: case VICTORY: case DEFEAT: case TIE:
+                setTurnLabel(command.getMessage());
                 tile.handleRequest(request);
                 break;
             default:

@@ -45,34 +45,30 @@ public class GUI extends JFrame {
             case LOGIN_SUCCESS:
                 username = tokens[1];
                 appendToTitle(username);
-                lobbyScreen.setUsername(username);
-                lobbyScreen.requestWaitlist();
+                lobbyScreen.handleRequest(request);
                 changePanel(lobbyScreen);
-                loginScreen.clearFields();
+                loginScreen.handleRequest(request);
                 break;
             case WELCOME:
                 board = new Board(this, 3);
                 appendToTitle(tokens[2]);
-                board.setTurnLabel("Player X starts first");
                 board.handleRequest(request);
                 changePanel(board);
                 break;
             case VICTORY: case DEFEAT: case TIE:
                 String message = command.getMessage();
-                board.setTurnLabel(message);
                 board.handleRequest(request);
                 JOptionPane.showMessageDialog(this, message);
-                lobbyScreen.requestWaitlist();
+                lobbyScreen.handleRequest(request);
                 changePanel(lobbyScreen);
                 setTitle(BASE_WINDOW_TITLE);
                 appendToTitle(username);
                 break;
             case VALID_MOVE: case OPPONENT_MOVED:
-                board.setTurnLabel(command.getMessage());
                 board.handleRequest(request);
                 break;
             case LOBBY:
-                lobbyScreen.addAllToWaitList(request.getRequest());
+                lobbyScreen.handleRequest(request);
                 break;
             case LOGOUT:
                 client.handleRequest(new Request(Command.LOGOUT));  // TODO

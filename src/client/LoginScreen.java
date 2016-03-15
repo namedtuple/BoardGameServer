@@ -29,7 +29,7 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 		this.setVisible(true);
 	}
 
-	public void createLoginButton(){
+	private void createLoginButton(){
 		loginBtn = new JButton("Login");
 		loginBtn.addActionListener(this);
 		loginBtn.addKeyListener(this);
@@ -37,7 +37,7 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 		this.add(loginBtn);
 	}
 
-	public void createLogo(){
+	private void createLogo(){
 		try {
 			BufferedImage logoImage = ImageIO.read(new File("img/logo.png"));
 			programLogo = new JLabel();
@@ -47,31 +47,30 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 			this.add(programLogo);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void createUsernameLabel(){
+	private void createUsernameLabel(){
 		usernameLabel = new JLabel("Username: ");
 		usernameLabel.setBounds(10,110,120,20);
 		this.add(usernameLabel);
 	}
 
-	public void createPasswordLabel(){
+	private void createPasswordLabel(){
 		passwordLabel = new JLabel("Password: ");
 		passwordLabel.setBounds(10,130,120,20);
 		this.add(passwordLabel);
 	}
 
-	public void createUsernameField() {
+	private void createUsernameField() {
 		usernameField = new JTextField();
         usernameField.addKeyListener(this);
 		usernameField.setBounds(140, 110, 200, 20);
 		this.add(usernameField);
 	}
 
-	public void createPasswordField(){
+	private void createPasswordField(){
 		passwordField = new JPasswordField();
         passwordField.addKeyListener(this);
 		passwordField.setBounds(140,130,200,20);
@@ -79,11 +78,11 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 	}
 
 
-	public String getUsername(){
+	private String getUsername(){
 		return usernameField.getText();
 	}
 
-	public String getPassword() {
+	private String getPassword() {
 		return String.valueOf(passwordField.getPassword());
 	}
 
@@ -113,13 +112,27 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
     // Helper method called by clicking Login button or pressing Enter
     private void attemptLogin() {
         if (!getUsername().equals("") && !getPassword().equals("")) {
-            gui.handleRequest(new Request(Command.LOGGING_IN, getUsername() + " " + getPassword()));
+            handleRequest(new Request(Command.LOGGING_IN, getUsername() + " " + getPassword()));
         }
     }
 
-    public void clearFields() {
+    private void clearFields() {
         usernameField.setText("");
         passwordField.setText("");
+    }
+
+    public void handleRequest(Request request) {
+        Command command = request.getCommand();
+        switch(command) {
+            case LOGGING_IN:
+                gui.handleRequest(request);
+                break;
+            case LOGIN_SUCCESS:
+                clearFields();
+                break;
+            default:
+                break;
+        }
     }
 
 }

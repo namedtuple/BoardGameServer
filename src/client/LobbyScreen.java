@@ -64,19 +64,19 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		else if(e.getSource() == logoutButton)
 		{
 			//create a new game instance depending on what game is selected
-            gui.handleRequest(new Request(Command.LOGOUT));
-            gui.handleRequest(new Request(Command.DISCONNECTED));
+            handleRequest(new Request(Command.LOGOUT));
+            handleRequest(new Request(Command.DISCONNECTED));
 		}
 		else if(e.getSource() == challengeOpponentButton)
 		{
             String userToJoin = (String) uiList.getSelectedValue();
 			//join an opponents game based on what opponent is chosen
-            gui.handleRequest(new Request(Command.JOIN, userToJoin));
+            handleRequest(new Request(Command.JOIN, userToJoin));
 		}
 
 	}
 
-	public void createUIList(){
+	private void createUIList(){
 		uiList = new JList(waitList);
         uiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         uiList.addListSelectionListener(new playerSelectionListener());
@@ -84,13 +84,13 @@ public class LobbyScreen extends JPanel implements ActionListener{
         uiList.setFixedCellHeight(44);
 	}
 
-	public void createJoinGameButton(){
+	private void createJoinGameButton(){
 		challengeOpponentButton = new JButton("Challenge Opponent");
 		challengeOpponentButton.addActionListener(this);
 		challengeOpponentButton.setEnabled(false);
 	}
 
-	public void createSelectionPanel(){
+	private void createSelectionPanel(){
 		selectionPanel = new JPanel();
 		selectionPanel.setLayout(new BoxLayout(selectionPanel,BoxLayout.LINE_AXIS));
 		createGameSelectionBox();
@@ -100,7 +100,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		selectionPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 	}
 
-	public void createGameSelectionBox(){
+	private void createGameSelectionBox(){
 		gameSelection = new JComboBox(gameList);
 		gameSelection.addActionListener(this);
 		gameSelection.setSelectedIndex(0);
@@ -108,18 +108,18 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		selectionPanel.add(gameSelection);
 	}
 
-	public void createnewGameButton(){
+	private void createnewGameButton(){
 		logoutButton = new JButton("Log out");
 		logoutButton.addActionListener(this);
 		selectionPanel.add(logoutButton);
 	}
 
 	//call this to add a player to the lobby
-	public void addToWaitList(String player){
+	private void addToWaitList(String player){
 		waitList.addElement(player);
 	}
 
-    public void addAllToWaitList(String request) {
+    private void addAllToWaitList(String request) {
 
         String[] splitMsg = request.split(" ");
 
@@ -147,14 +147,14 @@ public class LobbyScreen extends JPanel implements ActionListener{
     }
 
 	//call this to remove from the lobby
-	public void removeFromWaitList(String player){
+	private void removeFromWaitList(String player){
 		waitList.removeElement(player);
 	}
 
- 	public void requestWaitlist(){
+ 	private void requestWaitlist(){
  		waitList.clear(); //clear contents
  		currentGameSelection = (String) gameSelection.getSelectedItem();
- 		gui.handleRequest(new Request(Command.GOTO_LOBBY, currentGameSelection));
+ 		handleRequest(new Request(Command.GOTO_LOBBY, currentGameSelection));
  	}
 
 	class playerSelectionListener implements ListSelectionListener
@@ -167,7 +167,25 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
 	}
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void handleRequest(Request request) {
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch(command) {
+            case LOGOUT: case DISCONNECTED: case JOIN: case GOTO_LOBBY:
+                gui.handleRequest(request);
+                break;
+            case LOGIN_SUCCESS:
+                username = tokens[1];
+                requestWaitlist();
+                break;
+            case VICTORY: case DEFEAT: case TIE:
+                requestWaitlist();
+                break;
+            case LOBBY:
+                addAllToWaitList(request.getRequest()); // TODO
+                break;
+            default:
+                break;
+        }
     }
 }

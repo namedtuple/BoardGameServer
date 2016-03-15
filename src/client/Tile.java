@@ -18,6 +18,8 @@ public class Tile extends JButton implements ActionListener {
     private static HashMap<String, ImageIcon> imageHashMap;
     private static List<Tile> instances = new ArrayList<>();
     private static Tile lastClickedTile;
+    private static String username;
+    private static String opponentUsername;
     private Pair<Integer, Integer> coordinates; //saves button coordinates
 
     // Methods
@@ -87,6 +89,8 @@ public class Tile extends JButton implements ActionListener {
                 Tile.board.handleRequest(request);
                 break;
             case WELCOME:
+                Tile.username = tokens[1];
+                Tile.opponentUsername = tokens[3];
                 if (Tile.imageHashMap == null) {
                     if (request.getRequest().indexOf(" X ") < request.getRequest().indexOf(" O ")) { // TODO
                         loadImages(tokens[1], tokens[3]);
@@ -96,14 +100,14 @@ public class Tile extends JButton implements ActionListener {
                 }
                 break;
             case VALID_MOVE:
-                Tile.lastClickedTile.setIcon(chooseIcon(Tile.board.getUsername()));
-                Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.board.getUsername()));
+                Tile.lastClickedTile.setIcon(chooseIcon(Tile.username));
+                Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.username));
                 Tile.lastClickedTile.setEnabled(false);
                 break;
             case OPPONENT_MOVED:
                 Tile tile = getTile(extractPosition(request));
-                tile.setIcon(chooseIcon(Tile.board.getOpponentUsername()));
-                tile.setDisabledIcon(chooseIcon(Tile.board.getOpponentUsername()));
+                tile.setIcon(chooseIcon(Tile.opponentUsername));
+                tile.setDisabledIcon(chooseIcon(Tile.opponentUsername));
                 tile.setEnabled(false);
                 break;
             case VICTORY: case DEFEAT: case TIE:
