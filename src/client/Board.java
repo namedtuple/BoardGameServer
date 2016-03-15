@@ -3,7 +3,6 @@ import org.javatuples.Pair;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class Board extends JPanel {
 
@@ -65,25 +64,27 @@ public class Board extends JPanel {
     }
 
     public void handleRequest(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
+        Request r = new Request(request);
+        handleRequest(r);
+    }
 
-        if (request.startsWith("MOVE")) {
-            gui.handleRequest(request);
-        }
-        else if (request.startsWith("WELCOME")) {
-            username = splitRequest[1];
-            opponentUsername = splitRequest[3];
-            tile.handleRequest(request);
-        }
-        else if (request.startsWith("VALID_MOVE")){
-            tile.handleRequest(request);
-        }
-        else if (request.startsWith("OPPONENT_MOVED")) {
-            tile.handleRequest(request);
-        }
-        else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
-            tile.handleRequest(request);
+    public void handleRequest(Request request) {
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch (command) {
+            case MOVE:
+                gui.handleRequest(request);
+                break;
+            case WELCOME:
+                username = tokens[1];
+                opponentUsername = tokens[3];
+                tile.handleRequest(request.getRequest()); // TODO
+                break;
+            case VALID_MOVE: case OPPONENT_MOVED: case VICTORY: case DEFEAT: case TIE:
+                tile.handleRequest(request.getRequest());
+                break;
+            default:
+                break;
         }
     }
 

@@ -113,7 +113,7 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
     // Helper method called by clicking Login button or pressing Enter
     private void attemptLogin() {
         if (!getUsername().equals("") && !getPassword().equals("")) {
-            gui.handleRequest("LOGGING_IN " + getUsername() + " " + getPassword());
+            gui.handleRequest(new Request("LOGGING_IN " + getUsername() + " " + getPassword()));
         }
     }
 

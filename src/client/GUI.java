@@ -43,11 +43,6 @@ public class GUI extends JFrame {
         setTitle(getTitle() + " - " + toAppend);
     }
 
-    public void handleRequest(String request) {
-        Request r = new Request(request);
-        handleRequest(r);
-    }
-
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
@@ -68,13 +63,13 @@ public class GUI extends JFrame {
                 board = new Board(this, 3);
                 appendToTitle(tokens[2]);
                 board.setTurnLabel("Player X starts first");
-                board.handleRequest(request.getRequest()); // TODO
+                board.handleRequest(request);
                 changePanel(board);
                 break;
             case VICTORY: case DEFEAT: case TIE:
                 String message = requestMessageMap.get(request.getRequest()); // TODO
                 board.setTurnLabel(message);
-                board.handleRequest(request.getRequest()); // TODO
+                board.handleRequest(request);
                 JOptionPane.showMessageDialog(this, message);
                 lobbyScreen.requestWaitlist();
                 changePanel(lobbyScreen);
@@ -83,7 +78,7 @@ public class GUI extends JFrame {
                 break;
             case VALID_MOVE: case OPPONENT_MOVED:
                 board.setTurnLabel(requestMessageMap.get(command.toString())); // TODO
-                board.handleRequest(request.getRequest()); // TODO
+                board.handleRequest(request);
                 break;
             case LOBBY:
                 lobbyScreen.addAllToWaitList(request.getRequest());
