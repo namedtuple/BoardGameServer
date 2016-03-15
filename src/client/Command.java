@@ -1,0 +1,11 @@
+package client;
+
+public enum Command {
+    LOGGING_IN, LOGIN_SUCCESS, LOGIN_FAIL,
+    LOGOUT, DISCONNECTED,
+    GOTO_LOBBY, LOBBY,
+    JOIN, WELCOME,
+    MOVE, VALID_MOVE, OPPONENT_MOVED,
+    VICTORY, DEFEAT, TIE,
+    NULL
+}

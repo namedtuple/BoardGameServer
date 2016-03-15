@@ -38,13 +38,13 @@ public class Client {
 
     private void run() throws IOException, InterruptedException {
         System.out.println("Client running");
-        String message;
+        Request request;
         int totalDownTime = 0;
 
         while (true) {
             try {
-                message = receive();
-                handleRequest(message);
+                request = receive();
+                handleRequest(request);
             }
             catch (IOException e) {
                 try {
@@ -73,11 +73,25 @@ public class Client {
     }
 
     // Returns the next line of stream from Server
-    private String receive() throws IOException {
+    private Request receive() throws IOException {
         String msg = in.readLine();
         System.out.println("-----------------------------------------------------------------------------");
         System.out.println("Server says:  " + msg);
-        return msg;
+        return new Request(msg);
+    }
+
+    public void handleRequest(Request request) {
+        Command command = request.getCommand();
+        switch (command) {
+            case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY: case LOGOUT:
+                send(request.getRequest());
+                break;
+            default:
+                if (!request.getRequest().startsWith("You said: ")) {
+                    gui.handleRequest(request.getRequest());
+                }
+                break;
+        }
     }
 
     public void handleRequest(String request) {
