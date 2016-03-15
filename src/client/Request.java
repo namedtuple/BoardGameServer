@@ -25,4 +25,8 @@ public class Request {
         return command;
     }
 
+    public String[] getTokens() {
+        return request.split(" ");
+    }
+
 }

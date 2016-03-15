@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class Client {
 
@@ -48,7 +47,7 @@ public class Client {
             }
             catch (IOException e) {
                 try {
-                    handleRequest("DISCONNECTED");
+                    handleRequest(new Request("DISCONNECTED"));
                     System.out.println("No connection to server.  Will attempt to reconnect in " + RECONNECT_INTERVAL/1000 + " seconds.");
                     Thread.sleep(RECONNECT_INTERVAL);
                     totalDownTime += RECONNECT_INTERVAL;
@@ -88,22 +87,23 @@ public class Client {
                 break;
             default:
                 if (!request.getRequest().startsWith("You said: ")) {
-                    gui.handleRequest(request.getRequest());
+                    //gui.handleRequest(request.getRequest());
+                    gui.handleRequest(request);
                 }
                 break;
         }
     }
 
-    public void handleRequest(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-
-        if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY, LOGOUT".split(", ")).contains(firstToken)) {
-            send(request);
-        }
-        else if (!request.startsWith("You said: ")) {
-            gui.handleRequest(request);
-        }
-    }
+    //public void handleRequest(String request) {
+    //    String[] splitRequest = request.split(" ");
+    //    String firstToken = splitRequest[0];
+    //
+    //    if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY, LOGOUT".split(", ")).contains(firstToken)) {
+    //        send(request);
+    //    }
+    //    else if (!request.startsWith("You said: ")) {
+    //        gui.handleRequest(request);
+    //    }
+    //}
 
 }
