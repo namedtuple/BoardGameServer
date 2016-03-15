@@ -22,7 +22,6 @@ public class GUI extends JFrame {
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
-        //this.board = new Board(this, 3);
 
         add(loginScreen, "Center");
         loginScreen.setVisible(true);
@@ -61,7 +60,7 @@ public class GUI extends JFrame {
             appendToTitle(username);
             lobbyScreen.setUsername(username);
             lobbyScreen.requestWaitlist();
-            changePanel(loginScreen, lobbyScreen);
+            changePanel(lobbyScreen);
             loginScreen.clearFields();
         }
 
@@ -71,7 +70,7 @@ public class GUI extends JFrame {
             appendToTitle(splitRequest[2]);
             board.setTurnLabel("Player X starts first");
             board.handleRequest(request);
-            changePanel(lobbyScreen, board);
+            changePanel(board);
         }
 
         // HERE and DOWN (Board)
@@ -81,7 +80,7 @@ public class GUI extends JFrame {
             board.handleRequest(request);
             JOptionPane.showMessageDialog(this, message);
             lobbyScreen.requestWaitlist();
-            changePanel(board, lobbyScreen);
+            changePanel(lobbyScreen);
             setTitle(BASE_WINDOW_TITLE);
             appendToTitle(username);
         }
@@ -103,21 +102,16 @@ public class GUI extends JFrame {
         }
 
         else if (request.startsWith("DISCONNECTED")) {
-            if (currentScreen == lobbyScreen) {
-                changePanel(lobbyScreen, loginScreen);
-            }
-            else if (currentScreen == board) {
-                changePanel(board, loginScreen);
-            }
+            changePanel(loginScreen);
         }
 
     }
 
-    private void changePanel(JPanel currentPanel, JPanel nextPanel) {
+    private void changePanel(JPanel nextPanel) {
         add(nextPanel);
         nextPanel.setVisible(true);
-        currentPanel.setVisible(false);
-        remove(currentPanel);
+        currentScreen.setVisible(false);
+        remove(currentScreen);
         validate();
         repaint();
         currentScreen = nextPanel;
