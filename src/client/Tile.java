@@ -69,7 +69,8 @@ public class Tile extends JButton implements ActionListener {
 
     // Helper method to obtain position Pair from received String message
     @SuppressWarnings("Duplicates")
-    private static Pair<Integer, Integer> extractPosition(String message) {
+    private static Pair<Integer, Integer> extractPosition(Request request) {
+        String message = request.getRequest();
         int i = message.indexOf('[');
         int j = message.indexOf(',');
         int k = message.indexOf(']');
@@ -100,7 +101,7 @@ public class Tile extends JButton implements ActionListener {
                 Tile.lastClickedTile.setEnabled(false);
                 break;
             case OPPONENT_MOVED:
-                Tile tile = getTile(extractPosition(request.getRequest())); // TODO
+                Tile tile = getTile(extractPosition(request));
                 tile.setIcon(chooseIcon(Tile.board.getOpponentUsername()));
                 tile.setDisabledIcon(chooseIcon(Tile.board.getOpponentUsername()));
                 tile.setEnabled(false);

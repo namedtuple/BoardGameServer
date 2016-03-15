@@ -1,7 +1,6 @@
 package client;
 
 import javax.swing.*;
-import java.util.HashMap;
 
 public class GUI extends JFrame {
 
@@ -10,7 +9,6 @@ public class GUI extends JFrame {
     private LoginScreen loginScreen;
     private LobbyScreen lobbyScreen;
     private Board board;
-    private HashMap<String, String> requestMessageMap;
     private JPanel currentScreen;
     private final static String BASE_WINDOW_TITLE = "BoardGameServer";
     private String username;
@@ -31,12 +29,6 @@ public class GUI extends JFrame {
         setVisible(true);
         setResizable(false);
 
-        requestMessageMap = new HashMap<>();
-        requestMessageMap.put("VICTORY", "You win!");
-        requestMessageMap.put("DEFEAT", "You lose!");
-        requestMessageMap.put("TIE", "You tied!");
-        requestMessageMap.put("VALID_MOVE", "It is the opponent's turn");
-        requestMessageMap.put("OPPONENT_MOVED", "It is your turn");
     }
 
     private void appendToTitle(String toAppend) {
@@ -46,7 +38,6 @@ public class GUI extends JFrame {
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
-
         switch(command) {
             case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY:
                 client.handleRequest(request);
@@ -67,7 +58,7 @@ public class GUI extends JFrame {
                 changePanel(board);
                 break;
             case VICTORY: case DEFEAT: case TIE:
-                String message = requestMessageMap.get(request.getRequest()); // TODO
+                String message = command.getMessage();
                 board.setTurnLabel(message);
                 board.handleRequest(request);
                 JOptionPane.showMessageDialog(this, message);
@@ -77,7 +68,7 @@ public class GUI extends JFrame {
                 appendToTitle(username);
                 break;
             case VALID_MOVE: case OPPONENT_MOVED:
-                board.setTurnLabel(requestMessageMap.get(command.toString())); // TODO
+                board.setTurnLabel(command.getMessage());
                 board.handleRequest(request);
                 break;
             case LOBBY:
