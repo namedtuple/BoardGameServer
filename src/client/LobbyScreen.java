@@ -64,14 +64,14 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		else if(e.getSource() == logoutButton)
 		{
 			//create a new game instance depending on what game is selected
-            gui.handleRequest(new Request("LOGOUT"));
-            gui.handleRequest(new Request("DISCONNECTED"));
+            gui.handleRequest(new Request(Command.LOGOUT));
+            gui.handleRequest(new Request(Command.DISCONNECTED));
 		}
 		else if(e.getSource() == challengeOpponentButton)
 		{
             String userToJoin = (String) uiList.getSelectedValue();
 			//join an opponents game based on what opponent is chosen
-            gui.handleRequest(new Request("JOIN " + userToJoin));
+            gui.handleRequest(new Request(Command.JOIN, userToJoin));
 		}
 
 	}
@@ -154,7 +154,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
  	public void requestWaitlist(){
  		waitList.clear(); //clear contents
  		currentGameSelection = (String) gameSelection.getSelectedItem();
- 		gui.handleRequest(new Request("GOTO_LOBBY " + currentGameSelection));
+ 		gui.handleRequest(new Request(Command.GOTO_LOBBY, currentGameSelection));
  	}
 
 	class playerSelectionListener implements ListSelectionListener

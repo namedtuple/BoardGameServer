@@ -45,7 +45,7 @@ public class Tile extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Tile.lastClickedTile = this;
-        handleRequest(new Request("MOVE " + coordinates));
+        handleRequest(new Request(Command.MOVE, coordinates.toString()));
     }
 
     private static ImageIcon chooseIcon(String piece) {

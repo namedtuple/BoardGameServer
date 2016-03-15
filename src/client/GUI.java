@@ -75,7 +75,7 @@ public class GUI extends JFrame {
                 lobbyScreen.addAllToWaitList(request.getRequest());
                 break;
             case LOGOUT:
-                client.handleRequest(new Request("LOGOUT"));  // TODO
+                client.handleRequest(new Request(Command.LOGOUT));  // TODO
                 setTitle(BASE_WINDOW_TITLE);
                 break;
             case DISCONNECTED:

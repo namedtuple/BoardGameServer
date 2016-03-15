@@ -17,6 +17,16 @@ public class Request {
         }
     }
 
+    public Request(Command command) {
+        this.request = command.toString();
+        this.command = command;
+    }
+
+    public Request(Command command, String commandParameters) {
+        this.request = command.toString() + " " + commandParameters;
+        this.command = command;
+    }
+
     public String getRequest() {
         return request;
     }
