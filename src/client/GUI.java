@@ -39,7 +39,7 @@ public class GUI extends JFrame {
         requestMessageMap.put("OPPONENT_MOVED", "It is your turn");
     }
 
-    public void appendToTitle(String toAppend) {
+    private void appendToTitle(String toAppend) {
         setTitle(getTitle() + " - " + toAppend);
     }
 

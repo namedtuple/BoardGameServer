@@ -63,11 +63,6 @@ public class Board extends JPanel {
     	turnLabel.setText(text);
     }
 
-    public void handleRequest(String request) {
-        Request r = new Request(request);
-        handleRequest(r);
-    }
-
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
@@ -78,10 +73,10 @@ public class Board extends JPanel {
             case WELCOME:
                 username = tokens[1];
                 opponentUsername = tokens[3];
-                tile.handleRequest(request.getRequest()); // TODO
+                tile.handleRequest(request);
                 break;
             case VALID_MOVE: case OPPONENT_MOVED: case VICTORY: case DEFEAT: case TIE:
-                tile.handleRequest(request.getRequest());
+                tile.handleRequest(request);
                 break;
             default:
                 break;

@@ -85,25 +85,12 @@ public class Client {
             case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY: case LOGOUT:
                 send(request.getRequest());
                 break;
+            case NULL:
+                break;
             default:
-                if (!request.getRequest().startsWith("You said: ")) {
-                    //gui.handleRequest(request.getRequest());
-                    gui.handleRequest(request);
-                }
+                gui.handleRequest(request);
                 break;
         }
     }
-
-    //public void handleRequest(String request) {
-    //    String[] splitRequest = request.split(" ");
-    //    String firstToken = splitRequest[0];
-    //
-    //    if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY, LOGOUT".split(", ")).contains(firstToken)) {
-    //        send(request);
-    //    }
-    //    else if (!request.startsWith("You said: ")) {
-    //        gui.handleRequest(request);
-    //    }
-    //}
 
 }
