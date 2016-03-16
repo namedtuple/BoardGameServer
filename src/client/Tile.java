@@ -88,7 +88,7 @@ public class Tile extends JButton implements ActionListener {
             case MOVE:
                 Tile.board.handleRequest(request);
                 break;
-            case WELCOME:
+            case NEW_GAME:
                 Tile.username = tokens[1];
                 Tile.opponentUsername = tokens[3];
                 if (Tile.imageHashMap == null) {

@@ -65,7 +65,7 @@ public class GUI extends JFrame {
                 board.handleRequest(request);
                 changePanel(board);
                 break;
-            case WELCOME:
+            case NEW_GAME:
                 board = new Board(this, 3);
                 appendToTitle(tokens[2]);
                 board.handleRequest(request);

@@ -63,7 +63,7 @@ public class Board extends JPanel {
                 setTurnLabel("Player X starts first"); // TODO
                 tile.handleRequest(request);
                 break;
-            case WELCOME:
+            case NEW_GAME:
                 setTurnLabel("Player X starts first"); // TODO
                 tile.handleRequest(request);
                 break;
