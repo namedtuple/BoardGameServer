@@ -68,24 +68,24 @@ public class ServerThread extends Thread {
                 }
                 //handling moving for game
                 else if (firstToken.equals("MOVE")) {
-                    if (lobby.getLobbyName().equalsIgnoreCase("Chutes-N-Ladders")){
-                        if (game.legalMove(this)){
-                            send("VALID_MOVE");
-                            send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
-                        }
-                    }
-                    else if (lobby.getLobbyName().equalsIgnoreCase("Tic-Tac-Toe")){
+                    //if (lobby.getLobbyName().equalsIgnoreCase("Chutes-N-Ladders")){
+                    //    if (game.legalMove(this)){
+                    //        send("VALID_MOVE");
+                    //        send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
+                    //    }
+                    //}
+                    if (lobby.getLobbyName().equalsIgnoreCase("Tic-Tac-Toe")){
                         if (game.legalMove(extractPosition(msg), this)) {
                             send("VALID_MOVE");
                             send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
                         }
                     }
-                    else if (lobby.getLobbyName().equalsIgnoreCase("Checkers")){
-                        if (game.legalMove(extractPosition(msg), this)) {
-                            send("VALID_MOVE");
-                            send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
-                        }
-                    }
+                    //else if (lobby.getLobbyName().equalsIgnoreCase("Checkers")){
+                    //    if (game.legalMove(extractPosition(msg), this)) {
+                    //        send("VALID_MOVE");
+                    //        send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
+                    //    }
+                    //}
 
 
 
