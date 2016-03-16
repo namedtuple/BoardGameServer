@@ -1,5 +1,7 @@
 package server;
 
+import client.Command;
+import client.Request;
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;
@@ -32,76 +34,16 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
+        Request request;
         while (true) {
             try {
-                String msg = receive();
-                send("You said: " + msg);
-
-                String[] splitMsg = msg.split(" ");
-                String firstToken = splitMsg[0];
-                if (firstToken.equals("LOGGING_IN")) {
-                	if (server.login(splitMsg[1], splitMsg[2])){
-	                	username = splitMsg[1];
-                		send("LOGIN_SUCCESS " + username);
-	                	server.addConnection(username, this);
-                	}
-                	else {
-                		send("LOGIN_FAIL");
-                	}
-                }
-
-                // received when client changes lobby from the dropdown menu
-                else if (firstToken.equals("GOTO_LOBBY")){
-                    removeFromLobby(); //remove from current lobby
-                    server.sendToAll("LOBBY " + lobby.toString());
-                    lobby = server.getLobby(splitMsg[1]);
-                    lobby.addUser(username); //add to new lobby
-                    server.sendToAll("LOBBY " + lobby.toString());
-                }
-
-                // possible thread-safety issue, but does not matter for this project
-                else if (firstToken.equals("JOIN")) {
-                	String otherUser = splitMsg[1];
-                	ServerThread otherConnection = server.getConnection(otherUser);
-                	lobby.startGame(this, otherConnection);
-                    server.sendToAll("LOBBY " + lobby.toString());
-                }
-                //handling moving for game
-                else if (firstToken.equals("MOVE")) {
-                    //if (lobby.getLobbyName().equalsIgnoreCase("Chutes-N-Ladders")){
-                    //    if (game.legalMove(this)){
-                    //        send("VALID_MOVE");
-                    //        send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
-                    //    }
-                    //}
-                    if (lobby.getLobbyName().equalsIgnoreCase("Tic-Tac-Toe")){
-                        if (game.legalMove(extractPosition(msg), this)) {
-                            send("VALID_MOVE");
-                            send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
-                        }
-                    }
-                    //else if (lobby.getLobbyName().equalsIgnoreCase("Checkers")){
-                    //    if (game.legalMove(extractPosition(msg), this)) {
-                    //        send("VALID_MOVE");
-                    //        send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
-                    //    }
-                    //}
-
-
-
-                }
-
-                else if (firstToken.equals("LOGOUT")) {
-                    removeFromLobby();
-                    server.sendToAll("LOBBY " + lobby.toString());
-                    server.removeConnection(username);
-                }
-
+                request = receive();
+                handleRequest(request);
             }
             catch (IOException e) {
                 server.debugPrintLostConnectionMessage(username, socketAddress);
                 removeFromLobby();
-                server.sendToAll("LOBBY " + lobby.toString());
+                server.sendToAll("LOBBY " + lobby.toString());//TODO
                 server.removeConnection(username);
                 break;
             }
@@ -120,23 +62,29 @@ public class ServerThread extends Thread {
     }
 
     // Sends message to Client
-    public void send(String message) {
-        if (!message.equals("")) {
-            out.println(message);
+    public void send(Request request) { // TODO - get rid of this method
+        if (!request.getRequest().equals("")) {
+            out.println(request.getRequest());
+        }
+    }
+    // Sends message to Client
+    public void send(String request) {
+        if (!request.equals("")) {
+            out.println(request);
         }
     }
 
     // Returns the next line of stream from Client
-    public String receive() throws IOException {
+    public Request receive() throws IOException {
         String msg = in.readLine();
         System.out.println("-----------------------------------------------------------------------------");
         System.out.println("Client " + getUserName() + " says:  " + msg);
-        return msg;
+        return new Request(msg);
     }
 
     public void opponentMoved(Pair<Integer, Integer> location) {
-        send("OPPONENT_MOVED " + location);
-        send(game.hasWinner() ? "DEFEAT" : game.tied() ? "TIE" : "");
+        send(new Request(Command.OPPONENT_MOVED, location.toString()));
+        send(game.hasWinner() ? new Request(Command.DEFEAT) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
     }
 
     public ServerThread getOpponent() {
@@ -159,4 +107,58 @@ public class ServerThread extends Thread {
     	this.game = game;
     }
 
+    public void handleRequest(Request request) { // TODO - Make a copy of Request and Command classes and put in server package.
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch(command) {
+            case LOGGING_IN:
+                if (server.login(tokens[1], tokens[2])){
+                    username = tokens[1];
+                    send(new Request(Command.LOGIN_SUCCESS, username));
+                    server.addConnection(username, this);
+                }
+                else {
+                    send(new Request(Command.LOGIN_FAIL));
+                }
+                break;
+            case GOTO_LOBBY:
+                removeFromLobby();
+                server.sendToAll("LOBBY " + lobby.toString()); //TODO
+                lobby = server.getLobby(tokens[1]);
+                lobby.addUser(username); //add to new lobby
+                server.sendToAll("LOBBY " + lobby.toString());//TODO
+                break;
+            case JOIN: //TODO move to lobby
+                String otherUser = tokens[1];
+                ServerThread otherConnection = server.getConnection(otherUser);
+                lobby.startGame(this, otherConnection);
+                server.sendToAll("LOBBY " + lobby.toString());//TODO
+                break;
+            case MOVE: // TODO move to game/abstractgame/logic
+                //if (lobby.getLobbyName().equalsIgnoreCase("Chutes-N-Ladders")) {
+                //    if (game.legalMove(this)) {
+                //        send(new Request(Command.VALID_MOVE));
+                //        send(game.hasWinner() ? new Request(Command.VICTORY) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
+                //    }
+                //}
+                if (lobby.getLobbyName().equalsIgnoreCase("Tic-Tac-Toe")) {
+                    if (game.legalMove(extractPosition(request.getRequest()), this)) {
+                        send(new Request(Command.VALID_MOVE));
+                        send(game.hasWinner() ? new Request(Command.VICTORY) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
+                    }
+                }
+                //else if (lobby.getLobbyName().equalsIgnoreCase("Checkers")) {
+                //    if (game.legalMove(extractPosition(msg), this)) {
+                //        send(new Request(Command.VALID_MOVE));
+                //        send(game.hasWinner() ? new Request(Command.VICTORY) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
+                //    }
+                //}
+                break;
+            case LOGOUT:
+                removeFromLobby();
+                server.sendToAll("LOBBY " + lobby.toString()); //TODO
+                server.removeConnection(username);
+                break;
+        }
+    }
 }
