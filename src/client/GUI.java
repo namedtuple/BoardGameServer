@@ -10,6 +10,7 @@ public class GUI extends JFrame {
     private Client client;
     private LoginScreen loginScreen;
     private LobbyScreen lobbyScreen;
+    private AccountCreationScreen accountScreen;
     private Board board;
     private HashMap<String, String> requestMessageMap;
     private JPanel currentScreen;
@@ -22,6 +23,7 @@ public class GUI extends JFrame {
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
+        this.accountScreen = new AccountCreationScreen(this);
         //this.board = new Board(this, 3);
 
         add(loginScreen, "Center");
@@ -52,6 +54,13 @@ public class GUI extends JFrame {
         // UP (Client)
         if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY".split(", ")).contains(firstToken)) {
             client.handleRequest(request);
+        }
+        
+        // HERE and DOWN (AccountCreationScreen)
+        else if (request.startsWith("ACCOUNT_CREATION")) {
+            appendToTitle("Create New Account");
+            changePanel(loginScreen, accountScreen);
+            accountScreen.clearFields();
         }
 
         // HERE and DOWN (LobbyScreen)
