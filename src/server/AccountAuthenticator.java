@@ -116,6 +116,40 @@ public class AccountAuthenticator {
 		}
 	}
 	
+	public void addWin(String userName)
+	{
+		connect();
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "UPDATE users " +
+					   "SET WINS = WINS + 1 " +
+					   "WHERE USERNAME = '" + userName + "'";
+			stmt.executeQuery(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}			
+	}
+	
+	public void addLoss(String userName)
+	{
+		connect();
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "UPDATE users " +
+					   "SET LOSSES = LOSSES + 1 " +
+					   "WHERE USERNAME = '" + userName + "'";
+			stmt.executeQuery(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+	}
+	
 	//Creates Users table if it doesn't exist
 	//Can add more fields if needed
 	private void createTable() {
