@@ -1,8 +1,8 @@
 package server;
 
-import client.Command;
-import client.Request;
-import games.GameName;
+import shared.Command;
+import shared.Request;
+import shared.GameName;
 import games.chutes_and_ladders.ChutesLogic;
 import games.tic_tac_toe.TicTacToeLogic;
 

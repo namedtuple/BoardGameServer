@@ -1,9 +1,9 @@
 package server;
 
-import client.Command;
-import client.Request;
+import shared.Command;
+import shared.Request;
 import games.AbstractGameLogic;
-import games.GameName;
+import shared.GameName;
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;

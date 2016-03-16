@@ -1,4 +1,4 @@
-package client;
+package shared;
 
 public enum Command {
 

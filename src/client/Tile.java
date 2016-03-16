@@ -1,5 +1,7 @@
 package client;
 import org.javatuples.Pair;
+import shared.Command;
+import shared.Request;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

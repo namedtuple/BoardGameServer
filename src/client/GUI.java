@@ -1,6 +1,8 @@
 package client;
 
-import games.GameName;
+import shared.GameName;
+import shared.Command;
+import shared.Request;
 
 import javax.swing.*;
 

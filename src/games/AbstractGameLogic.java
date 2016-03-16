@@ -1,7 +1,7 @@
 package games;
 
-import client.Command;
-import client.Request;
+import shared.Command;
+import shared.Request;
 import games.tic_tac_toe.TicTacToeBoardTile;
 import org.javatuples.Pair;
 import server.*;

@@ -1,5 +1,7 @@
 package client;
 import org.javatuples.Pair;
+import shared.Command;
+import shared.Request;
 
 import javax.swing.*;
 import java.awt.*;

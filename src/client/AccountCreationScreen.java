@@ -1,4 +1,7 @@
 package client;
+import shared.Command;
+import shared.Request;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

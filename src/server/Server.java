@@ -1,7 +1,7 @@
 package server;
 
-import client.Request;
-import games.GameName;
+import shared.Request;
+import shared.GameName;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
