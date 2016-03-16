@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 
-	private JButton loginBtn;
+	private JButton loginBtn, accountCreateBtn;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JLabel usernameLabel, passwordLabel, programLogo;
@@ -18,6 +18,7 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 	public LoginScreen(GUI gui) {
         this.gui = gui;
 		createLoginButton();
+		createAccountButton();
 		createUsernameLabel();
 		createPasswordLabel();
 		createUsernameField();
@@ -33,8 +34,16 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 		loginBtn = new JButton("Login");
 		loginBtn.addActionListener(this);
 		loginBtn.addKeyListener(this);
-        loginBtn.setBounds(190,155,100,20);
+        loginBtn.setBounds(170,155,140,20);
 		this.add(loginBtn);
+	}
+	
+	public void createAccountButton(){
+		accountCreateBtn = new JButton("Create Account");
+		accountCreateBtn.addActionListener(this);
+		accountCreateBtn.addKeyListener(this);
+		accountCreateBtn.setBounds(170,175,140,20);
+		this.add(accountCreateBtn);
 	}
 
 	private void createLogo(){
@@ -92,6 +101,9 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
 		JButton button = (JButton) e.getSource();
 		if (button == loginBtn){
             attemptLogin();
+		}
+		if (button == accountCreateBtn){
+            gui.handleRequest("ACCOUNT_CREATION");
 		}
 	}
 

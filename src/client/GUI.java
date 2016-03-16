@@ -8,6 +8,7 @@ public class GUI extends JFrame {
     private Client client;
     private LoginScreen loginScreen;
     private LobbyScreen lobbyScreen;
+    private AccountCreationScreen accountScreen;
     private Board board;
     private JPanel currentScreen;
     private final static String BASE_WINDOW_TITLE = "BoardGameServer";
@@ -19,6 +20,11 @@ public class GUI extends JFrame {
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
+<<<<<<< HEAD
+=======
+        this.accountScreen = new AccountCreationScreen(this);
+        //this.board = new Board(this, 3);
+>>>>>>> 7b5f28df0a08f167af39f4e9de61b31af276e38a
 
         add(loginScreen, "Center");
         loginScreen.setVisible(true);
@@ -35,6 +41,7 @@ public class GUI extends JFrame {
         setTitle(getTitle() + " - " + toAppend);
     }
 
+<<<<<<< HEAD
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
@@ -79,6 +86,60 @@ public class GUI extends JFrame {
                 break;
             default:
                 break;
+=======
+    public void handleRequest(String request) {
+        String[] splitRequest = request.split(" ");
+        String firstToken = splitRequest[0];
+
+        // UP (Client)
+        if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY".split(", ")).contains(firstToken)) {
+            client.handleRequest(request);
+        }
+        
+        // HERE and DOWN (AccountCreationScreen)
+        else if (request.startsWith("ACCOUNT_CREATION")) {
+            appendToTitle("Create New Account");
+            changePanel(loginScreen, accountScreen);
+            accountScreen.clearFields();
+        }
+
+        // HERE and DOWN (LobbyScreen)
+        else if (request.startsWith("LOGIN_SUCCESS")) {
+            String[] splitMsg = request.split(" ");
+            username = splitMsg[1];
+            appendToTitle(username);
+            lobbyScreen.setUsername(username);
+            lobbyScreen.requestWaitlist();
+            changePanel(loginScreen, lobbyScreen);
+            loginScreen.clearFields();
+        }
+
+        // HERE and DOWN (Board)
+        else if (request.startsWith("WELCOME")) {
+            board = new Board(this, 3);
+            appendToTitle(splitRequest[2]);
+            board.setTurnLabel("Player X starts first");
+            board.handleRequest(request);
+            changePanel(lobbyScreen, board);
+        }
+
+        // HERE and DOWN (Board)
+        else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
+            String message = requestMessageMap.get(request);
+            board.setTurnLabel(message);
+            board.handleRequest(request);
+            JOptionPane.showMessageDialog(this, message);
+            lobbyScreen.requestWaitlist();
+            changePanel(board, lobbyScreen);
+            setTitle(BASE_WINDOW_TITLE);
+            appendToTitle(username);
+        }
+
+        // DOWN (Board) - VALID_MOVE, OPPONENT_MOVED
+        else if (Arrays.asList("VALID_MOVE, OPPONENT_MOVED".split(", ")).contains(firstToken)) {
+            board.setTurnLabel(requestMessageMap.get(firstToken));
+            board.handleRequest(request);
+>>>>>>> 7b5f28df0a08f167af39f4e9de61b31af276e38a
         }
     }
 
