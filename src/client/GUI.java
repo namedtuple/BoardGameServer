@@ -56,12 +56,19 @@ public class GUI extends JFrame {
                 changePanel(lobbyScreen);
                 loginScreen.handleRequest(request);
                 break;
+            case CHUTE:
+                board = new Board(this, 10);
+                appendToTitle(tokens[2]);
+                board.handleRequest(request);
+                changePanel(board);
+                break;
             case WELCOME:
                 board = new Board(this, 3);
                 appendToTitle(tokens[2]);
                 board.handleRequest(request);
                 changePanel(board);
                 break;
+
             case VICTORY: case DEFEAT: case TIE:
                 String message = command.getMessage();
                 board.handleRequest(request);
