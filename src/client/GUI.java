@@ -1,5 +1,7 @@
 package client;
 
+import games.GameName;
+
 import javax.swing.*;
 
 public class GUI extends JFrame {
@@ -66,8 +68,9 @@ public class GUI extends JFrame {
                 changePanel(board);
                 break;
             case NEW_GAME:
-                board = new Board(this, 3);
-                appendToTitle(tokens[2]);
+                GameName gameName = GameName.valueOf(tokens[1]);
+                board = new Board(this, gameName.getBoardSize());
+                appendToTitle(tokens[3]);
                 board.handleRequest(request);
                 changePanel(board);
                 break;

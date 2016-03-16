@@ -70,11 +70,11 @@ public class GameLobby {
         else if (lobbyName == GameName.TIC_TAC_TOE) {
 			TicTacToeLogic newGame = new TicTacToeLogic(server, player1, player2, 3);
 
-			player1.send(new Request(Command.NEW_GAME, p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
+			player1.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
 			player1.setOpponent(player2);
 			player1.setGame(newGame);
 
-			player2.send(new Request(Command.NEW_GAME, p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X '
+			player2.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X '
 			player2.setOpponent(player1);
 			player2.setGame(newGame);
 

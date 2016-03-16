@@ -6,20 +6,26 @@ import java.util.List;
 public enum GameName {
 
     // Constants
-    TIC_TAC_TOE("Tic-Tac-Toe"),
-    CHECKERS("Checkers"),
-    CHUTES_AND_LADDERS("Chutes-and-Ladders");
+    TIC_TAC_TOE("Tic-Tac-Toe", 3),
+    CHECKERS("Checkers", 8),
+    CHUTES_AND_LADDERS("Chutes-and-Ladders", 10);
 
     // Fields
     private String friendlyName;
+    private int boardSize;
 
     // Methods
-    GameName(String friendlyName) {
+    GameName(String friendlyName, int boardSize) {
         this.friendlyName = friendlyName;
+        this.boardSize = boardSize;
     }
 
     public String getFriendlyName() {
         return friendlyName;
+    }
+
+    public int getBoardSize() {
+        return boardSize;
     }
 
     public static String[] getAllFriendlyNames() {
@@ -42,4 +48,5 @@ public enum GameName {
         }
         return toReturn;
     }
+
 }

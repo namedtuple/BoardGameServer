@@ -89,13 +89,13 @@ public class Tile extends JButton implements ActionListener {
                 Tile.board.handleRequest(request);
                 break;
             case NEW_GAME:
-                Tile.username = tokens[1];
-                Tile.opponentUsername = tokens[3];
+                Tile.username = tokens[2];
+                Tile.opponentUsername = tokens[4];
                 if (Tile.imageHashMap == null) {
                     if (request.getRequest().indexOf(" X ") < request.getRequest().indexOf(" O ")) { // TODO
-                        loadImages(tokens[1], tokens[3]);
+                        loadImages(tokens[2], tokens[4]);
                     } else {
-                        loadImages(tokens[3], tokens[1]);
+                        loadImages(tokens[4], tokens[2]);
                     }
                 }
                 break;
