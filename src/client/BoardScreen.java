@@ -6,7 +6,7 @@ import shared.Request;
 import javax.swing.*;
 import java.awt.*;
 
-public class Board extends JPanel {
+public class BoardScreen extends JPanel {
 
     // Fields
     private GUI gui;
@@ -16,7 +16,7 @@ public class Board extends JPanel {
     private JPanel boardPanel, turnPanel;
 
     // Methods
-    public Board(GUI gui, int length) {
+    public BoardScreen(GUI gui, int length) {
         this.gui = gui;
         this.length = length;
         setBackground(Color.yellow);

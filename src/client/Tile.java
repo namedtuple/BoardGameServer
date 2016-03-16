@@ -16,7 +16,7 @@ import java.util.List;
 public class Tile extends JButton implements ActionListener {
 
     // Fields
-    private static Board board;
+    private static BoardScreen boardScreen;
     private static HashMap<String, ImageIcon> imageHashMap;
     private static List<Tile> instances = new ArrayList<>();
     private static Tile lastClickedTile;
@@ -25,8 +25,8 @@ public class Tile extends JButton implements ActionListener {
     private Pair<Integer, Integer> coordinates; //saves button coordinates
 
     // Methods
-    public Tile(Board board, Pair<Integer, Integer> coordinates) {
-        Tile.board = board;
+    public Tile(BoardScreen boardScreen, Pair<Integer, Integer> coordinates) {
+        Tile.boardScreen = boardScreen;
         Tile.instances.add(this);
         this.coordinates = coordinates;
         this.addActionListener(this);
@@ -88,7 +88,7 @@ public class Tile extends JButton implements ActionListener {
         Command command = request.getCommand();
         switch (command) {
             case MOVE:
-                Tile.board.handleRequest(request);
+                Tile.boardScreen.handleRequest(request);
                 break;
             case NEW_GAME:
                 Tile.username = tokens[2];
@@ -113,7 +113,7 @@ public class Tile extends JButton implements ActionListener {
                 tile.setEnabled(false);
                 break;
             case VICTORY: case DEFEAT: case TIE:
-                Tile.board = null;
+                Tile.boardScreen = null;
                 Tile.imageHashMap = null;
                 Tile.instances = new ArrayList<>();
                 Tile.lastClickedTile = null;
