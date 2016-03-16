@@ -61,12 +61,6 @@ public class GUI extends JFrame {
                 changePanel(lobbyScreen);
                 loginScreen.handleRequest(request);
                 break;
-            case CHUTE:
-                board = new Board(this, 10);
-                appendToTitle(tokens[2]);
-                board.handleRequest(request);
-                changePanel(board);
-                break;
             case NEW_GAME:
                 GameName gameName = GameName.valueOf(tokens[1]);
                 board = new Board(this, gameName.getBoardSize());

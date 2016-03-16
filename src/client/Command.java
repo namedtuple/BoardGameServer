@@ -10,7 +10,6 @@ public enum Command {
     JOIN, NEW_GAME,
     MOVE, VALID_MOVE("It is your opponent's turn"), OPPONENT_MOVED("It is your turn"),
     VICTORY("You win!"), DEFEAT("You lose!"), TIE("You tied!"),
-    CHUTE,
     NULL;
 
     // Fields

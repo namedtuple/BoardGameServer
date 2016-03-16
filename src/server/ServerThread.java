@@ -109,10 +109,6 @@ public class ServerThread extends Thread {
             case CREATING_ACCOUNT:
                 server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]);
                 break;
-            case CHUTE:
-                //
-                out.println("LOLOLOLOLOL");
-                break;
             case GOTO_LOBBY:
                 removeFromLobby();
                 server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
