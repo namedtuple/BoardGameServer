@@ -49,6 +49,11 @@ public class ServerThread extends Thread {
                 		send("LOGIN_FAIL");
                 	}
                 }
+                
+                else if(firstToken.equals("CREATING_ACCOUNT"))
+                {
+                	server.createAccount(splitMsg[1], splitMsg[2], splitMsg[3], splitMsg[4]);
+                }
 
                 // received when client changes lobby from the dropdown menu
                 else if (firstToken.equals("GOTO_LOBBY")){
