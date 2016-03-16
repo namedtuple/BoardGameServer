@@ -49,16 +49,20 @@ public class GameLobby {
 		System.out.println("CURRENT GAME IS" + lobbyName);
 		String p1 = player1.getUserName();
 		String p2 = player2.getUserName();
-		if (lobbyName.equalsIgnoreCase("Chutes-N-Ladders")) {
-			player1.send("CHUTE");
+		if (lobbyName.equalsIgnoreCase("Chutes-and-Ladders")) {
+			ChutesLogic newGame = new ChutesLogic(player1, player2, 10);
+
+			player1.send(new Request(Command.CHUTE));
+			player1.setOpponent(player2);
+			player1.setGame(newGame);
+
+
+			player2.send(new Request(Command.CHUTE)); // 'WELCOME username2 O username1 X '
+			player2.setOpponent(player1);
+			player2.setGame(newGame);
 
 		} else if (lobbyName.equalsIgnoreCase("Tic-Tac-Toe")) {
 			TicTacToeLogic newGame = new TicTacToeLogic(player1, player2, 3);
-
-
-			player1.send("WELCOME " + p1 + " X " + p2 + " O "); // 'WELCOME username1 X username2 O '
-			player1.setOpponent(player2);
-			player1.setGame(newGame);
 
 			player1.send(new Request(Command.WELCOME, p1 + " X " + p2 + " O ")); // 'WELCOME username1 X username2 O '
 			player1.setOpponent(player2);
