@@ -25,7 +25,7 @@ public class ServerThread extends Thread {
 
     // Methods
     public ServerThread(Socket socket, Server server) throws IOException {
-    	this.server = server;
+        this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         lobby = server.getLobby(DEFAULT_LOBBY);
@@ -87,7 +87,7 @@ public class ServerThread extends Thread {
     }
 
     public void setGame(AbstractGameLogic game){
-    	this.game = game;
+        this.game = game;
     }
 
     public void handleRequest(Request request) { // TODO - Make a copy of Request and Command classes and put in server package.
@@ -105,8 +105,8 @@ public class ServerThread extends Thread {
                 }
                 break;
             case CREATING_ACCOUNT:
-            	server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]);
-            	break;
+                server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]);
+                break;
             case CHUTE:
                 //
                 out.println("LOLOLOLOLOL");

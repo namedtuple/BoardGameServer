@@ -57,7 +57,7 @@ public class Server {
     public void run() throws IOException {
         System.out.println("Server running");
         while (true) {
-        	Socket newConnectionSocket = serverSocket.accept();
+            Socket newConnectionSocket = serverSocket.accept();
             System.out.println("New connection from: " + newConnectionSocket.getRemoteSocketAddress());
             ServerThread serverThread = new ServerThread(newConnectionSocket, this);
             serverThread.start();
@@ -65,12 +65,12 @@ public class Server {
     }
 
     public GameLobby getLobby(String lobbyName){
-    	return gameLobbies.get(lobbyName);
+        return gameLobbies.get(lobbyName);
     }
 
     //called when a user successfully logs in
     public void addConnection(String userName, ServerThread connection){
-    	connectionHandlers.put(userName, connection);
+        connectionHandlers.put(userName, connection);
     }
 
     public void removeConnection(String userName) {
@@ -78,7 +78,7 @@ public class Server {
     }
 
     public ServerThread getConnection(String userName){
-    	return connectionHandlers.get(userName);
+        return connectionHandlers.get(userName);
     }
 
     public boolean login(String enteredName, String enteredPassword){
@@ -88,14 +88,15 @@ public class Server {
             return false;
         }
         else if (accountAuthenticator.userExists(enteredName)){ //if user exists
-    		return accountAuthenticator.isValidLogin(enteredName, enteredPassword); //check password
-    	}
-    	else { //create account, should return true and login the user
-    		return accountAuthenticator.addUser(enteredName, enteredPassword, "Unknown", "Unknown");
-    	}
+            return accountAuthenticator.isValidLogin(enteredName, enteredPassword); //check password
+        }
+        else { //create account, should return true and login the user
+            return accountAuthenticator.addUser(enteredName, enteredPassword, "Unknown", "Unknown");
+        }
     }
+
     public void createAccount(String userName, String password, String gender, String country) {
-    	accountAuthenticator.addUser(userName, password, gender, country);
+        accountAuthenticator.addUser(userName, password, gender, country);
     }
 
     public void close() {

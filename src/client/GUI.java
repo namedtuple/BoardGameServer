@@ -45,14 +45,13 @@ public class GUI extends JFrame {
                 client.handleRequest(request);
                 break;
             case ACCOUNT_CREATION:
-                appendToTitle(command.getMessage());
                 changePanel(accountScreen);
                 accountScreen.clearFields();
                 break;
             case CREATING_ACCOUNT:
-            	client.handleRequest(request);
-            	changePanel(loginScreen);
-            	break;
+                client.handleRequest(request);
+                changePanel(loginScreen);
+                break;
             case LOGIN_SUCCESS:
                 username = tokens[1];
                 appendToTitle(username);
