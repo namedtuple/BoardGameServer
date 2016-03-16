@@ -59,6 +59,10 @@ public class Board extends JPanel {
             case MOVE:
                 gui.handleRequest(request);
                 break;
+            case CHUTE:
+                setTurnLabel("Player X starts first"); // TODO
+                tile.handleRequest(request);
+                break;
             case WELCOME:
                 setTurnLabel("Player X starts first"); // TODO
                 tile.handleRequest(request);

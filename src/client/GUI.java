@@ -49,12 +49,22 @@ public class GUI extends JFrame {
                 changePanel(accountScreen);
                 accountScreen.clearFields();
                 break;
+            case CREATING_ACCOUNT:
+            	client.handleRequest(request);
+            	changePanel(loginScreen);
+            	break;
             case LOGIN_SUCCESS:
                 username = tokens[1];
                 appendToTitle(username);
                 lobbyScreen.handleRequest(request);
                 changePanel(lobbyScreen);
                 loginScreen.handleRequest(request);
+                break;
+            case CHUTE:
+                board = new Board(this, 10);
+                appendToTitle(tokens[2]);
+                board.handleRequest(request);
+                changePanel(board);
                 break;
             case WELCOME:
                 board = new Board(this, 3);

@@ -82,7 +82,7 @@ public class Client {
     public void handleRequest(Request request) {
         Command command = request.getCommand();
         switch (command) {
-            case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY: case LOGOUT:
+            case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY: case LOGOUT: case CREATING_ACCOUNT:
                 send(request.getRequest());
                 break;
             case NULL:
