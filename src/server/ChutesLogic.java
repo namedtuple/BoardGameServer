@@ -7,6 +7,7 @@ import java.util.Random;
 /**
  * Created by Jonathan on 3/9/16.
  */
+
 public class ChutesLogic extends AbstractGameLogic {
     private HashMap<Pair<Integer,Integer>, Pair<Integer,Integer>> hotmaps;
     private Pair<Integer, Integer> location;
@@ -47,8 +48,9 @@ public class ChutesLogic extends AbstractGameLogic {
     public boolean legalMove() {
         return true;
     }
-
-
+    public boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
+        return false;
+    }
 
     public boolean legalMove(ServerThread currentPlayer) {
         //location=currentPlayer.
