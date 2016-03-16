@@ -37,8 +37,8 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
         loginBtn.setBounds(170,155,140,20);
 		this.add(loginBtn);
 	}
-	
-	public void createAccountButton(){
+
+	private void createAccountButton(){
 		accountCreateBtn = new JButton("Create Account");
 		accountCreateBtn.addActionListener(this);
 		accountCreateBtn.addKeyListener(this);
@@ -103,7 +103,7 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
             attemptLogin();
 		}
 		if (button == accountCreateBtn){
-            gui.handleRequest("ACCOUNT_CREATION");
+            gui.handleRequest(new Request(Command.ACCOUNT_CREATION));
 		}
 	}
 
@@ -136,7 +136,7 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
     public void handleRequest(Request request) {
         Command command = request.getCommand();
         switch(command) {
-            case LOGGING_IN:
+            case LOGGING_IN: case ACCOUNT_CREATION:
                 gui.handleRequest(request);
                 break;
             case LOGIN_SUCCESS:

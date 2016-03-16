@@ -4,6 +4,7 @@ public enum Command {
 
     // Constants
     LOGGING_IN, LOGIN_SUCCESS, LOGIN_FAIL,
+    ACCOUNT_CREATION("Create New Account"), CREATING_ACCOUNT,
     LOGOUT, DISCONNECTED,
     GOTO_LOBBY, LOBBY,
     JOIN, WELCOME,

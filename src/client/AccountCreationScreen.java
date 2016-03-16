@@ -33,7 +33,7 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 		this.setVisible(true);
 	}
 
-	public void createSubmitButton(){
+	private void createSubmitButton(){
 		submitBtn = new JButton("Submit");
 		submitBtn.addActionListener(this);
 		submitBtn.addKeyListener(this);
@@ -41,7 +41,7 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 		this.add(submitBtn);
 	}
 
-	public void createLogo(){
+	private void createLogo(){
 		try {
 			BufferedImage logoImage = ImageIO.read(new File("img/logo.png"));
 			programLogo = new JLabel();
@@ -51,56 +51,55 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 			this.add(programLogo);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void createUsernameLabel(){
+	private void createUsernameLabel(){
 		usernameLabel = new JLabel("Username: ");
 		usernameLabel.setBounds(10,110,120,20);
 		this.add(usernameLabel);
 	}
 
-	public void createPasswordLabel(){
+	private void createPasswordLabel(){
 		passwordLabel = new JLabel("Password: ");
 		passwordLabel.setBounds(10,130,120,20);
 		this.add(passwordLabel);
 	}
-	public void createGenderLabel(){
+	private void createGenderLabel(){
 		genderLabel = new JLabel("Gender: ");
 		genderLabel.setBounds(10,150,120,20);
 		this.add(genderLabel);
 	}
 
-	public void createCountryLabel(){
+	private void createCountryLabel(){
 		countryLabel = new JLabel("Country: ");
 		countryLabel.setBounds(10,170,120,20);
 		this.add(countryLabel);
 	}
 
-	public void createUsernameField() {
+	private void createUsernameField() {
 		usernameField = new JTextField();
         usernameField.addKeyListener(this);
 		usernameField.setBounds(140, 110, 200, 20);
 		this.add(usernameField);
 	}
 
-	public void createPasswordField(){
+	private void createPasswordField(){
 		passwordField = new JPasswordField();
         passwordField.addKeyListener(this);
 		passwordField.setBounds(140,130,200,20);
 		this.add(passwordField);
 	}
-	
-	public void createGenderField() {
+
+	private void createGenderField() {
 		genderField = new JTextField();
         genderField.addKeyListener(this);
 		genderField.setBounds(140, 150, 200, 20);
 		this.add(genderField);
 	}
 
-	public void createCountryField(){
+	private void createCountryField(){
 		countryField = new JTextField();
         countryField.addKeyListener(this);
 		countryField.setBounds(140,170,200,20);
@@ -114,7 +113,7 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 	public String getPassword() {
 		return String.valueOf(passwordField.getPassword());
 	}
-	
+
 	public String getGender(){
 		return usernameField.getText();
 	}
@@ -149,7 +148,7 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
     // Helper method called by clicking Login button or pressing Enter
     private void attemptAccountCreation() {
         if (!getUsername().equals("") && !getPassword().equals("") && !getGender().equals("") && !getCountry().equals("") ) {
-            gui.handleRequest("CREATING_ACCOUNT " + getUsername() + " " + getPassword() + " " + getGender() + " " + getCountry());
+            gui.handleRequest(new Request(Command.CREATING_ACCOUNT, getUsername() + " " + getPassword() + " " + getGender() + " " + getCountry()));
         }
     }
 
