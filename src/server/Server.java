@@ -1,6 +1,7 @@
 package server;
 
 import client.Request;
+import games.GameName;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -28,13 +29,10 @@ public class Server {
 
     // Fields
     private static final short PORT_NUM = 6666;
-    private static final String TIC_TAC_TOE = "Tic-Tac-Toe";
-    private static final String CHECKERS = "Checkers";
-    private static final String CHUTES_AND_LADDERS = "Chutes-and-Ladders";
     private ServerSocket serverSocket;
     private AccountAuthenticator accountAuthenticator;
 
-    private Map<String, GameLobby> gameLobbies; //stores a Lobby for each game, where String is name of game
+    private Map<GameName, GameLobby> gameLobbies; //stores a Lobby for each game, where String is name of game
     private Map<String, ServerThread> connectionHandlers; //stores connection handler for each user
 
     // Methods
@@ -45,12 +43,12 @@ public class Server {
 
         accountAuthenticator = new AccountAuthenticator();
 
-        gameLobbies = new HashMap<String, GameLobby>();
-        gameLobbies.put(TIC_TAC_TOE, new GameLobby(this, TIC_TAC_TOE));
-        gameLobbies.put(CHECKERS, new GameLobby(this, CHECKERS));
-        gameLobbies.put(CHUTES_AND_LADDERS, new GameLobby(this, CHUTES_AND_LADDERS));
+        gameLobbies = new HashMap<>();
+        gameLobbies.put(GameName.TIC_TAC_TOE, new GameLobby(this, GameName.TIC_TAC_TOE));
+        gameLobbies.put(GameName.CHECKERS, new GameLobby(this, GameName.CHECKERS));
+        gameLobbies.put(GameName.CHUTES_AND_LADDERS, new GameLobby(this, GameName.CHUTES_AND_LADDERS));
 
-        connectionHandlers = new HashMap<String, ServerThread>();
+        connectionHandlers = new HashMap<>();
 
     }
 
@@ -64,7 +62,7 @@ public class Server {
         }
     }
 
-    public GameLobby getLobby(String lobbyName){
+    public GameLobby getLobby(GameName lobbyName){
         return gameLobbies.get(lobbyName);
     }
 

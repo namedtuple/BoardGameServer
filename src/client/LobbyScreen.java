@@ -1,5 +1,7 @@
 package client;
 
+import games.GameName;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -16,9 +18,10 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
 	//method variables
 	private JComboBox gameSelection;
-	private String currentGameSelection;
-    private HashMap<String, List<String>> lobbyMap;
-	private String[] gameList = {"Tic-Tac-Toe", "Chutes-and-Ladders", "Checkers"};
+	private GameName currentGameSelection;
+    private HashMap<GameName, List<String>> lobbyMap;
+    private String[] gameList = GameName.getAllFriendlyNames();
+
 	private JButton logoutButton, challengeOpponentButton;
 	private JPanel selectionPanel;
 	private DefaultListModel waitList; //changes made to this will update GUI waiting list
@@ -32,9 +35,9 @@ public class LobbyScreen extends JPanel implements ActionListener{
         this.gui = gui;
 
         lobbyMap = new HashMap<>();
-        lobbyMap.put("Tic-Tac-Toe", new ArrayList<>());
-        lobbyMap.put("Chutes-and-Ladders", new ArrayList<>());
-        lobbyMap.put("Checkers", new ArrayList<>());
+        lobbyMap.put(GameName.TIC_TAC_TOE, new ArrayList<>());
+        lobbyMap.put(GameName.CHUTES_AND_LADDERS, new ArrayList<>());
+        lobbyMap.put(GameName.CHECKERS, new ArrayList<>());
 
 		waitList = new DefaultListModel();
         setVisible(false);
@@ -57,7 +60,6 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		if(e.getSource() == gameSelection)
 		{
             if (this.isVisible()) {
-                System.out.println("ABOUT TO CALL LobbyScreen.requestWaitlist() from actionPerformed()");
                 requestWaitlist();
             }
         }
@@ -104,7 +106,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 		gameSelection = new JComboBox(gameList);
 		gameSelection.addActionListener(this);
 		gameSelection.setSelectedIndex(0);
-		currentGameSelection = gameList[0];
+		currentGameSelection = GameName.getGameName(gameList[0]);
 		selectionPanel.add(gameSelection);
 	}
 
@@ -124,7 +126,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
         String[] splitMsg = request.split(" ");
 
         // update (model) list first:
-        String gameName = splitMsg[1];
+        GameName gameName = GameName.valueOf(splitMsg[1]);
         List<String> lobbyList = lobbyMap.get(gameName);
         lobbyList.clear();
         for (int i=2; i<splitMsg.length; ++i) {
@@ -153,8 +155,8 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
  	private void requestWaitlist(){
  		waitList.clear(); //clear contents
- 		currentGameSelection = (String) gameSelection.getSelectedItem();
- 		handleRequest(new Request(Command.GOTO_LOBBY, currentGameSelection));
+        currentGameSelection = GameName.getGameName((String) gameSelection.getSelectedItem());
+ 		handleRequest(new Request(Command.GOTO_LOBBY, currentGameSelection.toString()));
  	}
 
 	class playerSelectionListener implements ListSelectionListener

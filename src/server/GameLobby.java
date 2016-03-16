@@ -2,6 +2,7 @@ package server;
 
 import client.Command;
 import client.Request;
+import games.GameName;
 import games.chutes_and_ladders.ChutesLogic;
 import games.tic_tac_toe.TicTacToeLogic;
 
@@ -12,11 +13,11 @@ public class GameLobby {
 
     // Fields
     private Server server;
-    private String lobbyName;
+    private GameName lobbyName;
     private List<String> list;
 
     // Methods
-	public GameLobby(Server server, String lobbyName) {
+	public GameLobby(Server server, GameName lobbyName) {
         this.server = server;
         this.lobbyName = lobbyName;
         list = new ArrayList<>();
@@ -32,7 +33,7 @@ public class GameLobby {
 		debugPrintLobbyContents();
 	}
 
-	public String getLobbyName() {
+	public GameName getLobbyName() {
 		return lobbyName;
 	}
 
@@ -53,7 +54,7 @@ public class GameLobby {
 		System.out.println("CURRENT GAME IS" + lobbyName);
 		String p1 = player1.getUserName();
 		String p2 = player2.getUserName();
-		if (lobbyName.equalsIgnoreCase("Chutes-and-Ladders")) {
+		if (lobbyName == GameName.CHUTES_AND_LADDERS) {
 			ChutesLogic newGame = new ChutesLogic(server, player1, player2, 10);
 
 			player1.send(new Request(Command.CHUTE));
@@ -66,7 +67,7 @@ public class GameLobby {
 			player2.setGame(newGame);
 
 		}
-        else if (lobbyName.equalsIgnoreCase("Tic-Tac-Toe")) {
+        else if (lobbyName == GameName.TIC_TAC_TOE) {
 			TicTacToeLogic newGame = new TicTacToeLogic(server, player1, player2, 3);
 
 			player1.send(new Request(Command.NEW_GAME, p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '

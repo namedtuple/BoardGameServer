@@ -3,6 +3,7 @@ package server;
 import client.Command;
 import client.Request;
 import games.AbstractGameLogic;
+import games.GameName;
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;
@@ -22,7 +23,7 @@ public class ServerThread extends Thread {
     private String username;
     private Server server; //reference to the owning server
     private GameLobby lobby; //lobby that the user is currently in
-    private static final String DEFAULT_LOBBY = "Tic-Tac-Toe";
+    private static final GameName DEFAULT_LOBBY = GameName.TIC_TAC_TOE;
 
     // Methods
     public ServerThread(Socket socket, Server server) throws IOException {
@@ -115,7 +116,8 @@ public class ServerThread extends Thread {
             case GOTO_LOBBY:
                 removeFromLobby();
                 server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
-                lobby = server.getLobby(tokens[1]);
+                lobby = server.getLobby(GameName.valueOf(tokens[1]));
+                //lobby = server.getLobby(tokens[1]);
                 lobby.addUser(username); //add to new lobby
                 server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 break;
