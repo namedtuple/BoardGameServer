@@ -43,7 +43,7 @@ public class ServerThread extends Thread {
             catch (IOException e) {
                 server.debugPrintLostConnectionMessage(username, socketAddress);
                 removeFromLobby();
-                server.sendToAll("LOBBY " + lobby.toString());//TODO
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));//TODO
                 server.removeConnection(username);
                 break;
             }
@@ -123,16 +123,16 @@ public class ServerThread extends Thread {
                 break;
             case GOTO_LOBBY:
                 removeFromLobby();
-                server.sendToAll("LOBBY " + lobby.toString()); //TODO
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 lobby = server.getLobby(tokens[1]);
                 lobby.addUser(username); //add to new lobby
-                server.sendToAll("LOBBY " + lobby.toString());//TODO
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 break;
             case JOIN: //TODO move to lobby
                 String otherUser = tokens[1];
                 ServerThread otherConnection = server.getConnection(otherUser);
                 lobby.startGame(this, otherConnection);
-                server.sendToAll("LOBBY " + lobby.toString());//TODO
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 break;
             case MOVE: // TODO move to game/abstractgame/logic
                 //if (lobby.getLobbyName().equalsIgnoreCase("Chutes-N-Ladders")) {
@@ -156,7 +156,7 @@ public class ServerThread extends Thread {
                 break;
             case LOGOUT:
                 removeFromLobby();
-                server.sendToAll("LOBBY " + lobby.toString()); //TODO
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 server.removeConnection(username);
                 break;
         }

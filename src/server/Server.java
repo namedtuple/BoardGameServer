@@ -1,12 +1,13 @@
 package server;
 
-import java.util.HashMap;
-import java.util.Map;
+import client.Request;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
 
@@ -102,9 +103,9 @@ public class Server {
         }
     }
 
-    public void sendToAll(String message) {
+    public void sendToAll(Request request) {
         for (ServerThread st : connectionHandlers.values()) {
-            st.send(message);
+            st.send(request);
         }
     }
 
