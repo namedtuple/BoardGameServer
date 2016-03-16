@@ -1,17 +1,21 @@
 package games;
 
+import org.javatuples.Pair;
+import server.Server;
+import server.ServerThread;
 import shared.Command;
 import shared.Request;
-import games.tic_tac_toe.TicTacToeBoardTile;
-import org.javatuples.Pair;
-import server.*;
-
-import java.util.HashMap;
 
 public abstract class AbstractGameLogic implements GameLogicInterface {
 
+    //Interface
+    //boolean legalMove(Pair<Integer, Integer> location, ServerThread player);
+    ////boolean legalMove(ServerThread player);
+    //boolean hasWinner();
+    //boolean tied();
+
     // Fields
-    protected HashMap<Pair<Integer, Integer>, AbstractBoardTile> boardMap;  // change to new 'Board' class later
+    protected Board board;  // change to new 'Board' class later
     protected Server server;
     protected ServerThread currentPlayer;
     protected ServerThread otherPlayer;
@@ -23,18 +27,8 @@ public abstract class AbstractGameLogic implements GameLogicInterface {
         this.currentPlayer = player1;
         this.otherPlayer = player2;
         this.LENGTH = length;
-        setupBoardMap();
+        this.board = new Board(length);
         System.out.println("Game created: " + player1.getUserName() + " " + player2.getUserName());
-    }
-
-    private void setupBoardMap() {
-        boardMap = new HashMap<>();
-        for (int xCol = 1; xCol <= LENGTH; ++xCol) {
-            for (int yRow = 1; yRow <= LENGTH; ++yRow) {
-                Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                boardMap.put(pair, new TicTacToeBoardTile(pair));
-            }
-        }
     }
 
     public void debugPrintBoard() {
@@ -71,7 +65,7 @@ public abstract class AbstractGameLogic implements GameLogicInterface {
                 Pair<Integer, Integer> location = extractPosition(request.getRequest());
                 if (legalMove(location, player)) {
                     debugPrintBoard();
-                    boardMap.get(location).setOccupant(player);
+                    board.getCell(location).addOccupant(username);
                     currentPlayer = currentPlayer.getOpponent();
                     currentPlayer.opponentMoved(location);
                     player.send(new Request(Command.VALID_MOVE));

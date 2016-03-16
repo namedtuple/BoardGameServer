@@ -1,8 +1,8 @@
 package games.tic_tac_toe;
 
 import games.AbstractGameLogic;
+import games.Cell;
 import org.javatuples.Pair;
-import games.AbstractBoardTile;
 import server.Server;
 import server.ServerThread;
 
@@ -17,7 +17,7 @@ public class TicTacToeLogic extends AbstractGameLogic {
 
     @Override
     public synchronized boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
-        return player == currentPlayer && boardMap.get(location).getOccupant() == null;
+        return player == currentPlayer && board.getCell(location).getOccupant() == null;
     }
 
     @SuppressWarnings("Duplicates")
@@ -26,29 +26,30 @@ public class TicTacToeLogic extends AbstractGameLogic {
         // TL TM TR
         // ML MM MR
         // BL BM BR
-        ServerThread TL = boardMap.get(Pair.with(1,1)).getOccupant();
-        ServerThread TM = boardMap.get(Pair.with(2,1)).getOccupant();
-        ServerThread TR = boardMap.get(Pair.with(3,1)).getOccupant();
-        ServerThread ML = boardMap.get(Pair.with(1,2)).getOccupant();
-        ServerThread MM = boardMap.get(Pair.with(2,2)).getOccupant();
-        ServerThread MR = boardMap.get(Pair.with(3,2)).getOccupant();
-        ServerThread BL = boardMap.get(Pair.with(1,3)).getOccupant();
-        ServerThread BM = boardMap.get(Pair.with(2,3)).getOccupant();
-        ServerThread BR = boardMap.get(Pair.with(3,3)).getOccupant();
 
-        return  (TL != null && TL == TM && TM == TR) ||  // top row
-                (ML != null && ML == MM && MM == MR) ||  // middle row
-                (BL != null && BL == BM && BM == BR) ||  // bottom row
-                (TL != null && TL == ML && ML == BL) ||  // left column
-                (TM != null && TM == MM && MM == BM) ||  // middle column
-                (TR != null && TR == MR && MR == BR) ||  // right column
-                (TL != null && TL == MM && MM == BR) ||  // top-left to bottom-right diagonal
-                (TR != null && TR == MM && MM == BL);    // top-right to bottom-left diagonal
+        String TL = board.getCell(Pair.with(1,1)).getOccupant();
+        String TM = board.getCell(Pair.with(2,1)).getOccupant();
+        String TR = board.getCell(Pair.with(3,1)).getOccupant();
+        String ML = board.getCell(Pair.with(1,2)).getOccupant();
+        String MM = board.getCell(Pair.with(2,2)).getOccupant();
+        String MR = board.getCell(Pair.with(3,2)).getOccupant();
+        String BL = board.getCell(Pair.with(1,3)).getOccupant();
+        String BM = board.getCell(Pair.with(2,3)).getOccupant();
+        String BR = board.getCell(Pair.with(3,3)).getOccupant();
+
+        return  (TL != null && TL.equals(TM) && TM.equals(TR)) ||  // top row
+                (ML != null && ML.equals(MM) && MM.equals(MR)) ||  // middle row
+                (BL != null && BL.equals(BM) && BM.equals(BR)) ||  // bottom row
+                (TL != null && TL.equals(ML) && ML.equals(BL)) ||  // left column
+                (TM != null && TM.equals(MM) && MM.equals(BM)) ||  // middle column
+                (TR != null && TR.equals(MR) && MR.equals(BR)) ||  // right column
+                (TL != null && TL.equals(MM) && MM.equals(BR)) ||  // top-left to bottom-right diagonal
+                (TR != null && TR.equals(MM) && MM.equals(BL));    // top-right to bottom-left diagonal
     }
 
     public boolean tied() {
-        for (AbstractBoardTile tile : boardMap.values()) {
-            if (tile.getOccupant() == null) {
+        for (Cell cell : board.getCells()) {
+            if (cell.getOccupant() == null) {
                 return false;
             }
         }
