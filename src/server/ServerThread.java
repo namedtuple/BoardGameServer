@@ -121,6 +121,10 @@ public class ServerThread extends Thread {
                     send(new Request(Command.LOGIN_FAIL));
                 }
                 break;
+            case CHUTE:
+                //
+                out.println("LOLOLOLOLOL");
+                break;
             case GOTO_LOBBY:
                 removeFromLobby();
                 server.sendToAll("LOBBY " + lobby.toString()); //TODO

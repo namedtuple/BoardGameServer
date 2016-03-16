@@ -25,10 +25,6 @@ public class TicTacToeLogic extends AbstractGameLogic {
         return false;
     }
 
-    @Override
-    public boolean legalMove(ServerThread player) {
-        return false;
-    }
 
     @SuppressWarnings("Duplicates")
     @Override
