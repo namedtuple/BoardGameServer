@@ -1,11 +1,13 @@
 package client;
+import shared.Command;
+import shared.Request;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class Client {
 
@@ -38,17 +40,17 @@ public class Client {
 
     private void run() throws IOException, InterruptedException {
         System.out.println("Client running");
-        String message;
+        Request request;
         int totalDownTime = 0;
 
         while (true) {
             try {
-                message = receive();
-                handleRequest(message);
+                request = receive();
+                handleRequest(request);
             }
             catch (IOException e) {
                 try {
-                    handleRequest("DISCONNECTED");
+                    handleRequest(new Request(Command.DISCONNECTED));
                     System.out.println("No connection to server.  Will attempt to reconnect in " + RECONNECT_INTERVAL/1000 + " seconds.");
                     Thread.sleep(RECONNECT_INTERVAL);
                     totalDownTime += RECONNECT_INTERVAL;
@@ -73,22 +75,24 @@ public class Client {
     }
 
     // Returns the next line of stream from Server
-    private String receive() throws IOException {
+    private Request receive() throws IOException {
         String msg = in.readLine();
         System.out.println("-----------------------------------------------------------------------------");
         System.out.println("Server says:  " + msg);
-        return msg;
+        return new Request(msg);
     }
 
-    public void handleRequest(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-
-        if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY, LOGOUT".split(", ")).contains(firstToken)) {
-            send(request);
-        }
-        else if (!request.startsWith("You said: ")) {
-            gui.handleRequest(request);
+    public void handleRequest(Request request) {
+        Command command = request.getCommand();
+        switch (command) {
+            case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY: case LOGOUT: case CREATING_ACCOUNT:
+                send(request.getRequest());
+                break;
+            case NULL:
+                break;
+            default:
+                gui.handleRequest(request);
+                break;
         }
     }
 

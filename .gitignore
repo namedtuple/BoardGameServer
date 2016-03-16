@@ -4,6 +4,7 @@ out/**
 bin/**
 *.class
 Thumbs.db
+users.db
 
 ### JAVA ###
 *.class

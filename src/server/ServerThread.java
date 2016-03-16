@@ -1,5 +1,9 @@
 package server;
 
+import shared.Command;
+import shared.Request;
+import games.AbstractGameLogic;
+import shared.GameName;
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;
@@ -19,107 +23,53 @@ public class ServerThread extends Thread {
     private String username;
     private Server server; //reference to the owning server
     private GameLobby lobby; //lobby that the user is currently in
-    private static final String defaultLobby = "Tic-Tac-Toe";
+    private static final GameName DEFAULT_LOBBY = GameName.TIC_TAC_TOE;
 
     // Methods
     public ServerThread(Socket socket, Server server) throws IOException {
-    	this.server = server;
+        this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        lobby = server.getLobby(defaultLobby);
+        lobby = server.getLobby(DEFAULT_LOBBY);
         socketAddress = socket.getRemoteSocketAddress().toString();
     }
 
     @Override
     public void run() {
+        Request request;
         while (true) {
             try {
-                String msg = receive();
-                send("You said: " + msg);
-
-                String[] splitMsg = msg.split(" ");
-                String firstToken = splitMsg[0];
-                if (firstToken.equals("LOGGING_IN")) {
-                	if (server.login(splitMsg[1], splitMsg[2])){
-	                	username = splitMsg[1];
-                		send("LOGIN_SUCCESS " + username);
-	                	server.addConnection(username, this);
-                	}
-                	else {
-                		send("LOGIN_FAIL");
-                	}
-                }
-
-                // received when client changes lobby from the dropdown menu
-                else if (firstToken.equals("GOTO_LOBBY")){
-                    removeFromLobby(); //remove from current lobby
-                    server.sendToAll("LOBBY " + lobby.toString());
-                    lobby = server.getLobby(splitMsg[1]);
-                    lobby.addUser(username); //add to new lobby
-                    server.sendToAll("LOBBY " + lobby.toString());
-                }
-
-                // possible thread-safety issue, but does not matter for this project
-                else if (firstToken.equals("JOIN")) {
-                	String otherUser = splitMsg[1];
-                	ServerThread otherConnection = server.getConnection(otherUser);
-                	lobby.startGame(this, otherConnection);
-                    server.sendToAll("LOBBY " + lobby.toString());
-                }
-                //handling moving for game
-                else if (firstToken.equals("MOVE")) {
-                    if (game.legalMove(extractPosition(msg), this)) {
-                        send("VALID_MOVE");
-                        send(game.hasWinner() ? "VICTORY" : game.tied() ? "TIE" : "");
-                    }
-                }
-
-                else if (firstToken.equals("LOGOUT")) {
-                    removeFromLobby();
-                    server.sendToAll("LOBBY " + lobby.toString());
-                    server.removeConnection(username);
-                }
-
+                request = receive();
+                handleRequest(request);
             }
             catch (IOException e) {
                 server.debugPrintLostConnectionMessage(username, socketAddress);
                 removeFromLobby();
-                server.sendToAll("LOBBY " + lobby.toString());
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 server.removeConnection(username);
                 break;
             }
         }
     }
 
-    // Helper method to obtain position Pair from received String message
-    @SuppressWarnings("Duplicates")
-    public Pair<Integer, Integer> extractPosition(String message) {
-        int i = message.indexOf('[');
-        int j = message.indexOf(',');
-        int k = message.indexOf(']');
-        int x = Integer.parseInt(message.substring(i+1, j).trim());
-        int y = Integer.parseInt(message.substring(j+1, k).trim());
-        return Pair.with(x, y);
-    }
-
     // Sends message to Client
-    public void send(String message) {
-        if (!message.equals("")) {
-            out.println(message);
+    public void send(Request request) {
+        if (!request.getRequest().equals("")) {
+            out.println(request.getRequest());
         }
     }
 
     // Returns the next line of stream from Client
-    public String receive() throws IOException {
+    public Request receive() throws IOException {
         String msg = in.readLine();
         System.out.println("-----------------------------------------------------------------------------");
         System.out.println("Client " + getUserName() + " says:  " + msg);
-        return msg;
+        return new Request(msg);
     }
 
     public void opponentMoved(Pair<Integer, Integer> location) {
-        send("OPPONENT_MOVED " + location);
-        send(game.hasWinner() ? "DEFEAT" : game.tied() ? "TIE" : "");
+        send(new Request(Command.OPPONENT_MOVED, location.toString()));
+        send(game.hasWinner() ? new Request(Command.DEFEAT) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
     }
 
     public ServerThread getOpponent() {
@@ -139,7 +89,45 @@ public class ServerThread extends Thread {
     }
 
     public void setGame(AbstractGameLogic game){
-    	this.game = game;
+        this.game = game;
     }
 
+    public void handleRequest(Request request) { // TODO - Make a copy of Request and Command classes and put in server package.
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch(command) {
+            case LOGGING_IN:
+                if (server.login(tokens[1], tokens[2])){
+                    username = tokens[1];
+                    send(new Request(Command.LOGIN_SUCCESS, username));
+                    server.addConnection(username, this);
+                }
+                else {
+                    send(new Request(Command.LOGIN_FAIL));
+                }
+                break;
+            case CREATING_ACCOUNT:
+                server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]);
+                break;
+            case GOTO_LOBBY:
+                removeFromLobby();
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
+                lobby = server.getLobby(GameName.valueOf(tokens[1]));
+                //lobby = server.getLobby(tokens[1]);
+                lobby.addUser(username); //add to new lobby
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
+                break;
+            case JOIN:
+                lobby.handleRequest(request);
+                break;
+            case MOVE:
+                game.handleRequest(request);
+                break;
+            case LOGOUT:
+                removeFromLobby();
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
+                server.removeConnection(username);
+                break;
+        }
+    }
 }

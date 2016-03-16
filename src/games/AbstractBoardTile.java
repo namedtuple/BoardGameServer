@@ -1,5 +1,6 @@
-package server;
+package games;
 import org.javatuples.Pair;
+import server.ServerThread;
 
 public abstract class AbstractBoardTile {
     private ServerThread occupant1;

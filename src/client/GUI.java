@@ -1,8 +1,10 @@
 package client;
 
+import shared.GameName;
+import shared.Command;
+import shared.Request;
+
 import javax.swing.*;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class GUI extends JFrame {
 
@@ -10,8 +12,8 @@ public class GUI extends JFrame {
     private Client client;
     private LoginScreen loginScreen;
     private LobbyScreen lobbyScreen;
+    private AccountCreationScreen accountScreen;
     private Board board;
-    private HashMap<String, String> requestMessageMap;
     private JPanel currentScreen;
     private final static String BASE_WINDOW_TITLE = "BoardGameServer";
     private String username;
@@ -22,7 +24,7 @@ public class GUI extends JFrame {
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
-        //this.board = new Board(this, 3);
+        this.accountScreen = new AccountCreationScreen(this);
 
         add(loginScreen, "Center");
         loginScreen.setVisible(true);
@@ -33,95 +35,73 @@ public class GUI extends JFrame {
         setVisible(true);
         setResizable(false);
 
-        requestMessageMap = new HashMap<>();
-        requestMessageMap.put("VICTORY", "You win!");
-        requestMessageMap.put("DEFEAT", "You lose!");
-        requestMessageMap.put("TIE", "You tied!");
-        requestMessageMap.put("VALID_MOVE", "It is the opponent's turn");
-        requestMessageMap.put("OPPONENT_MOVED", "It is your turn");
     }
 
-    public void appendToTitle(String toAppend) {
+    private void appendToTitle(String toAppend) {
         setTitle(getTitle() + " - " + toAppend);
     }
 
-    public void handleRequest(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-
-        // UP (Client)
-        if (Arrays.asList("MOVE, JOIN, LOGGING_IN, GOTO_LOBBY".split(", ")).contains(firstToken)) {
-            client.handleRequest(request);
+    public void handleRequest(Request request) {
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch(command) {
+            case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY:
+                client.handleRequest(request);
+                break;
+            case ACCOUNT_CREATION:
+                changePanel(accountScreen);
+                accountScreen.clearFields();
+                break;
+            case CREATING_ACCOUNT:
+                client.handleRequest(request);
+                changePanel(loginScreen);
+                break;
+            case LOGIN_SUCCESS:
+                username = tokens[1];
+                appendToTitle(username);
+                lobbyScreen.handleRequest(request);
+                changePanel(lobbyScreen);
+                loginScreen.handleRequest(request);
+                break;
+            case NEW_GAME:
+                GameName gameName = GameName.valueOf(tokens[1]);
+                board = new Board(this, gameName.getBoardSize());
+                appendToTitle(tokens[3]);
+                board.handleRequest(request);
+                changePanel(board);
+                break;
+            case VICTORY: case DEFEAT: case TIE:
+                String message = command.getMessage();
+                board.handleRequest(request);
+                JOptionPane.showMessageDialog(this, message);
+                lobbyScreen.handleRequest(request);
+                changePanel(lobbyScreen);
+                setTitle(BASE_WINDOW_TITLE);
+                appendToTitle(username);
+                break;
+            case VALID_MOVE: case OPPONENT_MOVED:
+                board.handleRequest(request);
+                break;
+            case LOBBY:
+                lobbyScreen.handleRequest(request);
+                break;
+            case LOGOUT:
+                client.handleRequest(new Request(Command.LOGOUT));  // TODO
+                setTitle(BASE_WINDOW_TITLE);
+                break;
+            case DISCONNECTED:
+                changePanel(loginScreen);
+                break;
+            default:
+                break;
         }
-
-        // HERE and DOWN (LobbyScreen)
-        else if (request.startsWith("LOGIN_SUCCESS")) {
-            String[] splitMsg = request.split(" ");
-            username = splitMsg[1];
-            appendToTitle(username);
-            lobbyScreen.setUsername(username);
-            lobbyScreen.requestWaitlist();
-            changePanel(loginScreen, lobbyScreen);
-            loginScreen.clearFields();
-        }
-
-        // HERE and DOWN (Board)
-        else if (request.startsWith("WELCOME")) {
-            board = new Board(this, 3);
-            appendToTitle(splitRequest[2]);
-            board.setTurnLabel("Player X starts first");
-            board.handleRequest(request);
-            changePanel(lobbyScreen, board);
-        }
-
-        // HERE and DOWN (Board)
-        else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
-            String message = requestMessageMap.get(request);
-            board.setTurnLabel(message);
-            board.handleRequest(request);
-            JOptionPane.showMessageDialog(this, message);
-            lobbyScreen.requestWaitlist();
-            changePanel(board, lobbyScreen);
-            setTitle(BASE_WINDOW_TITLE);
-            appendToTitle(username);
-        }
-
-        // DOWN (Board) - VALID_MOVE, OPPONENT_MOVED
-        else if (Arrays.asList("VALID_MOVE, OPPONENT_MOVED".split(", ")).contains(firstToken)) {
-            board.setTurnLabel(requestMessageMap.get(firstToken));
-            board.handleRequest(request);
-        }
-
-        // DOWN (LobbyScreen)
-        else if (request.startsWith("LOBBY")) {
-            lobbyScreen.addAllToWaitList(request);
-        }
-
-        else if (request.startsWith("TO_BOARD_SCREEN")) {
-            changePanel(lobbyScreen, board);
-        }
-
-        else if (request.startsWith("LOGOUT")) {
-            client.handleRequest("LOGOUT");
-            setTitle(BASE_WINDOW_TITLE);
-        }
-
-        else if (request.startsWith("DISCONNECTED")) {
-            if (currentScreen == lobbyScreen) {
-                changePanel(lobbyScreen, loginScreen);
-            }
-            else if (currentScreen == board) {
-                changePanel(board, loginScreen);
-            }
-        }
-
     }
 
-    private void changePanel(JPanel currentPanel, JPanel nextPanel) {
+    private void changePanel(JPanel nextPanel) {
         add(nextPanel);
         nextPanel.setVisible(true);
-        currentPanel.setVisible(false);
-        remove(currentPanel);
+        currentScreen.setVisible(false);
+        remove(currentScreen);
         validate();
         repaint();
         currentScreen = nextPanel;

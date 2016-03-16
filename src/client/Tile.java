@@ -1,5 +1,7 @@
 package client;
 import org.javatuples.Pair;
+import shared.Command;
+import shared.Request;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -8,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class Tile extends JButton implements ActionListener {
     private static HashMap<String, ImageIcon> imageHashMap;
     private static List<Tile> instances = new ArrayList<>();
     private static Tile lastClickedTile;
+    private static String username;
+    private static String opponentUsername;
     private Pair<Integer, Integer> coordinates; //saves button coordinates
 
     // Methods
@@ -46,7 +49,7 @@ public class Tile extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Tile.lastClickedTile = this;
-        handleRequest("MOVE " + coordinates);
+        handleRequest(new Request(Command.MOVE, username + " " + coordinates.toString()));
     }
 
     private static ImageIcon chooseIcon(String piece) {
@@ -70,7 +73,8 @@ public class Tile extends JButton implements ActionListener {
 
     // Helper method to obtain position Pair from received String message
     @SuppressWarnings("Duplicates")
-    private static Pair<Integer, Integer> extractPosition(String message) {
+    private static Pair<Integer, Integer> extractPosition(Request request) {
+        String message = request.getRequest();
         int i = message.indexOf('[');
         int j = message.indexOf(',');
         int k = message.indexOf(']');
@@ -79,37 +83,44 @@ public class Tile extends JButton implements ActionListener {
         return Pair.with(x, y);
     }
 
-    public void handleRequest(String request) {
-        String[] splitRequest = request.split(" ");
-        String firstToken = splitRequest[0];
-        if (request.startsWith("MOVE")) {
-            Tile.board.handleRequest(request);
-        }
-        else if (request.startsWith("WELCOME")) {
-            if (Tile.imageHashMap == null) {
-                if (request.indexOf(" X ") < request.indexOf(" O ")) {
-                    loadImages(splitRequest[1], splitRequest[3]);
-                } else {
-                    loadImages(splitRequest[3], splitRequest[1]);
+    public void handleRequest(Request request) {
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch (command) {
+            case MOVE:
+                Tile.board.handleRequest(request);
+                break;
+            case NEW_GAME:
+                Tile.username = tokens[2];
+                Tile.opponentUsername = tokens[4];
+                if (Tile.imageHashMap == null) {
+                    if (request.getRequest().indexOf(" X ") < request.getRequest().indexOf(" O ")) { // TODO
+                        loadImages(tokens[2], tokens[4]);
+                    } else {
+                        loadImages(tokens[4], tokens[2]);
+                    }
                 }
-            }
-        }
-        else if (request.startsWith("VALID_MOVE")) {
-            Tile.lastClickedTile.setIcon(chooseIcon(Tile.board.getUsername()));
-            Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.board.getUsername()));
-            Tile.lastClickedTile.setEnabled(false);
-        }
-        else if (request.startsWith("OPPONENT_MOVED")) {
-            Tile tile = getTile(extractPosition(request));
-            tile.setIcon(chooseIcon(Tile.board.getOpponentUsername()));
-            tile.setDisabledIcon(chooseIcon(Tile.board.getOpponentUsername()));
-            tile.setEnabled(false);
-        }
-        else if (Arrays.asList("VICTORY, DEFEAT, TIE".split(", ")).contains(firstToken)) {
-            Tile.board = null;
-            Tile.imageHashMap = null;
-            Tile.instances = new ArrayList<>();
-            Tile.lastClickedTile = null;
+                break;
+            case VALID_MOVE:
+                Tile.lastClickedTile.setIcon(chooseIcon(Tile.username));
+                Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.username));
+                Tile.lastClickedTile.setEnabled(false);
+                break;
+            case OPPONENT_MOVED:
+                Tile tile = getTile(extractPosition(request));
+                tile.setIcon(chooseIcon(Tile.opponentUsername));
+                tile.setDisabledIcon(chooseIcon(Tile.opponentUsername));
+                tile.setEnabled(false);
+                break;
+            case VICTORY: case DEFEAT: case TIE:
+                Tile.board = null;
+                Tile.imageHashMap = null;
+                Tile.instances = new ArrayList<>();
+                Tile.lastClickedTile = null;
+                break;
+            default:
+                break;
         }
     }
+
 }

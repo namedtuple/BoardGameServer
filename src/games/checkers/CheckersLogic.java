@@ -1,6 +1,6 @@
 //<<<<<<< HEAD
 //import org.javatuples.Pair;
-//import server.AbstractGameLogic;
+//import games.AbstractGameLogic;
 //import server.ServerThread;
 //
 //public class CheckersLogic extends AbstractGameLogic {

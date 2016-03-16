@@ -1,12 +1,14 @@
 package server;
 
-import java.util.HashMap;
-import java.util.Map;
+import shared.Request;
+import shared.GameName;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Server {
 
@@ -26,14 +28,11 @@ public class Server {
     }
 
     // Fields
-    public static final short PORT_NUM = 6666;
-    public static final String TIC_TAC_TOE = "Tic-Tac-Toe";
-    public static final String CHECKERS = "Checkers";
-    public static final String CHUTES_AND_LADDERS = "Chutes-and-Ladders";
+    private static final short PORT_NUM = 6666;
     private ServerSocket serverSocket;
     private AccountAuthenticator accountAuthenticator;
 
-    private Map<String, GameLobby> gameLobbies; //stores a Lobby for each game, where String is name of game
+    private Map<GameName, GameLobby> gameLobbies; //stores a Lobby for each game, where String is name of game
     private Map<String, ServerThread> connectionHandlers; //stores connection handler for each user
 
     // Methods
@@ -44,32 +43,32 @@ public class Server {
 
         accountAuthenticator = new AccountAuthenticator();
 
-        gameLobbies = new HashMap<String, GameLobby>();
-        gameLobbies.put(TIC_TAC_TOE, new GameLobby(TIC_TAC_TOE));
-        gameLobbies.put(CHECKERS, new GameLobby(CHECKERS));
-        gameLobbies.put(CHUTES_AND_LADDERS, new GameLobby(CHUTES_AND_LADDERS));
+        gameLobbies = new HashMap<>();
+        gameLobbies.put(GameName.TIC_TAC_TOE, new GameLobby(this, GameName.TIC_TAC_TOE));
+        gameLobbies.put(GameName.CHECKERS, new GameLobby(this, GameName.CHECKERS));
+        gameLobbies.put(GameName.CHUTES_AND_LADDERS, new GameLobby(this, GameName.CHUTES_AND_LADDERS));
 
-        connectionHandlers = new HashMap<String, ServerThread>();
+        connectionHandlers = new HashMap<>();
 
     }
 
     public void run() throws IOException {
         System.out.println("Server running");
         while (true) {
-        	Socket newConnectionSocket = serverSocket.accept();
+            Socket newConnectionSocket = serverSocket.accept();
             System.out.println("New connection from: " + newConnectionSocket.getRemoteSocketAddress());
             ServerThread serverThread = new ServerThread(newConnectionSocket, this);
             serverThread.start();
         }
     }
 
-    public GameLobby getLobby(String lobbyName){
-    	return gameLobbies.get(lobbyName);
+    public GameLobby getLobby(GameName lobbyName){
+        return gameLobbies.get(lobbyName);
     }
 
     //called when a user successfully logs in
     public void addConnection(String userName, ServerThread connection){
-    	connectionHandlers.put(userName, connection);
+        connectionHandlers.put(userName, connection);
     }
 
     public void removeConnection(String userName) {
@@ -77,7 +76,7 @@ public class Server {
     }
 
     public ServerThread getConnection(String userName){
-    	return connectionHandlers.get(userName);
+        return connectionHandlers.get(userName);
     }
 
     public boolean login(String enteredName, String enteredPassword){
@@ -87,11 +86,15 @@ public class Server {
             return false;
         }
         else if (accountAuthenticator.userExists(enteredName)){ //if user exists
-    		return accountAuthenticator.isValidLogin(enteredName, enteredPassword); //check password
-    	}
-    	else { //create account, should return true and login the user
-    		return accountAuthenticator.addUser(enteredName, enteredPassword);
-    	}
+            return accountAuthenticator.isValidLogin(enteredName, enteredPassword); //check password
+        }
+        else { //create account, should return true and login the user
+            return accountAuthenticator.addUser(enteredName, enteredPassword, "Unknown", "Unknown");
+        }
+    }
+
+    public void createAccount(String userName, String password, String gender, String country) {
+        accountAuthenticator.addUser(userName, password, gender, country);
     }
 
     public void close() {
@@ -102,9 +105,9 @@ public class Server {
         }
     }
 
-    public void sendToAll(String message) {
+    public void sendToAll(Request request) {
         for (ServerThread st : connectionHandlers.values()) {
-            st.send(message);
+            st.send(request);
         }
     }
 

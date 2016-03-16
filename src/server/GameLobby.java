@@ -1,61 +1,82 @@
 package server;
 
+import shared.Command;
+import shared.Request;
+import shared.GameName;
+import games.chutes_and_ladders.ChutesLogic;
+import games.tic_tac_toe.TicTacToeLogic;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameLobby {
 
     // Fields
-	private String lobbyName;
+    private Server server;
+    private GameName lobbyName;
     private List<String> list;
 
     // Methods
-	public GameLobby(String lobbyName) {
+	public GameLobby(Server server, GameName lobbyName) {
+        this.server = server;
         this.lobbyName = lobbyName;
         list = new ArrayList<>();
 	}
 
-	public void addUser(String userName){
+	public void addUser(String userName) {
 		list.add(userName);
-        debugPrintLobbyContents();
+		debugPrintLobbyContents();
 	}
 
-	public void removeUser(String userName){
+	public void removeUser(String userName) {
 		list.remove(userName);
-        debugPrintLobbyContents();
+		debugPrintLobbyContents();
 	}
+
+	public GameName getLobbyName() {
+		return lobbyName;
+	}
+
 
 	//Can be used to send contents of waiting list over socket
-    @Override
+	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-        str.append(lobbyName).append(" ");
-		for(String userName : list){
+		str.append(lobbyName).append(" ");
+		for (String userName : list) {
 			str.append(userName);
 			str.append(" ");
 		}
 		return str.toString();
 	}
 
-	public void startGame(ServerThread player1, ServerThread player2){
+	public void startGame(ServerThread player1, ServerThread player2) {
+		String p1 = player1.getUserName();
+		String p2 = player2.getUserName();
+		if (lobbyName == GameName.CHUTES_AND_LADDERS) {
+			ChutesLogic newGame = new ChutesLogic(server, player1, player2, 10);
 
-		//create game, giving it necessary parameters
-		TicTacToeLogic newGame = new TicTacToeLogic(player1, player2, 3);
+			player1.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O ' // TODO
+			player1.setOpponent(player2);
+			player1.setGame(newGame);
 
-        String p1 = player1.getUserName();
-        String p2 = player2.getUserName();
+			player2.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X ' // TODO
+			player2.setOpponent(player1);
+			player2.setGame(newGame);
 
-        player1.send("WELCOME " + p1 + " X " + p2 + " O "); // WELCOME username1=X username2=O
-		player1.setOpponent(player2);
-		player1.setGame(newGame);
+		}
+        else if (lobbyName == GameName.TIC_TAC_TOE) {
+			TicTacToeLogic newGame = new TicTacToeLogic(server, player1, player2, 3);
 
-        player2.send("WELCOME " + p2 + " O " + p1 + " X "); // WELCOME username1=X username2=O
-		player2.setOpponent(player1);
-		player2.setGame(newGame);
+			player1.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
+			player1.setOpponent(player2);
+			player1.setGame(newGame);
 
-        //remove the two players from the lobby
-		player1.removeFromLobby();
-		player2.removeFromLobby();
+			player2.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X '
+			player2.setOpponent(player1);
+			player2.setGame(newGame);
+
+		}
 	}
 
     private void debugPrintLobbyContents() {
@@ -71,4 +92,19 @@ public class GameLobby {
         System.out.println(lobbyContentsMessage);
     }
 
+    public void handleRequest(Request request) { // TODO - Make a copy of Request and Command classes and put in server package.
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch(command) {
+            case JOIN:
+                ServerThread player1 = server.getConnection(tokens[1]);
+                ServerThread player2 = server.getConnection(tokens[2]);
+                startGame(player1, player2);
+                player1.removeFromLobby();
+                player2.removeFromLobby();
+                server.sendToAll(new Request(Command.LOBBY, toString()));
+                break;
+        }
+    }
 }
+

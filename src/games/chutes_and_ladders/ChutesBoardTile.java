@@ -7,6 +7,7 @@
 // */
 //public class ChutesBoardTile extends AbstractBoardTile{
 //    public ChutesBoardTile() {
+//        super();
 //        //super(coordinates);
 //    }
 //    public ChutesBoardTile(Pair<Integer, Integer> coordinates) {

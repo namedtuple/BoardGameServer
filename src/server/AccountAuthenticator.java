@@ -16,8 +16,8 @@ public class AccountAuthenticator {
 			createTable();
 		}
 		
-		addUser("test","test");
-		addUser("user","user");
+		addUser("test","test","test","test");
+		addUser("user","user","user","user");
 	}
 	
 	//Checks if userName/password combo exists in database
@@ -87,7 +87,7 @@ public class AccountAuthenticator {
 	
 	//Adds userName/password combo to database
 	//Returns true if add was successful, false otherwise
-	public boolean addUser(String userName, String password)
+	public boolean addUser(String userName, String password, String gender, String country)
 	{
 		if(userExists(userName))
 		{
@@ -100,8 +100,8 @@ public class AccountAuthenticator {
 			
 			Statement stmt = con.createStatement();
 			
-			String query = "INSERT INTO USERS (USERNAME,PASSWORD) " +
-	                   	   "VALUES ('" + userName + "', '" + password + "');"; 
+			String query = "INSERT INTO USERS (USERNAME,PASSWORD,GENDER,COUNTRY) " +
+	                   	   "VALUES ('" + userName + "', '" + password + "', '" + gender + "', '" + country + "');"; 
 			
 			stmt.executeUpdate(query);
 	   
@@ -116,6 +116,40 @@ public class AccountAuthenticator {
 		}
 	}
 	
+	public void addWin(String userName)
+	{
+		connect();
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "UPDATE users " +
+					   "SET WINS = WINS + 1 " +
+					   "WHERE USERNAME = '" + userName + "'";
+			stmt.executeQuery(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}			
+	}
+	
+	public void addLoss(String userName)
+	{
+		connect();
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "UPDATE users " +
+					   "SET LOSSES = LOSSES + 1 " +
+					   "WHERE USERNAME = '" + userName + "'";
+			stmt.executeQuery(query);
+			stmt.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+	}
+	
 	//Creates Users table if it doesn't exist
 	//Can add more fields if needed
 	private void createTable() {
@@ -126,7 +160,11 @@ public class AccountAuthenticator {
 			Statement stmt = con.createStatement();
 			String query = "CREATE TABLE USERS " +
 	                 	   "(USERNAME TEXT PRIMARY KEY NOT NULL," +
-	                       " PASSWORD TEXT NOT NULL)";
+	                       " PASSWORD TEXT NOT NULL," +
+	                       " GENDER TEXT NOT NULL," +
+	                       " COUNTRY TEXT NOT NULL," +
+	                       " WINS INTEGER DEFAULT 0," +
+	                       " LOSSES INTEGER DEFAULT 0)";
 	    
 			stmt.executeUpdate(query);
 			stmt.close();
