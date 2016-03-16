@@ -1,5 +1,8 @@
 package server;
 
+import client.Command;
+import client.Request;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,18 +61,13 @@ public class GameLobby {
 			player1.setOpponent(player2);
 			player1.setGame(newGame);
 
-			player2.send("WELCOME " + p2 + " O " + p1 + " X "); // 'WELCOME username2 O username1 X '
-			player2.setOpponent(player1);
-			player2.setGame(newGame);
+        player1.send(new Request(Command.WELCOME, p1 + " X " + p2 + " O ")); // 'WELCOME username1 X username2 O '
+		player1.setOpponent(player2);
+		player1.setGame(newGame);
 
-			//remove the two players from the lobby
-			player1.removeFromLobby();
-			player2.removeFromLobby();
-		}
-		else if (lobbyName.equalsIgnoreCase("Checkers")){
-
-		}
-		//create game, giving it necessary parameters
+        player2.send(new Request(Command.WELCOME, p2 + " O " + p1 + " X ")); // 'WELCOME username2 O username1 X '
+		player2.setOpponent(player1);
+		player2.setGame(newGame);
 
 	}
 
@@ -86,4 +84,11 @@ public class GameLobby {
         System.out.println(lobbyContentsMessage);
     }
 
+    //public void handleRequest(Request request) { // TODO - Make a copy of Request and Command classes and put in server package.
+    //    String[] tokens = request.getTokens();
+    //    Command command = request.getCommand();
+    //    switch(command) {
+    //        case JOIN:
+    //    }
+    //}
 }
