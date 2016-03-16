@@ -56,6 +56,9 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
 		if(e.getSource() == gameSelection)
 		{
+			//gameSelection.setSelectedIndex(0);
+			//currentGameSelection = gameList[0];
+
             if (this.isVisible()) {
                 System.out.println("ABOUT TO CALL LobbyScreen.requestWaitlist() from actionPerformed()");
                 requestWaitlist();
