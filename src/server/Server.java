@@ -90,8 +90,11 @@ public class Server {
     		return accountAuthenticator.isValidLogin(enteredName, enteredPassword); //check password
     	}
     	else { //create account, should return true and login the user
-    		return accountAuthenticator.addUser(enteredName, enteredPassword);
+    		return accountAuthenticator.addUser(enteredName, enteredPassword, "Unknown", "Unknown");
     	}
+    }    
+    public void createAccount(String userName, String password, String gender, String country) {
+    	accountAuthenticator.addUser(userName, password, gender, country);
     }
 
     public void close() {

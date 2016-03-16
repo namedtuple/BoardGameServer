@@ -121,6 +121,9 @@ public class ServerThread extends Thread {
                     send(new Request(Command.LOGIN_FAIL));
                 }
                 break;
+            case CREATING_ACCOUNT:
+            	server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]);
+            	break;
             case CHUTE:
                 //
                 out.println("LOLOLOLOLOL");
