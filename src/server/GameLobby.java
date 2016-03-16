@@ -24,6 +24,10 @@ public class GameLobby {
 		list.remove(userName);
         debugPrintLobbyContents();
 	}
+	public String getLobbyName(){
+		return lobbyName;
+	}
+
 
 	//Can be used to send contents of waiting list over socket
     @Override
