@@ -27,10 +27,10 @@ public class Server {
     }
 
     // Fields
-    public static final short PORT_NUM = 6666;
-    public static final String TIC_TAC_TOE = "Tic-Tac-Toe";
-    public static final String CHECKERS = "Checkers";
-    public static final String CHUTES_AND_LADDERS = "Chutes-and-Ladders";
+    private static final short PORT_NUM = 6666;
+    private static final String TIC_TAC_TOE = "Tic-Tac-Toe";
+    private static final String CHECKERS = "Checkers";
+    private static final String CHUTES_AND_LADDERS = "Chutes-and-Ladders";
     private ServerSocket serverSocket;
     private AccountAuthenticator accountAuthenticator;
 
@@ -46,9 +46,9 @@ public class Server {
         accountAuthenticator = new AccountAuthenticator();
 
         gameLobbies = new HashMap<String, GameLobby>();
-        gameLobbies.put(TIC_TAC_TOE, new GameLobby(TIC_TAC_TOE));
-        gameLobbies.put(CHECKERS, new GameLobby(CHECKERS));
-        gameLobbies.put(CHUTES_AND_LADDERS, new GameLobby(CHUTES_AND_LADDERS));
+        gameLobbies.put(TIC_TAC_TOE, new GameLobby(this, TIC_TAC_TOE));
+        gameLobbies.put(CHECKERS, new GameLobby(this, CHECKERS));
+        gameLobbies.put(CHUTES_AND_LADDERS, new GameLobby(this, CHUTES_AND_LADDERS));
 
         connectionHandlers = new HashMap<String, ServerThread>();
 

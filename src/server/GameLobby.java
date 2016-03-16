@@ -9,11 +9,13 @@ import java.util.List;
 public class GameLobby {
 
     // Fields
+    private Server server;
 	private String lobbyName;
     private List<String> list;
 
     // Methods
-	public GameLobby(String lobbyName) {
+	public GameLobby(Server server, String lobbyName) {
+        this.server = server;
         this.lobbyName = lobbyName;
         list = new ArrayList<>();
 	}
@@ -78,11 +80,16 @@ public class GameLobby {
         System.out.println(lobbyContentsMessage);
     }
 
-    //public void handleRequest(Request request) { // TODO - Make a copy of Request and Command classes and put in server package.
-    //    String[] tokens = request.getTokens();
-    //    Command command = request.getCommand();
-    //    switch(command) {
-    //        case JOIN:
-    //    }
-    //}
+    public void handleRequest(Request request) { // TODO - Make a copy of Request and Command classes and put in server package.
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        switch(command) {
+            case JOIN:
+                ServerThread serverThreadPlayer1 = server.getConnection(tokens[1]);
+                ServerThread serverThreadPlayer2 = server.getConnection(tokens[2]);
+                startGame(serverThreadPlayer1, serverThreadPlayer2);
+                server.sendToAll(new Request(Command.LOBBY, toString()));
+                break;
+        }
+    }
 }

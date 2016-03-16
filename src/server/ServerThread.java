@@ -128,11 +128,8 @@ public class ServerThread extends Thread {
                 lobby.addUser(username); //add to new lobby
                 server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 break;
-            case JOIN: //TODO move to lobby
-                String otherUser = tokens[1];
-                ServerThread otherConnection = server.getConnection(otherUser);
-                lobby.startGame(this, otherConnection);
-                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
+            case JOIN:
+                lobby.handleRequest(request);
                 break;
             case MOVE: // TODO move to game/abstractgame/logic
                 //if (lobby.getLobbyName().equalsIgnoreCase("Chutes-N-Ladders")) {
