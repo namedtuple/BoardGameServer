@@ -98,9 +98,11 @@ public class GameLobby {
         Command command = request.getCommand();
         switch(command) {
             case JOIN:
-                ServerThread serverThreadPlayer1 = server.getConnection(tokens[1]);
-                ServerThread serverThreadPlayer2 = server.getConnection(tokens[2]);
-                startGame(serverThreadPlayer1, serverThreadPlayer2);
+                ServerThread player1 = server.getConnection(tokens[1]);
+                ServerThread player2 = server.getConnection(tokens[2]);
+                startGame(player1, player2);
+                player1.removeFromLobby();
+                player2.removeFromLobby();
                 server.sendToAll(new Request(Command.LOBBY, toString()));
                 break;
         }
