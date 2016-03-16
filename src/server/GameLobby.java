@@ -49,7 +49,7 @@ public class GameLobby {
 	public void startGame(ServerThread player1, ServerThread player2){
 
 		//create game, giving it necessary parameters
-		TicTacToeLogic newGame = new TicTacToeLogic(player1, player2, 3);
+		TicTacToeLogic newGame = new TicTacToeLogic(server, player1, player2, 3);
 
         String p1 = player1.getUserName();
         String p2 = player2.getUserName();

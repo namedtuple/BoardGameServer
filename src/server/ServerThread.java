@@ -21,14 +21,14 @@ public class ServerThread extends Thread {
     private String username;
     private Server server; //reference to the owning server
     private GameLobby lobby; //lobby that the user is currently in
-    private static final String defaultLobby = "Tic-Tac-Toe";
+    private static final String DEFAULT_LOBBY = "Tic-Tac-Toe";
 
     // Methods
     public ServerThread(Socket socket, Server server) throws IOException {
     	this.server = server;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        lobby = server.getLobby(defaultLobby);
+        lobby = server.getLobby(DEFAULT_LOBBY);
         socketAddress = socket.getRemoteSocketAddress().toString();
     }
 
@@ -43,34 +43,17 @@ public class ServerThread extends Thread {
             catch (IOException e) {
                 server.debugPrintLostConnectionMessage(username, socketAddress);
                 removeFromLobby();
-                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));//TODO
+                server.sendToAll(new Request(Command.LOBBY, lobby.toString()));
                 server.removeConnection(username);
                 break;
             }
         }
     }
 
-    // Helper method to obtain position Pair from received String message
-    @SuppressWarnings("Duplicates")
-    public Pair<Integer, Integer> extractPosition(String message) {
-        int i = message.indexOf('[');
-        int j = message.indexOf(',');
-        int k = message.indexOf(']');
-        int x = Integer.parseInt(message.substring(i+1, j).trim());
-        int y = Integer.parseInt(message.substring(j+1, k).trim());
-        return Pair.with(x, y);
-    }
-
     // Sends message to Client
-    public void send(Request request) { // TODO - get rid of this method
+    public void send(Request request) {
         if (!request.getRequest().equals("")) {
             out.println(request.getRequest());
-        }
-    }
-    // Sends message to Client
-    public void send(String request) {
-        if (!request.equals("")) {
-            out.println(request);
         }
     }
 
@@ -131,25 +114,8 @@ public class ServerThread extends Thread {
             case JOIN:
                 lobby.handleRequest(request);
                 break;
-            case MOVE: // TODO move to game/abstractgame/logic
-                //if (lobby.getLobbyName().equalsIgnoreCase("Chutes-N-Ladders")) {
-                //    if (game.legalMove(this)) {
-                //        send(new Request(Command.VALID_MOVE));
-                //        send(game.hasWinner() ? new Request(Command.VICTORY) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
-                //    }
-                //}
-                if (lobby.getLobbyName().equalsIgnoreCase("Tic-Tac-Toe")) {
-                    if (game.legalMove(extractPosition(request.getRequest()), this)) {
-                        send(new Request(Command.VALID_MOVE));
-                        send(game.hasWinner() ? new Request(Command.VICTORY) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
-                    }
-                }
-                //else if (lobby.getLobbyName().equalsIgnoreCase("Checkers")) {
-                //    if (game.legalMove(extractPosition(msg), this)) {
-                //        send(new Request(Command.VALID_MOVE));
-                //        send(game.hasWinner() ? new Request(Command.VICTORY) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
-                //    }
-                //}
+            case MOVE:
+                game.handleRequest(request);
                 break;
             case LOGOUT:
                 removeFromLobby();

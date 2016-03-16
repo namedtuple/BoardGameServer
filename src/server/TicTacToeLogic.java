@@ -7,22 +7,13 @@ public class TicTacToeLogic extends AbstractGameLogic {
     // Fields
 
     // Methods
-    public TicTacToeLogic(ServerThread currentPlayer, ServerThread otherPlayer, int length) {
-        super(currentPlayer, otherPlayer, length);
+    public TicTacToeLogic(Server server, ServerThread currentPlayer, ServerThread otherPlayer, int length) {
+        super(server, currentPlayer, otherPlayer, length);
     }
 
     @Override
     public synchronized boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
-        if (player == currentPlayer && boardMap.get(location).getOccupant() == null ) {
-
-            // boardmap updated with new player piece
-            boardMap.get(location).setOccupant(player);
-            currentPlayer = currentPlayer.getOpponent();
-            currentPlayer.opponentMoved(location);
-            debugPrintBoard();
-            return true;
-        }
-        return false;
+        return player == currentPlayer && boardMap.get(location).getOccupant() == null;
     }
 
     @SuppressWarnings("Duplicates")
