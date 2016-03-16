@@ -8,8 +8,10 @@ import java.util.Random;
  * Created by Jonathan on 3/9/16.
  */
 public class ChutesLogic extends AbstractGameLogic {
-    HashMap<Pair<Integer,Integer>, Pair<Integer,Integer>> hotmaps;
+    private HashMap<Pair<Integer,Integer>, Pair<Integer,Integer>> hotmaps;
     private Pair<Integer, Integer> location;
+    private HashMap<ServerThread, Pair<Integer,Integer>> player;
+    private ServerThread currentPlayer;
 
     public ChutesLogic(ServerThread currentPlayer, ServerThread otherPlayer, int length) {
         super(currentPlayer, otherPlayer, length);
@@ -36,6 +38,7 @@ public class ChutesLogic extends AbstractGameLogic {
         hotmaps.put(new Pair(8,6),new Pair(6,8));
         hotmaps.put(new Pair(9,6),new Pair(10,9));
         hotmaps.put(new Pair(5,9),new Pair(6,10));
+        currentPlayer = currentPlayer;
     }
 
     public boolean legalMove() {
@@ -45,6 +48,7 @@ public class ChutesLogic extends AbstractGameLogic {
 
 
     public boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
+        //location=currentPlayer.
         Random r = new Random();
 
         int roll = r.nextInt(7-1) + 1;
