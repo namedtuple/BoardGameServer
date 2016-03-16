@@ -15,8 +15,11 @@ public class ChutesLogic extends AbstractGameLogic {
 
     public ChutesLogic(ServerThread currentPlayer, ServerThread otherPlayer, int length) {
         super(currentPlayer, otherPlayer, length);
+        player.put(currentPlayer,new Pair(0,10));
+        player.put(otherPlayer, new Pair(0,10));
        // HashMap<Pair<Integer,Integer>, Pair<Integer,Integer>> hm = null;
         //ladder values bottom to top, left to right
+
         hotmaps.put(new Pair(10,1),new Pair(3,7));
         hotmaps.put(new Pair(10,4),new Pair(7,9));
         hotmaps.put(new Pair(9,10),new Pair(10,7));
@@ -47,17 +50,18 @@ public class ChutesLogic extends AbstractGameLogic {
 
 
 
-    public boolean legalMove(Pair<Integer, Integer> location, ServerThread player) {
+    public boolean legalMove(ServerThread currentPlayer) {
         //location=currentPlayer.
         Random r = new Random();
-
         int roll = r.nextInt(7-1) + 1;
-        if(location.getValue1()!=1){
-            if(location.getValue0()-roll<1){
+        Pair<Integer,Integer> tempLocation = player.get(currentPlayer);
+
+        if(tempLocation.getValue1()!=1){
+            if(tempLocation.getValue0()-roll<1){
                 return false;
             }
         }
-        move(location,roll);
+        move(tempLocation,roll);
         return true;
     }
 
