@@ -2,6 +2,7 @@ package server;
 
 import client.Command;
 import client.Request;
+import games.AbstractGameLogic;
 import org.javatuples.Pair;
 
 import java.io.BufferedReader;

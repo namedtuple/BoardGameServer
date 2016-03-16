@@ -1,6 +1,10 @@
-package server;
+package games.tic_tac_toe;
 
+import games.AbstractGameLogic;
 import org.javatuples.Pair;
+import games.AbstractBoardTile;
+import server.Server;
+import server.ServerThread;
 
 public class TicTacToeLogic extends AbstractGameLogic {
 

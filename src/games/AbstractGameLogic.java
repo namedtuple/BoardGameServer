@@ -1,8 +1,10 @@
-package server;
+package games;
 
 import client.Command;
 import client.Request;
+import games.tic_tac_toe.TicTacToeBoardTile;
 import org.javatuples.Pair;
+import server.*;
 
 import java.util.HashMap;
 

@@ -1,5 +1,6 @@
-package server;
+package games.chutes_and_ladders;
 import org.javatuples.Pair;
+import server.User;
 
 /**
  * Created by Jonathan on 3/9/16.
