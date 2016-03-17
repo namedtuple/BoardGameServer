@@ -206,17 +206,6 @@ public class Tile extends JButton implements ActionListener {
                 tile.setDisabledIcon(chooseIcon(BOTH));
                 tile.setEnabled(true);
                 break;
-            case VALID_MOVE:
-                Tile.lastClickedTile.setIcon(chooseIcon(Tile.username));
-                Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.username));
-                Tile.lastClickedTile.setEnabled(false);
-                break;
-            case OPPONENT_MOVED:
-                tile = getTile(extractPosition(request));
-                tile.setIcon(chooseIcon(Tile.opponentUsername));
-                tile.setDisabledIcon(chooseIcon(Tile.opponentUsername));
-                tile.setEnabled(false);
-                break;
             case VICTORY: case DEFEAT: case TIE:
                 Tile.boardScreen = null;
                 Tile.imageHashMap = null;

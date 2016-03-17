@@ -134,7 +134,7 @@ public class BoardScreen extends JPanel {
                 setTurnLabel("Player X starts first"); // TODO
                 tile.handleRequest(request);
                 break;
-            case VALID_MOVE: case OPPONENT_MOVED: case VICTORY: case DEFEAT: case TIE:
+            case VICTORY: case DEFEAT: case TIE:
                 setTurnLabel(command.getMessage());
                 tile.handleRequest(request);
                 break;
