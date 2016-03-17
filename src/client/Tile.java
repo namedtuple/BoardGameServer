@@ -36,7 +36,9 @@ public class Tile extends JButton implements ActionListener {
         Tile.imageHashMap = new HashMap<>();
         try {
             Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/x.png"))));
+            System.out.println(usernamePlayer1 + " = X");
             Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/o.png"))));
+            System.out.println(usernamePlayer2 + " = O");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,6 +88,7 @@ public class Tile extends JButton implements ActionListener {
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
+        Tile tile = null;
         switch (command) {
             case MOVE:
                 Tile.boardScreen.handleRequest(request);
@@ -102,13 +105,20 @@ public class Tile extends JButton implements ActionListener {
                     Tile.opponentUsername = player1;
                 }
                 break;
+            case MOVE_TO:
+                System.out.println("MOVE_TO!!!!");
+                tile = getTile(extractPosition(request));
+                tile.setIcon(chooseIcon(tokens[1]));
+                tile.setDisabledIcon(chooseIcon(tokens[1]));
+                tile.setEnabled(false);
+                break;
             case VALID_MOVE:
                 Tile.lastClickedTile.setIcon(chooseIcon(Tile.username));
                 Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.username));
                 Tile.lastClickedTile.setEnabled(false);
                 break;
             case OPPONENT_MOVED:
-                Tile tile = getTile(extractPosition(request));
+                tile = getTile(extractPosition(request));
                 tile.setIcon(chooseIcon(Tile.opponentUsername));
                 tile.setDisabledIcon(chooseIcon(Tile.opponentUsername));
                 tile.setEnabled(false);
