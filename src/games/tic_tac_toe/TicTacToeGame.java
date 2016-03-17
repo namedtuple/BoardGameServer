@@ -81,9 +81,10 @@ public class TicTacToeGame extends AbstractGame {
 		Pair<Integer, Integer> location = extractPosition(request.getRequest());
 		board.getCell(location).addOccupant(player.getUserName());
 
-    	player.send(new Request(Command.VALID_MOVE));
-    	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
-		if (hasWinner()){
+    	player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
+    	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
+
+        if (hasWinner()){
 			gameOver = true;
 			player.send(new Request(Command.VICTORY));
 			otherPlayer(player).send(new Request(Command.DEFEAT));

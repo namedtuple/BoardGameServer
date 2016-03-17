@@ -106,7 +106,6 @@ public class Tile extends JButton implements ActionListener {
                 }
                 break;
             case MOVE_TO:
-                System.out.println("MOVE_TO!!!!");
                 tile = getTile(extractPosition(request));
                 tile.setIcon(chooseIcon(tokens[1]));
                 tile.setDisabledIcon(chooseIcon(tokens[1]));
