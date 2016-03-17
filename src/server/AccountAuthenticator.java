@@ -1,5 +1,4 @@
 package server;
-
 import java.sql.*;
 
 public class AccountAuthenticator {
@@ -51,6 +50,44 @@ public class AccountAuthenticator {
 		} 
 		
 		return false;
+	}
+	
+	public String getProfileInfo(String userName)
+	{
+		connect();
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT * FROM USERS " +
+						   "WHERE USERNAME = '" + userName + "'";
+			ResultSet rs = stmt.executeQuery(query);			
+			
+			if(rs.next())
+			{	
+				String profileInfo = rs.getString(1) + ", " 
+					 + rs.getString(3) + ", "
+					 + rs.getString(4) + ", " 
+					 + rs.getInt(5) + ", "
+					 + rs.getInt(6);
+				
+				rs.close();
+				stmt.close();
+				con.close();
+				
+				return profileInfo;
+			}
+			
+			rs.close();
+			stmt.close();
+			con.close();
+		
+		} catch(SQLException ex) {
+			
+			ex.printStackTrace();
+		} 
+		
+		return "User Not Found";
+
 	}
 	
 	//Checks just if user exists
