@@ -21,9 +21,7 @@ public class CheckersGame extends AbstractGame{
 
 	static final char RED_KING = 'R';
 	static final char BLACK_KING = 'B';
-
-	private boolean gameOver;
-
+	
 	//last action of current player
 	private Action lastAction;
 
