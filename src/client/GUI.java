@@ -20,8 +20,8 @@ public class GUI extends JFrame {
 
     // Methods
     public GUI(Client client) {
+
         super(BASE_WINDOW_TITLE);
-        JFrame.setDefaultLookAndFeelDecorated(true);
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
@@ -90,6 +90,9 @@ public class GUI extends JFrame {
                 changePanel(lobbyScreen);
                 setTitle(BASE_WINDOW_TITLE);
                 appendToTitle(username);
+                break;
+            case LOGIN_FAIL:
+                JOptionPane.showMessageDialog(this, "Incorrect Username and/or Password");
                 break;
             case MOVE_TO: case REMOVE_FROM: case MOVE_BOTH_TO:
                 boardScreen.handleRequest(request);
