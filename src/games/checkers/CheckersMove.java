@@ -16,8 +16,8 @@ public class CheckersMove {
 	//Expected in the form MOVE [a,b] [c,d]
 	public static CheckersMove parseMove(String str){
 		String[] splitStr = str.split(" ");
-		String source = splitStr[2]; //[x,y]
-		String dest = splitStr[3]; //[x,y]
+		String source = splitStr[2]; //[x, y]
+		String dest = splitStr[5]; //[x, y]
 
 		int sourceCol = Character.getNumericValue(source.charAt(1));
 		int sourceRow = Character.getNumericValue(source.charAt(3)); 
