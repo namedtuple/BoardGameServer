@@ -131,7 +131,7 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 	}
 
 	public String getCountry() {
-		return String.valueOf(countryField.getText());
+		return countryField.getText();
 	}
 
     // ActionListener
