@@ -158,7 +158,6 @@ public class CheckersGame extends AbstractGame{
 		}
 	}
 
-	//returns true if player made a jump and must keep jumping that same piece
 	private void makeCheckersMove(CheckersMove move) {
 		char piece = removePiece(move.sourceCol, move.sourceRow);
 		placePiece(move.destCol, move.destRow, piece);
@@ -191,11 +190,11 @@ public class CheckersGame extends AbstractGame{
 	//converts a piece to king, if necessary
 	private void checkForKing(char piece, CheckersMove move){
 		if (move.destRow == 1 && piece == BLACK){
-			removePiece(move.destCol, move.sourceRow);
+			removePiece(move.destCol, move.destRow);
 			placePiece(move.destCol, move.destRow, BLACK_KING);
 		}
 		else if (move.destRow == board.getNumRows() && piece == RED){
-			removePiece(move.destCol, move.sourceRow);
+			removePiece(move.destCol, move.destRow);
 			placePiece(move.destCol, move.destRow, RED_KING);
 		}
 	}
