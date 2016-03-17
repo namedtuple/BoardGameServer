@@ -127,11 +127,11 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 	}
 
 	public String getGender(){
-		return usernameField.getText();
+		return genderField.getText();
 	}
 
 	public String getCountry() {
-		return String.valueOf(passwordField.getPassword());
+		return String.valueOf(countryField.getText());
 	}
 
     // ActionListener
