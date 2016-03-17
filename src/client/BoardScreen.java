@@ -58,6 +58,7 @@ public class BoardScreen extends JPanel {
     }
 
     public void handleRequest(Request request) {
+        String[] tokens = request.getTokens();
         Command command = request.getCommand();
         switch (command) {
             case MOVE:
@@ -71,7 +72,15 @@ public class BoardScreen extends JPanel {
                 setTurnLabel(command.getMessage());
                 tile.handleRequest(request);
                 break;
-            case MOVE_TO: case REMOVE_FROM:
+            case MOVE_TO:
+                if (tokens[1].equals(username)) {
+                    setTurnLabel(Command.MOVE_TO.getMessage2());
+                } else {
+                    setTurnLabel(Command.MOVE_TO.getMessage1());
+                }
+                tile.handleRequest(request);
+                break;
+            case REMOVE_FROM:
                 tile.handleRequest(request);
                 break;
             default:

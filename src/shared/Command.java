@@ -13,22 +13,35 @@ public enum Command {
     YOUR_TURN, OPPONENT_TURN,
     CONTINUE_JUMP, //for checkers
     VICTORY("You win!"), DEFEAT("You lose!"), TIE("You tied!"),
-    MOVE_TO, REMOVE_FROM,
+    MOVE_TO("It is your turn", "It is your opponent's turn"), REMOVE_FROM,
     NULL;
 
     // Fields
-    private String message;
+    private String message1;
+    private String message2;
 
     // Methods
     Command () {
     }
 
     Command (String message) {
-        this.message = message;
+        this.message1 = message;
+    }
+    Command (String message1, String message2) {
+        this.message1 = message1;
+        this.message2 = message2;
     }
 
     public String getMessage() {
-        return message;
+        return message1;
+    }
+
+    public String getMessage1() {
+        return message1;
+    }
+
+    public String getMessage2() {
+        return message2;
     }
 
 }
