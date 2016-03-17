@@ -331,7 +331,7 @@ public class CheckersGame extends AbstractGame{
 	private char getPieceAt(int col, int row){
 		String piece = board.getCell(Pair.with(col, row)).getOccupant();
 		if (piece == null) {
-            return '_';
+            return EMPTY;
         } else {
             return piece.charAt(0);
         }
