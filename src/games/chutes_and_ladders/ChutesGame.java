@@ -39,7 +39,7 @@ public class ChutesGame extends AbstractGame {
         playerLocations.put(player2, 0);
 
         destinationMap = new HashMap<Integer,Integer>();
-        for (int i = 1; i <= NUM_CELLS; ++i){
+        for (int i = 1; i <= NUM_CELLS + 5; ++i){
         	destinationMap.put(i, i);
         }
 
@@ -85,24 +85,27 @@ public class ChutesGame extends AbstractGame {
     public void makeMove(ServerThread player, Request request) {
     	int movement = rollDice();
     	int oldPosition = playerLocations.get(player);
+    	
+        if (oldPosition != 0) {
+            player.send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + locationToCoord(oldPosition).toString()));
+            otherPlayer(player).send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + locationToCoord(oldPosition).toString()));
+        }
+    	
     	int newPosition = oldPosition + movement;
     	int newActualPosition = destinationMap.get(newPosition);
-    	playerLocations.put(player, newActualPosition);
-
+    	
     	if (newActualPosition > 100) { //overshot the end, don't move
     		newActualPosition = oldPosition;
     	}
-
+    	
+    	playerLocations.put(player, newActualPosition);
     	Pair<Integer, Integer> newPosAsPair = locationToCoord(newActualPosition);
 
 
         player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
     	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
 
-        if (oldPosition != 0) {
-            player.send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + locationToCoord(oldPosition).toString()));
-    	    otherPlayer(player).send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + locationToCoord(oldPosition).toString()));
-        }
+
 
     	if (newActualPosition == 100){
     		gameOver = true;
