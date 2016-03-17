@@ -2,6 +2,7 @@ package client;
 
 import org.javatuples.Pair;
 import shared.Command;
+import shared.GameName;
 import shared.Request;
 
 import javax.imageio.ImageIO;
@@ -33,15 +34,29 @@ public class Tile extends JButton implements ActionListener {
         this.addActionListener(this);
     }
 
-    private static void loadImages(String usernamePlayer1, String usernamePlayer2) {
+    private static void loadImages(GameName gameName, String usernamePlayer1, String usernamePlayer2) {
         Tile.imageHashMap = new HashMap<>();
         try {
-            Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/x.png"))));
-            //Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/chutes-red.png"))));
-            System.out.println(usernamePlayer1 + " = X");
-            Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/o.png"))));
-            //Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/chutes-black.png"))));
-            System.out.println(usernamePlayer2 + " = O");
+            if (gameName == GameName.TIC_TAC_TOE) {
+                Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/x.png"))));
+                System.out.println(usernamePlayer1 + " = X");
+                Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/o.png"))));
+                System.out.println(usernamePlayer2 + " = O");
+            }
+            else if (gameName == GameName.CHUTES_AND_LADDERS) {
+                // TODO
+                Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/chutes-red-10%.png"))));
+                System.out.println(usernamePlayer1 + " = X");
+                Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/chutes-black-10%.png"))));
+                System.out.println(usernamePlayer2 + " = O");
+            }
+            else if (gameName == GameName.CHECKERS) {
+                Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/checkers-red-12%.png"))));
+                System.out.println(usernamePlayer1 + " = X");
+                Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/checkers-black-12%.png"))));
+                System.out.println(usernamePlayer2 + " = O");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,6 +103,40 @@ public class Tile extends JButton implements ActionListener {
         return Pair.with(x, y);
     }
 
+    private void setupCheckers(Request request) {
+        int length = 8;
+        String[] tokens = request.getTokens();
+        Command command = request.getCommand();
+        Tile tile = null;
+        String player1 = tokens[2];
+        String player2 = tokens[4];
+
+        int adj = 0;
+        for (int yRow = 1; yRow <= 2; ++yRow) {
+            for (int xCol = 1; xCol <= length; xCol+=2) {
+                // Blacks
+                tile = getTile(Pair.with(xCol + adj, yRow));
+                tile.setIcon(chooseIcon(player2));
+                tile.setDisabledIcon(chooseIcon(player2));
+                tile.setEnabled(false);
+            }
+            adj++;
+        }
+
+        adj = 0;
+        for (int yRow = 7; yRow <= 8; ++yRow) {
+            for (int xCol = 1; xCol <= length; xCol+=2) {
+                // Blacks
+                tile = getTile(Pair.with(xCol + adj, yRow));
+                tile.setIcon(chooseIcon(player1));
+                tile.setDisabledIcon(chooseIcon(player1));
+                tile.setEnabled(false);
+            }
+            adj++;
+        }
+
+    }
+
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
@@ -97,9 +146,13 @@ public class Tile extends JButton implements ActionListener {
                 Tile.boardScreen.handleRequest(request);
                 break;
             case NEW_GAME:
+                GameName gameName = GameName.valueOf(tokens[1]);
                 String player1 = tokens[2];
                 String player2 = tokens[4];
-                loadImages(player1, player2);
+                loadImages(gameName, player1, player2);
+                if (gameName == GameName.CHECKERS) {
+                    setupCheckers(request);
+                }
                 if (player1.equals(boardScreen.getUsername())) { // then i'm p1 and I should be X
                     Tile.username = player1;
                     Tile.opponentUsername = player2;
