@@ -1,7 +1,6 @@
 package games.tic_tac_toe;
 
 import games.AbstractGame;
-import games.Board;
 import games.Cell;
 import org.javatuples.Pair;
 import server.ServerThread;
@@ -16,15 +15,11 @@ public class TicTacToeGame extends AbstractGame {
     	O
     }
 
-    static final int COLS = 3;
-    static final int ROWS = 3;
-
     private Turn turn;
 
     // Methods
     public TicTacToeGame(ServerThread currentPlayer, ServerThread otherPlayer) {
         super(currentPlayer, otherPlayer);
-    	board = new Board(COLS, ROWS);
     	turn = Turn.X;
     }
 
@@ -66,9 +61,9 @@ public class TicTacToeGame extends AbstractGame {
         return true;
     }
 
-	@Override
-	public void start() {
-		sendWelcomeMessage();
+	@Override 
+	public GameName getGameName(){
+		return GameName.TIC_TAC_TOE;
 	}
 
 	@Override
@@ -85,14 +80,10 @@ public class TicTacToeGame extends AbstractGame {
     	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
 
         if (hasWinner()){
-			gameOver = true;
-			player.send(new Request(Command.VICTORY));
-			otherPlayer(player).send(new Request(Command.DEFEAT));
+			endGameWinner(player);
 		}
 		else if (tied()){
-			gameOver = true;
-			player.send(new Request(Command.TIE));
-			otherPlayer(player).send(new Request(Command.TIE));
+			endGameTie();
 		}
 		changeTurn();
 	}
@@ -108,14 +99,6 @@ public class TicTacToeGame extends AbstractGame {
 
 	private Turn getOppositeTurn(Turn turn){
 		return turn == Turn.X ? Turn.O : Turn.X;
-	}
-
-	private void sendWelcomeMessage(){
-		String p1 = player1.getUserName();
-		String p2 = player2.getUserName();
-		player1.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-		player2.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
-
 	}
 
     private Pair<Integer, Integer> extractPosition(String message) {

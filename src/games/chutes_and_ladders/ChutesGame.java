@@ -1,7 +1,6 @@
 package games.chutes_and_ladders;
 
 import games.AbstractGame ;
-import games.Board;
 import org.javatuples.Pair;
 import server.ServerThread;
 import shared.Command;
@@ -15,23 +14,16 @@ import java.util.Random;
 
 public class ChutesGame extends AbstractGame {
 
-    public static final int COLS = 10;
-    public static final int ROWS = 10;
-
-    public static final int NUM_CELLS = COLS * ROWS;
-
     private ServerThread currentPlayer;
     private Map<ServerThread, Integer> playerLocations;
     private Map<Integer, Integer> destinationMap;
 
     private Random random;
 
-    // Methods
     public ChutesGame(ServerThread player1, ServerThread player2) {
         super(player1, player2);
 
         currentPlayer = player1;
-        board = new Board(COLS, ROWS);
         random = new Random();
 
         playerLocations = new HashMap<ServerThread, Integer>();
@@ -39,7 +31,9 @@ public class ChutesGame extends AbstractGame {
         playerLocations.put(player2, 0);
 
         destinationMap = new HashMap<Integer,Integer>();
-        for (int i = 1; i <= NUM_CELLS + 5; ++i){
+        int boardSize = board.getNumCols() * board.getNumRows();
+        int boardSizeAdj = boardSize + 5; // +5 if player is on 99 and rolls a 6 = 105;
+        for (int i = 1; i <= boardSizeAdj; ++i){
         	destinationMap.put(i, i);
         }
 
@@ -69,13 +63,10 @@ public class ChutesGame extends AbstractGame {
     }
 
     @Override
-    public void start() {
-		String p1 = player1.getUserName();
-		String p2 = player2.getUserName();
-        player1.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-		player2.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
+    public GameName getGameName(){
+    	return GameName.CHUTES_AND_LADDERS;
     }
-
+    
     @Override
     public boolean legalMove(ServerThread player, Request request) {
     	return player == currentPlayer; //just "roll"
@@ -113,9 +104,7 @@ public class ChutesGame extends AbstractGame {
         }
 
     	if (newActualPosition == 100){
-    		gameOver = true;
-    		player.send(new Request(Command.VICTORY));
-    		otherPlayer(player).send(new Request(Command.DEFEAT));
+    		endGameWinner(player);
     	}
 
     	changeTurn();

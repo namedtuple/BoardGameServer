@@ -3,7 +3,6 @@ package server;
 import shared.Command;
 import shared.Request;
 import shared.GameName;
-import org.javatuples.Pair;
 
 import games.AbstractGame;
 
@@ -18,7 +17,6 @@ public class ServerThread extends Thread {
     // Fields
     private BufferedReader in;
     private PrintWriter out;
-    private ServerThread opponentServerThread;
     private AbstractGame game;
     private String socketAddress;
     private String username;

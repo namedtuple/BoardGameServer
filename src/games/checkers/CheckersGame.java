@@ -3,7 +3,6 @@ package games.checkers;
 import org.javatuples.Pair;
 
 import games.AbstractGame;
-import games.Board;
 import server.ServerThread;
 import shared.Command;
 import shared.GameName;
@@ -20,10 +19,6 @@ public class CheckersGame extends AbstractGame{
 		BLACK,
 		RED
 	}
-
-	static final int COLS = 8;
-	static final int ROWS = 8;
-
 	static final char EMPTY = ' ';
 	static final char RED = 'r';
 	static final char BLACK = 'b';
@@ -52,13 +47,13 @@ public class CheckersGame extends AbstractGame{
 		mustJumpAgainC = -1;
 		mustJumpAgainR = -1;
 
-		board = new Board(COLS, ROWS);
 		setupBoard();
 		printBoard();
 	}
-
-	public void start(){
-		sendWelcomeMessage();
+	
+	@Override
+	public GameName getGameName(){
+		return GameName.CHECKERS;
 	}
 
 
@@ -158,7 +153,6 @@ public class CheckersGame extends AbstractGame{
 		}
 	}
 
-	//returns true if player made a jump and must keep jumping that same piece
 	private void makeCheckersMove(CheckersMove move) {
 		char piece = removePiece(move.sourceCol, move.sourceRow);
 		placePiece(move.destCol, move.destRow, piece);
@@ -191,11 +185,11 @@ public class CheckersGame extends AbstractGame{
 	//converts a piece to king, if necessary
 	private void checkForKing(char piece, CheckersMove move){
 		if (move.destRow == 1 && piece == BLACK){
-			removePiece(move.destCol, move.sourceRow);
+			removePiece(move.destCol, move.destRow);
 			placePiece(move.destCol, move.destRow, BLACK_KING);
 		}
 		else if (move.destRow == board.getNumRows() && piece == RED){
-			removePiece(move.destCol, move.sourceRow);
+			removePiece(move.destCol, move.destRow);
 			placePiece(move.destCol, move.destRow, RED_KING);
 		}
 	}
@@ -218,22 +212,15 @@ public class CheckersGame extends AbstractGame{
 				return;
 			}
 			if (!actionPossible(Action.MOVE, turn)){
-				onGameOver();
+				endGameWinner(otherPlayer(currentPlayer()));
 			}
 		}
 	}
 
-	private void onGameOver(){
-		gameOver = true;
-		currentPlayer().send(new Request(Command.DEFEAT));
-		otherPlayer(currentPlayer()).send(new Request(Command.VICTORY));
-	}
-
-
 	//checks if black or red has a jump or move
 	private boolean actionPossible(Action action, Turn turn){
-		for(int c = 1; c <= COLS; ++c){
-			for (int r = 1; r <= ROWS; ++r){
+		for(int c = 1; c <= board.getNumCols(); ++c){
+			for (int r = 1; r <= board.getNumRows(); ++r){
 				char piece = getPieceAt(c, r);
 				if (pieceMatchesSide(piece, turn)){
 					if (canAct(action, piece, c, r)){
@@ -317,15 +304,15 @@ public class CheckersGame extends AbstractGame{
 	private void setupBoard(){
 		//first three rows, place Red on black squares
 		for (int r = 1; r <= 3; ++r){
-			for (int c = 1; c <= COLS; ++c){
+			for (int c = 1; c <= board.getNumCols(); ++c){
 				if (isDarkSquare(c, r)){
 					placePiece(c, r, RED);
 				}
 			}
 		}
 		//bottom three rows, place Red on black squares
-		for (int r = ROWS - 2; r <= ROWS; ++r){
-			for (int c = 1; c <= COLS; ++c){
+		for (int r = board.getNumRows() - 2; r <= board.getNumRows(); ++r){
+			for (int c = 1; c <= board.getNumCols(); ++c){
 				if (isDarkSquare(c, r)){
 					placePiece(c, r, BLACK);
 				}
@@ -336,13 +323,13 @@ public class CheckersGame extends AbstractGame{
 	private void printBoard(){
 		System.out.println("===========");
 		System.out.print("  ");
-		for (int c = 1; c <= COLS; ++c){
+		for (int c = 1; c <= board.getNumCols(); ++c){
 			System.out.print(c + " ");
 		}
 		System.out.println();
-		for (int r = 1; r <= ROWS; ++r){
+		for (int r = 1; r <= board.getNumRows(); ++r){
 			System.out.print(r + " ");
-			for (int c = 1; c <= COLS; ++c){
+			for (int c = 1; c <= board.getNumCols(); ++c){
 				System.out.print(getPieceAt(c, r) + " ");
 			}
 			System.out.println();
@@ -375,13 +362,6 @@ public class CheckersGame extends AbstractGame{
 
 	private boolean isDarkSquare(int col, int row){
 		return (col + row) % 2 != 0;
-	}
-
-	private void sendWelcomeMessage() {
-        String p1 = player1.getUserName();
-		String p2 = player2.getUserName();
-        player1.send(new Request(Command.NEW_GAME, GameName.CHECKERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-		player2.send(new Request(Command.NEW_GAME, GameName.CHECKERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
 	}
 
 	private void sendTurnMessage(){

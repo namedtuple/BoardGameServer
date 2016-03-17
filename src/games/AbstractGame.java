@@ -2,6 +2,7 @@ package games;
 
 import server.*;
 import shared.Command;
+import shared.GameName;
 import shared.Request;
 
 public abstract class AbstractGame {
@@ -20,9 +21,16 @@ public abstract class AbstractGame {
 		player1.setGame(this);
 		player2.setGame(this);
 		gameOver = false;
+		
+		board = new Board(getGameName().getBoardSize());
 	}
 
-	public abstract void start();
+	public void start(){
+        sendNewGameMessage(player1);
+        sendNewGameMessage(player2);
+	}
+	
+	public abstract GameName getGameName();
 
 	public boolean gameOver(){
 		return gameOver;
@@ -55,5 +63,29 @@ public abstract class AbstractGame {
     public ServerThread otherPlayer(ServerThread player){
     	return player == player1 ? player2 : player1;
     }
-
+    
+    protected void endGameWinner(ServerThread winner){
+    	gameOver = true;
+    	
+    	ServerThread loser = otherPlayer(winner);
+    	
+		winner.send(new Request(Command.VICTORY));
+		loser.send(new Request(Command.DEFEAT));
+		
+		server.addWin(winner.getUserName());
+		server.addLoss(loser.getUserName());
+    }
+    
+    protected void endGameTie(){
+    	gameOver = true;
+    	player1.send(new Request(Command.TIE));
+    	player2.send(new Request(Command.TIE));
+    }
+    
+	
+	private void sendNewGameMessage(ServerThread player){
+		String p1 = player1.getUserName();
+		String p2 = player2.getUserName();
+		player.send(new Request(Command.NEW_GAME, getGameName() + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
+	}
 }

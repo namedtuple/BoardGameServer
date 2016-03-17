@@ -100,6 +100,14 @@ public class Server {
     public String getProfile(String userName){
         return accountAuthenticator.getProfileInfo(userName);
     }
+    
+    public void addWin(String userName){
+    	accountAuthenticator.addWin(userName);
+    }
+    
+    public void addLoss(String userName){
+    	accountAuthenticator.addLoss(userName);
+    }
 
     public void close() {
         try {
