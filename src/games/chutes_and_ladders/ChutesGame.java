@@ -100,13 +100,17 @@ public class ChutesGame extends AbstractGame {
 
     	playerLocations.put(player, newActualPosition);
     	Pair<Integer, Integer> newPosAsPair = locationToCoord(newActualPosition);
-
-
         System.out.println(player.getUserName() + "  ROLLED: " + movement + "    AND MOVED    FROM: " + oldPosition + " == " + locationToCoord(oldPosition) + "     TO: " + newPosition + " -> " + newActualPosition + " == " + newPosAsPair.toString());
-        player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
-    	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
 
-
+        if (playerLocations.get(player).equals(playerLocations.get(otherPlayer(player)))) {
+            // two on same spot
+            player.send(new Request(Command.MOVE_BOTH_TO, newPosAsPair.toString()));
+            otherPlayer(player).send(new Request(Command.MOVE_BOTH_TO, newPosAsPair.toString()));
+        }
+        else {
+            player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
+            otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
+        }
 
     	if (newActualPosition == 100){
     		gameOver = true;

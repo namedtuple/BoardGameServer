@@ -14,6 +14,7 @@ public enum Command {
     CONTINUE_JUMP, //for checkers
     VICTORY("You win!"), DEFEAT("You lose!"), TIE("You tied!"),
     MOVE_TO("It is your turn", "It is your opponent's turn"), REMOVE_FROM,
+    MOVE_BOTH_TO,
     NULL;
 
     // Fields
