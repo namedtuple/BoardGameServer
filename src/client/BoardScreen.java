@@ -49,7 +49,6 @@ public class BoardScreen extends JPanel {
         }
 
         else if (length == 10) {
-
             int tileNumber;
             for (int yRow = 1; yRow <= length; ++yRow) {
                 for (int xCol = 1; xCol <= length; ++xCol) {
@@ -78,13 +77,37 @@ public class BoardScreen extends JPanel {
                     if (tileNumber == 93 || tileNumber ==  73) { tile.setBackground(new Color(225, 164,  81)); }
                     if (tileNumber == 95 || tileNumber ==  75) { tile.setBackground(new Color(243, 121,  63)); }
                     if (tileNumber == 98 || tileNumber ==  78) { tile.setBackground(new Color(201,  29,  72)); }
-
                 }
             }
         }
 
+        else if (length == 8) {
+            for (int yRow = 1; yRow <= length; ++yRow) {
+                for (int xCol = 1; xCol <= length; ++xCol) {
+                    Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
+                    Tile tile = new Tile(this, pair);
+                    this.tile = tile; // any Tile instance works here
 
-
+                    if      (xCol % 2 == 0 && yRow % 2 == 0) {  // even column, even row
+                        tile.setBackground(Color.black);
+                        // black
+                    }
+                    else if (xCol % 2 == 0 && yRow % 2 != 0) { // even column, odd row
+                        // red
+                        tile.setBackground(Color.red);
+                    }
+                    else if (xCol % 2 != 0 && yRow % 2 == 0) { // odd column, even row
+                        // red
+                        tile.setBackground(Color.red);
+                    }
+                    else if (xCol % 2 != 0 && yRow % 2 != 0) { // odd column, odd row
+                        tile.setBackground(Color.black);
+                        // black
+                    }
+                    boardPanel.add(tile);
+                }
+            }
+        }
 
         add(boardPanel,BorderLayout.CENTER);
         turnLabel = new JLabel();

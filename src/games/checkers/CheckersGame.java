@@ -6,6 +6,7 @@ import games.AbstractGame;
 import games.Board;
 import server.ServerThread;
 import shared.Command;
+import shared.GameName;
 import shared.Request;
 
 public class CheckersGame extends AbstractGame{
@@ -14,57 +15,57 @@ public class CheckersGame extends AbstractGame{
 		MOVE, //moving any piece one step
 		JUMP // eating a piece
 	}
-	
+
 	enum Turn{
 		BLACK,
 		RED
 	}
-	
+
 	static final int COLS = 8;
 	static final int ROWS = 8;
-	
+
 	static final char EMPTY = ' ';
 	static final char RED = 'r';
 	static final char BLACK = 'b';
-	
+
 	static final char RED_KING = 'R';
 	static final char BLACK_KING = 'B';
 
 	private Turn turn;
 	private boolean gameOver;
-	
+
 	//last action of current player
 	private Action lastAction;
-	
+
 	//must the current player jump?
 	private boolean mustJump;
-	
+
 	//coordinates of piece that must jump again
 	//for when a player already jumped
 	private int mustJumpAgainC;
 	private int mustJumpAgainR;
-	
+
 	public CheckersGame(ServerThread player1, ServerThread player2){
 		super(player1, player2);
 
 		turn = Turn.BLACK;
 		mustJumpAgainC = -1;
 		mustJumpAgainR = -1;
-		
+
 		board = new Board(COLS, ROWS);
 		setupBoard();
 		printBoard();
 	}
-	
+
 	public void start(){
 		sendWelcomeMessage();
 	}
-	
+
 
 	@Override
 	public boolean legalMove(ServerThread player, Request request) {
 		if (!isCurrentTurn(player)) {
-			return false; 
+			return false;
 		}
 		CheckersMove move = CheckersMove.parseMove(request.getRequest());
 		return validCheckersMove(move);
@@ -74,10 +75,10 @@ public class CheckersGame extends AbstractGame{
 	public void makeMove(ServerThread player, Request request) {
 		CheckersMove move = CheckersMove.parseMove(request.getRequest());
 		makeCheckersMove(move);
-		
+
     	player.send(new Request(Command.VALID_MOVE));
 		if(mustJumpAgainC != -1) { //player must continue jumping
-			currentPlayer().send(new Request(Command.CONTINUE_JUMP)); 
+			currentPlayer().send(new Request(Command.CONTINUE_JUMP));
 	    	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
 		}
 		else{
@@ -86,8 +87,8 @@ public class CheckersGame extends AbstractGame{
 			sendTurnMessage();
 		}
 	}
-	
-	
+
+
 	private boolean validCheckersMove(CheckersMove move){
 		//assume players turn has been validated
 		char piece = getPieceAt(move.sourceCol, move.sourceRow);
@@ -97,7 +98,7 @@ public class CheckersGame extends AbstractGame{
 		}
 		return canMove(piece, move);
 	}
-	
+
 	private boolean canMove(char piece, CheckersMove move){
 		if (getPieceAt(move.destCol, move.destRow) != EMPTY) {
 			return false; //can only move to an empty cell
@@ -137,19 +138,19 @@ public class CheckersGame extends AbstractGame{
 			return false;
 		}
 	}
-	
+
 	//returns true if player made a jump and must keep jumping that same piece
 	private void makeCheckersMove(CheckersMove move) {
 		char piece = removePiece(move.sourceCol, move.sourceRow);
 		placePiece(move.destCol, move.destRow, piece);
-		
+
 		checkForKing(piece, move);
 
 		if (move.isJump()){ //eat the piece
 			int jumpedC = move.sourceCol + Integer.signum(move.getDeltaC());
 			int jumpedR = move.sourceRow + Integer.signum(move.getDeltaR());
 			removePiece(jumpedC, jumpedR);
-			
+
 			//check if piece can jump again
 			if (canAct(Action.JUMP, piece, move.destCol, move.destRow)){
 				mustJumpAgainC = move.destCol;
@@ -165,8 +166,8 @@ public class CheckersGame extends AbstractGame{
 		}
 		printBoard();
 	}
-	
-	
+
+
 	//converts a piece to king, if necessary
 	private void checkForKing(char piece, CheckersMove move){
 		if (move.destRow == 1 && piece == BLACK){
@@ -178,8 +179,8 @@ public class CheckersGame extends AbstractGame{
 			placePiece(move.destCol, move.destRow, RED_KING);
 		}
 	}
-	
-	
+
+
 	//determines next turn, or ends game
 	private void updateTurn(){
 		//check if current player needs to jump
@@ -201,13 +202,13 @@ public class CheckersGame extends AbstractGame{
 			}
 		}
 	}
-	
+
 	private void onGameOver(){
 		gameOver = true;
 		currentPlayer().send(new Request(Command.DEFEAT));
 		otherPlayer(currentPlayer()).send(new Request(Command.VICTORY));
 	}
-	
+
 
 	//checks if black or red has a jump or move
 	private boolean actionPossible(Action action, Turn turn){
@@ -223,7 +224,7 @@ public class CheckersGame extends AbstractGame{
 		}
 		return false;
 	}
-	
+
 	private boolean pieceMatchesSide(char piece, Turn side){
 		switch(piece){
 		case BLACK:
@@ -253,7 +254,7 @@ public class CheckersGame extends AbstractGame{
 		default:
 			return false;
 		}
-		
+
 		for (int dc : deltaCs){
 			for (int dr : deltaRs){
 				int tempDestC = col + dc;
@@ -267,7 +268,7 @@ public class CheckersGame extends AbstractGame{
 		}
 		return false;
 	}
-	
+
 	private boolean isCurrentTurn(ServerThread player){
 		if (turn == Turn.BLACK){
 			return player == player1;
@@ -276,19 +277,19 @@ public class CheckersGame extends AbstractGame{
 			return player == player2;
 		}
 	}
-	
+
 	private void changeTurn(){
 		turn = getOppositeTurn(turn);
 	}
-	
+
 	private Turn getOppositeTurn(Turn turn){
 		return turn == Turn.BLACK ? Turn.RED : Turn.BLACK;
 	}
-	
+
 	public ServerThread currentPlayer(){
 		return turn == Turn.BLACK ? player1 : player2;
 	}
-	
+
 	//can be put into parent class
 	//function can be used to set-up test scenarios
 	private void setupBoard(){
@@ -309,7 +310,7 @@ public class CheckersGame extends AbstractGame{
 			}
 		}
 	}
-	
+
 	private void printBoard(){
 		System.out.println("===========");
 		System.out.print("  ");
@@ -325,32 +326,38 @@ public class CheckersGame extends AbstractGame{
 			System.out.println();
 		}
 	}
-	
-	
+
+
 	private char getPieceAt(int col, int row){
 		String piece = board.getCell(Pair.with(col, row)).getOccupant();
-		return piece.charAt(0);
+		if (piece == null) {
+            return '_';
+        } else {
+            return piece.charAt(0);
+        }
 	}
-	
+
 	private char removePiece(int col, int row){
 		char piece = getPieceAt(col, row);
 		board.getCell(Pair.with(col, row)).addOccupant(Character.toString(EMPTY));
 		return piece;
 	}
-	
+
 	private void placePiece(int col, int row, char piece){
 		board.getCell(Pair.with(col, row)).addOccupant(Character.toString(piece));
 	}
-	
+
 	private boolean isDarkSquare(int col, int row){
 		return (col + row) % 2 != 0;
 	}
-	
-	private void sendWelcomeMessage(){
-		player1.send(new Request(Command.NEW_GAME, player1.getUserName() + " B " + player2.getUserName() + " R "));
-		player2.send(new Request(Command.NEW_GAME, player2.getUserName() + " R " + player1.getUserName() + " B "));
+
+	private void sendWelcomeMessage() {
+        String p1 = player1.getUserName();
+		String p2 = player2.getUserName();
+        player1.send(new Request(Command.NEW_GAME, GameName.CHECKERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
+		player2.send(new Request(Command.NEW_GAME, GameName.CHECKERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
 	}
-	
+
 	private void sendTurnMessage(){
 		if (!gameOver){
 			currentPlayer().send(new Request(Command.YOUR_TURN));
