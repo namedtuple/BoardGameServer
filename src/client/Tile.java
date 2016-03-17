@@ -28,6 +28,7 @@ public class Tile extends JButton implements ActionListener {
     private static String firstMove;
     private Pair<Integer, Integer> coordinates; //saves button coordinates
     private static GameName gameName;
+    private static final String BOTH = "BOTH";
 
     // Methods
     public Tile(BoardScreen boardScreen, Pair<Integer, Integer> coordinates) {
@@ -52,6 +53,7 @@ public class Tile extends JButton implements ActionListener {
                 System.out.println(usernamePlayer1 + " = X");
                 Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/chutes-black-10%.png"))));
                 System.out.println(usernamePlayer2 + " = O");
+                Tile.imageHashMap.put(BOTH, new ImageIcon(ImageIO.read(new File("img/chutes-black-and-red-10%.png"))));
             }
             else if (gameName == GameName.CHECKERS) {
                 Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/checkers-black-12%.png"))));
@@ -196,6 +198,12 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(extractPosition(request));
                 tile.setIcon(null);
                 tile.setDisabledIcon(null);
+                tile.setEnabled(true);
+                break;
+            case MOVE_BOTH_TO:
+                tile = getTile(extractPosition(request));
+                tile.setIcon(chooseIcon(BOTH));
+                tile.setDisabledIcon(chooseIcon(BOTH));
                 tile.setEnabled(true);
                 break;
             case VALID_MOVE:
