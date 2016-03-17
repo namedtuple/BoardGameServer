@@ -3,8 +3,8 @@ package shared;
 public enum Command {
 
     // Constants
-    LOGGING_IN, LOGIN_SUCCESS, LOGIN_FAIL,
-    ACCOUNT_CREATION("Create New Account"), CREATING_ACCOUNT,
+    LOGGING_IN, LOGIN_SUCCESS, GOTO_LOGIN, LOGIN_FAIL("Unable to log in to game server. Check that your username/password is correct."),
+    ACCOUNT_CREATION, CREATING_ACCOUNT, ACCOUNT_CREATION_FAIL("Unable to create new account. Username already exists."),
     GET_PROFILE, PROFILE,
     LOGOUT, DISCONNECTED,
     GOTO_LOBBY, LOBBY,
