@@ -76,13 +76,20 @@ public class CheckersGame extends AbstractGame{
 		CheckersMove move = CheckersMove.parseMove(request.getRequest());
 		makeCheckersMove(move);
 
-    	player.send(new Request(Command.VALID_MOVE));
+    	//player.send(new Request(Command.VALID_MOVE));
+    	player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + move.getDestinationPosition().toString()));
+        otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + move.getDestinationPosition().toString()));
+
 		if(mustJumpAgainC != -1) { //player must continue jumping
 			currentPlayer().send(new Request(Command.CONTINUE_JUMP));
-	    	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
+	    	player.send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            otherPlayer(player).send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            //otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
 		}
 		else{
-	    	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
+	    	player.send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            otherPlayer(player).send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            //otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
 			updateTurn();
 			sendTurnMessage();
 		}
