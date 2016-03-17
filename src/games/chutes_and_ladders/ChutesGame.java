@@ -85,23 +85,24 @@ public class ChutesGame extends AbstractGame {
     public void makeMove(ServerThread player, Request request) {
     	int movement = rollDice();
     	int oldPosition = playerLocations.get(player);
-    	
+
         if (oldPosition != 0) {
             player.send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + locationToCoord(oldPosition).toString()));
             otherPlayer(player).send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + locationToCoord(oldPosition).toString()));
         }
-    	
+
     	int newPosition = oldPosition + movement;
     	int newActualPosition = destinationMap.get(newPosition);
-    	
+
     	if (newActualPosition > 100) { //overshot the end, don't move
     		newActualPosition = oldPosition;
     	}
-    	
+
     	playerLocations.put(player, newActualPosition);
     	Pair<Integer, Integer> newPosAsPair = locationToCoord(newActualPosition);
 
 
+        System.out.println(player.getUserName() + "  ROLLED: " + movement + "    AND MOVED    FROM: " + oldPosition + " == " + locationToCoord(oldPosition) + "     TO: " + newPosition + " -> " + newActualPosition + " == " + newPosAsPair.toString());
         player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
     	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + newPosAsPair.toString()));
 

@@ -35,7 +35,6 @@ public abstract class AbstractGame {
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
-        System.out.println("            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ");
         switch(command) {
             case MOVE:
                 String username = tokens[1];
