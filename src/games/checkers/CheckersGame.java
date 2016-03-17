@@ -3,7 +3,6 @@ package games.checkers;
 import org.javatuples.Pair;
 
 import games.AbstractGame;
-import games.Board;
 import server.ServerThread;
 import shared.Command;
 import shared.GameName;
@@ -20,10 +19,6 @@ public class CheckersGame extends AbstractGame{
 		BLACK,
 		RED
 	}
-
-	static final int COLS = 8;
-	static final int ROWS = 8;
-
 	static final char EMPTY = ' ';
 	static final char RED = 'r';
 	static final char BLACK = 'b';
@@ -52,7 +47,6 @@ public class CheckersGame extends AbstractGame{
 		mustJumpAgainC = -1;
 		mustJumpAgainR = -1;
 
-		board = new Board(COLS, ROWS);
 		setupBoard();
 		printBoard();
 	}
@@ -225,8 +219,8 @@ public class CheckersGame extends AbstractGame{
 
 	//checks if black or red has a jump or move
 	private boolean actionPossible(Action action, Turn turn){
-		for(int c = 1; c <= COLS; ++c){
-			for (int r = 1; r <= ROWS; ++r){
+		for(int c = 1; c <= board.getNumCols(); ++c){
+			for (int r = 1; r <= board.getNumRows(); ++r){
 				char piece = getPieceAt(c, r);
 				if (pieceMatchesSide(piece, turn)){
 					if (canAct(action, piece, c, r)){
@@ -310,15 +304,15 @@ public class CheckersGame extends AbstractGame{
 	private void setupBoard(){
 		//first three rows, place Red on black squares
 		for (int r = 1; r <= 3; ++r){
-			for (int c = 1; c <= COLS; ++c){
+			for (int c = 1; c <= board.getNumCols(); ++c){
 				if (isDarkSquare(c, r)){
 					placePiece(c, r, RED);
 				}
 			}
 		}
 		//bottom three rows, place Red on black squares
-		for (int r = ROWS - 2; r <= ROWS; ++r){
-			for (int c = 1; c <= COLS; ++c){
+		for (int r = board.getNumRows() - 2; r <= board.getNumRows(); ++r){
+			for (int c = 1; c <= board.getNumCols(); ++c){
 				if (isDarkSquare(c, r)){
 					placePiece(c, r, BLACK);
 				}
@@ -329,13 +323,13 @@ public class CheckersGame extends AbstractGame{
 	private void printBoard(){
 		System.out.println("===========");
 		System.out.print("  ");
-		for (int c = 1; c <= COLS; ++c){
+		for (int c = 1; c <= board.getNumCols(); ++c){
 			System.out.print(c + " ");
 		}
 		System.out.println();
-		for (int r = 1; r <= ROWS; ++r){
+		for (int r = 1; r <= board.getNumRows(); ++r){
 			System.out.print(r + " ");
-			for (int c = 1; c <= COLS; ++c){
+			for (int c = 1; c <= board.getNumCols(); ++c){
 				System.out.print(getPieceAt(c, r) + " ");
 			}
 			System.out.println();

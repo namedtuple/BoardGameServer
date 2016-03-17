@@ -1,7 +1,6 @@
 package games.tic_tac_toe;
 
 import games.AbstractGame;
-import games.Board;
 import games.Cell;
 import org.javatuples.Pair;
 import server.ServerThread;
@@ -16,15 +15,11 @@ public class TicTacToeGame extends AbstractGame {
     	O
     }
 
-    static final int COLS = 3;
-    static final int ROWS = 3;
-
     private Turn turn;
 
     // Methods
     public TicTacToeGame(ServerThread currentPlayer, ServerThread otherPlayer) {
         super(currentPlayer, otherPlayer);
-    	board = new Board(COLS, ROWS);
     	turn = Turn.X;
     }
 
