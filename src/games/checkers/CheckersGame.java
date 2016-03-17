@@ -65,9 +65,11 @@ public class CheckersGame extends AbstractGame{
 	@Override
 	public boolean legalMove(ServerThread player, Request request) {
 		if (!isCurrentTurn(player)) {
-			return false;
+			System.err.println("Illegal move: not player's turn");
+            return false;
 		}
 		CheckersMove move = CheckersMove.parseMove(request.getRequest());
+        System.out.println("Move is legal");
 		return validCheckersMove(move);
 	}
 
@@ -76,13 +78,20 @@ public class CheckersGame extends AbstractGame{
 		CheckersMove move = CheckersMove.parseMove(request.getRequest());
 		makeCheckersMove(move);
 
-    	player.send(new Request(Command.VALID_MOVE));
+    	//player.send(new Request(Command.VALID_MOVE));
+    	player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + move.getDestinationPosition().toString()));
+        otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + move.getDestinationPosition().toString()));
+
 		if(mustJumpAgainC != -1) { //player must continue jumping
 			currentPlayer().send(new Request(Command.CONTINUE_JUMP));
-	    	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
+	    	player.send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            otherPlayer(player).send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            //otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
 		}
 		else{
-	    	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
+	    	player.send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            otherPlayer(player).send(new Request(Command.REMOVE_FROM, player.getUserName() + " " + move.getSourcePosition().toString()));
+            //otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
 			updateTurn();
 			sendTurnMessage();
 		}
@@ -94,6 +103,7 @@ public class CheckersGame extends AbstractGame{
 		char piece = getPieceAt(move.sourceCol, move.sourceRow);
 
 		if (!pieceMatchesSide(piece, turn)){
+            System.err.println("  Invalid move: piece doesn't match side.");
 			return false;
 		}
 		return canMove(piece, move);
@@ -101,22 +111,27 @@ public class CheckersGame extends AbstractGame{
 
 	private boolean canMove(char piece, CheckersMove move){
 		if (getPieceAt(move.destCol, move.destRow) != EMPTY) {
+            System.err.println("    Cannot Move: cell not empty");
 			return false; //can only move to an empty cell
 		}
 		if (piece == RED){
 			if (move.getDeltaR() <= 0 ) {
+                System.err.println("    Cannot Move: RED cannot move backward");
 				return false; //cannot move backwards
 			}
 		}
 		else if (piece == BLACK){
 			if (move.getDeltaR() >= 0) {
+                System.err.println("    Cannot Move: BLACK cannot move backward");
 				return false; //cannot move backwards
 			}
 		}
 
 		if (move.isJump()){ //JUMP
 			if (mustJumpAgainC != -1){
+                System.out.println("    mustJumpAgainC != -1");
 				if (move.sourceCol != mustJumpAgainC || move.sourceRow != mustJumpAgainR){
+                    System.err.println("      move.sourceCol != mustJumpAgainC || move.sourceRow != mustJumpAgainR");
 					return false; //not moving the required piece to move
 				}
 			}
@@ -127,14 +142,18 @@ public class CheckersGame extends AbstractGame{
 		}
 		else if (move.isMove()){ //MOVE
 			if (mustJump){ //must jump a piece
+                System.err.println("    Cannot Move: must jump a piece");
 				return false;
 			}
 			if (mustJumpAgainC != -1){ //must jump previous piece
+                System.err.println("    Cannot Move: must jump previous piece");
 				return false;
 			}
+            System.out.println("    Can Move");
 			return true;
 		}
 		else{
+            System.err.println("    Cannot Move: isn't a move");
 			return false;
 		}
 	}
@@ -149,7 +168,8 @@ public class CheckersGame extends AbstractGame{
 		if (move.isJump()){ //eat the piece
 			int jumpedC = move.sourceCol + Integer.signum(move.getDeltaC());
 			int jumpedR = move.sourceRow + Integer.signum(move.getDeltaR());
-			removePiece(jumpedC, jumpedR);
+			System.out.println("ABOUT TO EAT PIECE: (" + jumpedC + ", " + jumpedR + ")");
+            removePiece(jumpedC, jumpedR);
 
 			//check if piece can jump again
 			if (canAct(Action.JUMP, piece, move.destCol, move.destRow)){
@@ -271,9 +291,11 @@ public class CheckersGame extends AbstractGame{
 
 	private boolean isCurrentTurn(ServerThread player){
 		if (turn == Turn.BLACK){
+            System.out.println("Turn OK");
 			return player == player1;
 		}
 		else {
+            System.err.println("Turn not OK");
 			return player == player2;
 		}
 	}
@@ -339,7 +361,11 @@ public class CheckersGame extends AbstractGame{
 
 	private char removePiece(int col, int row){
 		char piece = getPieceAt(col, row);
-		board.getCell(Pair.with(col, row)).addOccupant(Character.toString(EMPTY));
+		board.getCell(Pair.with(col, row)).removeAllOccupants();
+        Pair<Integer, Integer> pair = Pair.with(col, row);
+        player1.send(new Request(Command.REMOVE_FROM, player1.getUserName() + " " + pair.toString()));
+        otherPlayer(player1).send(new Request(Command.REMOVE_FROM, player1.getUserName() + " " + pair.toString()));
+        //board.getCell(Pair.with(col, row)).addOccupant(Character.toString(EMPTY));
 		return piece;
 	}
 

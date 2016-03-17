@@ -54,9 +54,9 @@ public class Tile extends JButton implements ActionListener {
                 System.out.println(usernamePlayer2 + " = O");
             }
             else if (gameName == GameName.CHECKERS) {
-                Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/checkers-red-12%.png"))));
+                Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/checkers-black-12%.png"))));
                 System.out.println(usernamePlayer1 + " = X");
-                Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/checkers-black-12%.png"))));
+                Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/checkers-red-12%.png"))));
                 System.out.println(usernamePlayer2 + " = O");
             }
 
@@ -120,8 +120,8 @@ public class Tile extends JButton implements ActionListener {
                 // Reds
                 System.out.print("(" + (xCol+adj) + ", " + yRow + ")    ");
                 tile = getTile(Pair.with(xCol + adj, yRow));
-                tile.setIcon(chooseIcon(player1));
-                tile.setDisabledIcon(chooseIcon(player1));
+                tile.setIcon(chooseIcon(player2));
+                tile.setDisabledIcon(chooseIcon(player2));
                 //tile.setEnabled(false);
             }
             System.out.println("");
@@ -135,8 +135,8 @@ public class Tile extends JButton implements ActionListener {
                 // Blacks
                 System.out.print("(" + (xCol+adj) + ", " + yRow + ")    ");
                 tile = getTile(Pair.with(xCol + adj, yRow));
-                tile.setIcon(chooseIcon(player2));
-                tile.setDisabledIcon(chooseIcon(player2));
+                tile.setIcon(chooseIcon(player1));
+                tile.setDisabledIcon(chooseIcon(player1));
                 //tile.setEnabled(false);
             }
             System.out.println("");
@@ -189,7 +189,7 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(extractPosition(request));
                 tile.setIcon(chooseIcon(tokens[1]));
                 tile.setDisabledIcon(chooseIcon(tokens[1]));
-                tile.setEnabled(false);
+                tile.setEnabled(true);
                 break;
             case REMOVE_FROM:
                 // TODO handle multiple players per space

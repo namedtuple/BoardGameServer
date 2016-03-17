@@ -9,10 +9,10 @@ public abstract class AbstractGame {
 
 	protected ServerThread player1;
 	protected ServerThread player2;
-	
+
 	protected Board board;
 	protected boolean gameOver;
-	
+
 	public AbstractGame(ServerThread player1, ServerThread player2){
 		this.server = player1.getServer();
 		this.player1 = player1;
@@ -21,20 +21,21 @@ public abstract class AbstractGame {
 		player2.setGame(this);
 		gameOver = false;
 	}
-	
+
 	public abstract void start();
-	
+
 	public boolean gameOver(){
 		return gameOver;
 	}
-	
+
 	public abstract boolean legalMove(ServerThread player, Request request);
 
 	public abstract void makeMove(ServerThread player, Request request);
-	
+
     public void handleRequest(Request request) {
         String[] tokens = request.getTokens();
         Command command = request.getCommand();
+        System.out.println("            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ");
         switch(command) {
             case MOVE:
                 String username = tokens[1];
@@ -43,17 +44,17 @@ public abstract class AbstractGame {
                 	makeMove(player, request);
                 }
                 else {
-                	System.out.print("Invalid Move");
+                	System.err.println("?@!?#@!!@#$ Invalid Move");
                 }
                 break;
         }
     }
-    
+
     //different games decide who the current player is
     public abstract ServerThread currentPlayer();
-    
+
     public ServerThread otherPlayer(ServerThread player){
     	return player == player1 ? player2 : player1;
     }
-    
+
 }

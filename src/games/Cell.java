@@ -35,4 +35,8 @@ public class Cell {
         }
         return null;
     }
+
+    public void removeAllOccupants() {
+        occupants.clear();
+    }
 }

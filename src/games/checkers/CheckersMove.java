@@ -1,5 +1,7 @@
 package games.checkers;
 
+import org.javatuples.Pair;
+
 public class CheckersMove {
 	public int sourceCol;
 	public int sourceRow;
@@ -57,5 +59,13 @@ public class CheckersMove {
 	private int getAbsDeltaR(){
 		return Math.abs(getDeltaR());
 	}
+
+    public Pair<Integer, Integer> getSourcePosition() {
+        return Pair.with(sourceCol, sourceRow);
+    }
+
+    public Pair<Integer, Integer> getDestinationPosition() {
+        return Pair.with(destCol, destRow);
+    }
 
 }
