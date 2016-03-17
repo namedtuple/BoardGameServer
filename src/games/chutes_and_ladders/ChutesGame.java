@@ -26,7 +26,6 @@ public class ChutesGame extends AbstractGame {
 
     private Random random;
 
-    // Methods
     public ChutesGame(ServerThread player1, ServerThread player2) {
         super(player1, player2);
 
@@ -69,13 +68,10 @@ public class ChutesGame extends AbstractGame {
     }
 
     @Override
-    public void start() {
-		String p1 = player1.getUserName();
-		String p2 = player2.getUserName();
-        player1.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-		player2.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
+    public GameName getGameName(){
+    	return GameName.CHUTES_AND_LADDERS;
     }
-
+    
     @Override
     public boolean legalMove(ServerThread player, Request request) {
     	return player == currentPlayer; //just "roll"

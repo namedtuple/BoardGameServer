@@ -56,9 +56,10 @@ public class CheckersGame extends AbstractGame{
 		setupBoard();
 		printBoard();
 	}
-
-	public void start(){
-		sendWelcomeMessage();
+	
+	@Override
+	public GameName getGameName(){
+		return GameName.CHECKERS;
 	}
 
 
@@ -367,13 +368,6 @@ public class CheckersGame extends AbstractGame{
 
 	private boolean isDarkSquare(int col, int row){
 		return (col + row) % 2 != 0;
-	}
-
-	private void sendWelcomeMessage() {
-        String p1 = player1.getUserName();
-		String p2 = player2.getUserName();
-        player1.send(new Request(Command.NEW_GAME, GameName.CHECKERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-		player2.send(new Request(Command.NEW_GAME, GameName.CHECKERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
 	}
 
 	private void sendTurnMessage(){

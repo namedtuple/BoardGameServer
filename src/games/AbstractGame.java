@@ -2,6 +2,7 @@ package games;
 
 import server.*;
 import shared.Command;
+import shared.GameName;
 import shared.Request;
 
 public abstract class AbstractGame {
@@ -22,7 +23,18 @@ public abstract class AbstractGame {
 		gameOver = false;
 	}
 
-	public abstract void start();
+	public void start(){
+        sendNewGameMessage(player1);
+        sendNewGameMessage(player2);
+	}
+	
+	private void sendNewGameMessage(ServerThread player){
+		String p1 = player1.getUserName();
+		String p2 = player2.getUserName();
+		player.send(new Request(Command.NEW_GAME, getGameName() + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
+	}
+	
+	public abstract GameName getGameName();
 
 	public boolean gameOver(){
 		return gameOver;

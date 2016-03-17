@@ -66,9 +66,9 @@ public class TicTacToeGame extends AbstractGame {
         return true;
     }
 
-	@Override
-	public void start() {
-		sendWelcomeMessage();
+	@Override 
+	public GameName getGameName(){
+		return GameName.TIC_TAC_TOE;
 	}
 
 	@Override
@@ -104,14 +104,6 @@ public class TicTacToeGame extends AbstractGame {
 
 	private Turn getOppositeTurn(Turn turn){
 		return turn == Turn.X ? Turn.O : Turn.X;
-	}
-
-	private void sendWelcomeMessage(){
-		String p1 = player1.getUserName();
-		String p2 = player2.getUserName();
-		player1.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-		player2.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
-
 	}
 
     private Pair<Integer, Integer> extractPosition(String message) {
