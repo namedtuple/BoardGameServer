@@ -1,4 +1,5 @@
 package client;
+
 import org.javatuples.Pair;
 import shared.Command;
 import shared.Request;
@@ -36,8 +37,10 @@ public class Tile extends JButton implements ActionListener {
         Tile.imageHashMap = new HashMap<>();
         try {
             Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/x.png"))));
+            //Tile.imageHashMap.put(usernamePlayer1, new ImageIcon(ImageIO.read(new File("img/chutes-red.png"))));
             System.out.println(usernamePlayer1 + " = X");
             Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/o.png"))));
+            //Tile.imageHashMap.put(usernamePlayer2, new ImageIcon(ImageIO.read(new File("img/chutes-black.png"))));
             System.out.println(usernamePlayer2 + " = O");
         } catch (IOException e) {
             e.printStackTrace();

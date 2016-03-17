@@ -31,7 +31,7 @@ public class GUI extends JFrame {
         currentScreen = loginScreen;
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(450, 300);
+        setSize(450, 375);
         setVisible(true);
         setResizable(false);
 

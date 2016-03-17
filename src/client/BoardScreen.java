@@ -37,19 +37,70 @@ public class BoardScreen extends JPanel {
      * at the end of this method.
      */
     private void setupBoard() {
-        for (int yRow = 1; yRow <= length; ++yRow) {
-            for (int xCol = 1; xCol <= length; ++xCol) {
-                Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
-                Tile tile = new Tile(this, pair);
-                this.tile = tile; // any Tile instance works here
-                boardPanel.add(tile);
+        if (length == 3) {
+            for (int yRow = 1; yRow <= length; ++yRow) {
+                for (int xCol = 1; xCol <= length; ++xCol) {
+                    Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
+                    Tile tile = new Tile(this, pair);
+                    this.tile = tile; // any Tile instance works here
+                    boardPanel.add(tile);
+                }
             }
         }
+
+        else if (length == 10) {
+
+            int tileNumber;
+            for (int yRow = 1; yRow <= length; ++yRow) {
+                for (int xCol = 1; xCol <= length; ++xCol) {
+                    Pair<Integer, Integer> pair = Pair.with(xCol, yRow);
+                    Tile tile = new Tile(this, pair);
+                    this.tile = tile; // any Tile instance works here
+                    boardPanel.add(tile);
+                    tileNumber = coordToNumber(length, xCol, yRow);
+                    if (tileNumber == 1  || tileNumber ==  38) { tile.setBackground(new Color(  0, 128,   0)); }
+                    if (tileNumber == 4  || tileNumber ==  14) { tile.setBackground(new Color(  0, 128,  64)); }
+                    if (tileNumber == 9  || tileNumber ==  31) { tile.setBackground(new Color( 64, 128, 128)); }
+                    if (tileNumber == 21 || tileNumber ==  42) { tile.setBackground(new Color(  0, 128, 192)); }
+                    if (tileNumber == 28 || tileNumber ==  84) { tile.setBackground(new Color(  0, 128, 255)); }
+                    if (tileNumber == 36 || tileNumber ==  44) { tile.setBackground(new Color(  0, 255, 255)); }
+                    if (tileNumber == 51 || tileNumber ==  67) { tile.setBackground(new Color( 27, 128, 228)); }
+                    if (tileNumber == 71 || tileNumber ==  91) { tile.setBackground(new Color( 64, 191, 118)); }
+                    if (tileNumber == 80 || tileNumber == 100) { tile.setBackground(new Color( 68, 187, 181)); }
+
+                    if (tileNumber == 16 || tileNumber ==   6) { tile.setBackground(new Color(255, 128, 192)); }
+                    if (tileNumber == 47 || tileNumber ==  26) { tile.setBackground(new Color(255,   0, 255)); }
+                    if (tileNumber == 49 || tileNumber ==  11) { tile.setBackground(new Color(255, 128, 255)); }
+                    if (tileNumber == 56 || tileNumber ==  53) { tile.setBackground(new Color(128,   0,  64)); }
+                    if (tileNumber == 62 || tileNumber ==  19) { tile.setBackground(new Color(128,   0, 255)); }
+                    if (tileNumber == 64 || tileNumber ==  60) { tile.setBackground(new Color(255,   0, 128)); }
+                    if (tileNumber == 87 || tileNumber ==  24) { tile.setBackground(new Color(238,  94,  68)); }
+                    if (tileNumber == 93 || tileNumber ==  73) { tile.setBackground(new Color(225, 164,  81)); }
+                    if (tileNumber == 95 || tileNumber ==  75) { tile.setBackground(new Color(243, 121,  63)); }
+                    if (tileNumber == 98 || tileNumber ==  78) { tile.setBackground(new Color(201,  29,  72)); }
+
+                }
+            }
+        }
+
+
+
+
         add(boardPanel,BorderLayout.CENTER);
         turnLabel = new JLabel();
         turnLabel.setVerticalAlignment(JLabel.BOTTOM);
         turnPanel.add(turnLabel);
         add(turnPanel,BorderLayout.SOUTH);
+    }
+
+    private int coordToNumber(int boardLength, int xCol, int yRow) {
+        int numRowsBelow = boardLength - yRow;
+        int partialSum = numRowsBelow * boardLength;
+        if (numRowsBelow % 2 == 0) {
+            return partialSum + xCol;
+        } else {
+            return partialSum + (boardLength - xCol + 1);
+        }
     }
 
     private void setTurnLabel(String text)
