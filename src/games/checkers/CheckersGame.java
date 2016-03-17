@@ -15,10 +15,6 @@ public class CheckersGame extends AbstractGame{
 		JUMP // eating a piece
 	}
 
-	enum Turn{
-		BLACK,
-		RED
-	}
 	static final char EMPTY = ' ';
 	static final char RED = 'r';
 	static final char BLACK = 'b';
@@ -26,7 +22,6 @@ public class CheckersGame extends AbstractGame{
 	static final char RED_KING = 'R';
 	static final char BLACK_KING = 'B';
 
-	private Turn turn;
 	private boolean gameOver;
 
 	//last action of current player
@@ -43,7 +38,6 @@ public class CheckersGame extends AbstractGame{
 	public CheckersGame(ServerThread player1, ServerThread player2){
 		super(player1, player2);
 
-		turn = Turn.BLACK;
 		mustJumpAgainC = -1;
 		mustJumpAgainR = -1;
 
@@ -236,10 +230,10 @@ public class CheckersGame extends AbstractGame{
 		switch(piece){
 		case BLACK:
 		case BLACK_KING:
-			return side == Turn.BLACK;
+			return side == Turn.X;
 		case RED:
 		case RED_KING:
-			return side == Turn.RED;
+			return side == Turn.O;
 		default:
 			return false;
 		}
@@ -277,7 +271,7 @@ public class CheckersGame extends AbstractGame{
 	}
 
 	private boolean isCurrentTurn(ServerThread player){
-		if (turn == Turn.BLACK){
+		if (turn == Turn.X){
             System.out.println("Turn OK");
 			return player == player1;
 		}
@@ -285,18 +279,6 @@ public class CheckersGame extends AbstractGame{
             System.err.println("Turn not OK");
 			return player == player2;
 		}
-	}
-
-	private void changeTurn(){
-		turn = getOppositeTurn(turn);
-	}
-
-	private Turn getOppositeTurn(Turn turn){
-		return turn == Turn.BLACK ? Turn.RED : Turn.BLACK;
-	}
-
-	public ServerThread currentPlayer(){
-		return turn == Turn.BLACK ? player1 : player2;
 	}
 
 	//can be put into parent class
@@ -335,7 +317,6 @@ public class CheckersGame extends AbstractGame{
 			System.out.println();
 		}
 	}
-
 
 	private char getPieceAt(int col, int row){
 		String piece = board.getCell(Pair.with(col, row)).getOccupant();

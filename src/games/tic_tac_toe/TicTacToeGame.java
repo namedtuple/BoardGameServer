@@ -10,18 +10,37 @@ import shared.Request;
 
 public class TicTacToeGame extends AbstractGame {
 
-    enum Turn{
-    	X,
-    	O
-    }
-
-    private Turn turn;
-
     // Methods
     public TicTacToeGame(ServerThread currentPlayer, ServerThread otherPlayer) {
         super(currentPlayer, otherPlayer);
-    	turn = Turn.X;
     }
+    
+	@Override 
+	public GameName getGameName(){
+		return GameName.TIC_TAC_TOE;
+	}
+
+	@Override
+	public boolean legalMove(ServerThread player, Request request) {
+		return validMove(extractPosition(request.getRequest()), player);
+	}
+
+	@Override
+	public void makeMove(ServerThread player, Request request) {
+		Pair<Integer, Integer> location = extractPosition(request.getRequest());
+		board.getCell(location).addOccupant(player.getUserName());
+
+    	player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
+    	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
+
+        if (hasWinner()){
+			endGameWinner(player);
+		}
+		else if (tied()){
+			endGameTie();
+		}
+		changeTurn();
+	}
 
     private boolean validMove(Pair<Integer, Integer> location, ServerThread player) {
         return player == currentPlayer() && board.getCell(location).getOccupant() == null;
@@ -60,46 +79,6 @@ public class TicTacToeGame extends AbstractGame {
         }
         return true;
     }
-
-	@Override 
-	public GameName getGameName(){
-		return GameName.TIC_TAC_TOE;
-	}
-
-	@Override
-	public boolean legalMove(ServerThread player, Request request) {
-		return validMove(extractPosition(request.getRequest()), player);
-	}
-
-	@Override
-	public void makeMove(ServerThread player, Request request) {
-		Pair<Integer, Integer> location = extractPosition(request.getRequest());
-		board.getCell(location).addOccupant(player.getUserName());
-
-    	player.send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
-    	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
-
-        if (hasWinner()){
-			endGameWinner(player);
-		}
-		else if (tied()){
-			endGameTie();
-		}
-		changeTurn();
-	}
-
-	@Override
-	public ServerThread currentPlayer() {
-		return turn == Turn.X ? player1 : player2;
-	}
-
-	private void changeTurn(){
-		turn = getOppositeTurn(turn);
-	}
-
-	private Turn getOppositeTurn(Turn turn){
-		return turn == Turn.X ? Turn.O : Turn.X;
-	}
 
     private Pair<Integer, Integer> extractPosition(String message) {
         int i = message.indexOf('[');

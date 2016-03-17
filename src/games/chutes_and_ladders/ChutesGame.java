@@ -14,7 +14,6 @@ import java.util.Random;
 
 public class ChutesGame extends AbstractGame {
 
-    private ServerThread currentPlayer;
     private Map<ServerThread, Integer> playerLocations;
     private Map<Integer, Integer> destinationMap;
 
@@ -23,7 +22,6 @@ public class ChutesGame extends AbstractGame {
     public ChutesGame(ServerThread player1, ServerThread player2) {
         super(player1, player2);
 
-        currentPlayer = player1;
         random = new Random();
 
         playerLocations = new HashMap<ServerThread, Integer>();
@@ -69,7 +67,7 @@ public class ChutesGame extends AbstractGame {
     
     @Override
     public boolean legalMove(ServerThread player, Request request) {
-    	return player == currentPlayer; //just "roll"
+    	return player == currentPlayer(); //just "roll"
     }
 
     @Override
@@ -104,15 +102,6 @@ public class ChutesGame extends AbstractGame {
     	}
 
     	changeTurn();
-    }
-
-    @Override
-    public ServerThread currentPlayer() {
-        return currentPlayer;
-    }
-
-    private void changeTurn(){
-    	currentPlayer = otherPlayer(currentPlayer);
     }
 
     private Pair<Integer, Integer> locationToCoord(int location){
