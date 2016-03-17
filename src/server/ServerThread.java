@@ -95,8 +95,9 @@ public class ServerThread extends Thread {
                     send(new Request(Command.LOGIN_FAIL));
                 }
                 break;
-            case CREATING_ACCOUNT:
-                server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]);
+            case CREATING_ACCOUNT:            	
+                if(!server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]));
+                send(new Request(Command.ACCOUNT_CREATION_FAIL));
                 break;
             case GOTO_LOBBY:
                 removeFromLobby();
