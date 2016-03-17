@@ -13,7 +13,7 @@ public enum Command {
     YOUR_TURN, OPPONENT_TURN,
     CONTINUE_JUMP, //for checkers
     VICTORY("You win!"), DEFEAT("You lose!"), TIE("You tied!"),
-    MOVE_TO,
+    MOVE_TO, REMOVE_FROM,
     NULL;
 
     // Fields

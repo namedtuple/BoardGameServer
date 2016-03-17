@@ -111,6 +111,13 @@ public class Tile extends JButton implements ActionListener {
                 tile.setDisabledIcon(chooseIcon(tokens[1]));
                 tile.setEnabled(false);
                 break;
+            case REMOVE_FROM:
+                // TODO handle multiple players per space
+                tile = getTile(extractPosition(request));
+                tile.setIcon(null);
+                tile.setDisabledIcon(null);
+                tile.setEnabled(true);
+                break;
             case VALID_MOVE:
                 Tile.lastClickedTile.setIcon(chooseIcon(Tile.username));
                 Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.username));

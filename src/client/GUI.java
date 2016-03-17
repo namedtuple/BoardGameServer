@@ -89,7 +89,7 @@ public class GUI extends JFrame {
                 setTitle(BASE_WINDOW_TITLE);
                 appendToTitle(username);
                 break;
-            case VALID_MOVE: case OPPONENT_MOVED: case MOVE_TO:
+            case VALID_MOVE: case OPPONENT_MOVED: case MOVE_TO: case REMOVE_FROM:
                 boardScreen.handleRequest(request);
                 break;
             case LOBBY:

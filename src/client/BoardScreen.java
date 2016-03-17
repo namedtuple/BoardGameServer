@@ -71,7 +71,7 @@ public class BoardScreen extends JPanel {
                 setTurnLabel(command.getMessage());
                 tile.handleRequest(request);
                 break;
-            case MOVE_TO:
+            case MOVE_TO: case REMOVE_FROM:
                 tile.handleRequest(request);
                 break;
             default:
