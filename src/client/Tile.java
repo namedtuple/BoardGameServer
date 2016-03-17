@@ -189,7 +189,7 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(extractPosition(request));
                 tile.setIcon(chooseIcon(tokens[1]));
                 tile.setDisabledIcon(chooseIcon(tokens[1]));
-                tile.setEnabled(false);
+                tile.setEnabled(true);
                 break;
             case REMOVE_FROM:
                 // TODO handle multiple players per space
