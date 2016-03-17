@@ -93,8 +93,12 @@ public class Server {
         }
     }
 
-    public boolean createAccount(String userName, String password, String gender, String country) {
-        return accountAuthenticator.addUser(userName, password, gender, country);
+    public void createAccount(String userName, String password, String gender, String country) {
+        accountAuthenticator.addUser(userName, password, gender, country);
+    }
+
+    public String getProfile(String userName){
+        return accountAuthenticator.getProfileInfo(userName);
     }
 
     public void close() {

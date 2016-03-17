@@ -2,8 +2,9 @@ package server;
 
 import shared.Command;
 import shared.Request;
-import games.AbstractGame;
+import games.AbstractGameLogic;
 import shared.GameName;
+import org.javatuples.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +17,8 @@ public class ServerThread extends Thread {
     // Fields
     private BufferedReader in;
     private PrintWriter out;
-    private AbstractGame game;
+    private ServerThread opponentServerThread;
+    private AbstractGameLogic game;
     private String socketAddress;
     private String username;
     private Server server; //reference to the owning server
@@ -65,10 +67,19 @@ public class ServerThread extends Thread {
         return new Request(msg);
     }
 
-    public Server getServer(){
-    	return this.server;
+    public void opponentMoved(Pair<Integer, Integer> location) {
+        send(new Request(Command.OPPONENT_MOVED, location.toString()));
+        send(game.hasWinner() ? new Request(Command.DEFEAT) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
     }
-    
+
+    public ServerThread getOpponent() {
+        return opponentServerThread;
+    }
+
+    public void setOpponent(ServerThread opponentServerThread) {
+        this.opponentServerThread = opponentServerThread;
+    }
+
     public String getUserName() {
         return username == null ? socketAddress : username;
     }
@@ -77,7 +88,7 @@ public class ServerThread extends Thread {
         lobby.removeUser(username);
     }
 
-    public void setGame(AbstractGame game){ 
+    public void setGame(AbstractGameLogic game){
         this.game = game;
     }
 
@@ -95,9 +106,12 @@ public class ServerThread extends Thread {
                     send(new Request(Command.LOGIN_FAIL));
                 }
                 break;
-            case CREATING_ACCOUNT:            	
-                if(!server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]));
-                send(new Request(Command.ACCOUNT_CREATION_FAIL));
+            case CREATING_ACCOUNT:
+                server.createAccount(tokens[1], tokens[2], tokens[3], tokens[4]);
+                break;
+            case GET_PROFILE:
+                String profileInfo = server.getProfile(tokens[1]);
+                send(new Request(Command.PROFILE,profileInfo));
                 break;
             case GOTO_LOBBY:
                 removeFromLobby();

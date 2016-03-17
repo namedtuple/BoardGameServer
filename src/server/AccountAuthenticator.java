@@ -64,10 +64,18 @@ public class AccountAuthenticator {
 			
 			if(rs.next())
 			{	
+<<<<<<< HEAD
+				String profileInfo = rs.getString(1) + ","
+					 + rs.getString(2) + ","
+					 + rs.getString(3) + ","
+					 + rs.getString(4) + ","
+					 + rs.getInt(5) + ","
+=======
 				String profileInfo = rs.getString(1) + ", " 
 					 + rs.getString(3) + ", "
 					 + rs.getString(4) + ", " 
 					 + rs.getInt(5) + ", "
+>>>>>>> bdf78e7f7ca9c65910a6d6677f2452c9551f9c0a
 					 + rs.getInt(6);
 				
 				rs.close();
@@ -138,7 +146,7 @@ public class AccountAuthenticator {
 			Statement stmt = con.createStatement();
 			
 			String query = "INSERT INTO USERS (USERNAME,PASSWORD,GENDER,COUNTRY) " +
-	                   	   "VALUES ('" + userName + "', '" + password + "', '" + gender + "', '" + country + "');"; 
+	                   	   "VALUES ('" + userName + "', '" + password + "', '" + gender + "', '" + country + "');";
 			
 			stmt.executeUpdate(query);
 	   
