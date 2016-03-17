@@ -65,10 +65,10 @@ public class AccountAuthenticator {
 			if(rs.next())
 			{	
 				//TODO: might not be merged properly
-				String profileInfo = rs.getString(1) + ", " 
-					 + rs.getString(3) + ", "
-					 + rs.getString(4) + ", " 
-					 + rs.getInt(5) + ", "
+				String profileInfo = rs.getString(1) + "," 
+					 + rs.getString(3) + ","
+					 + rs.getString(4) + "," 
+					 + rs.getInt(5) + ","
 					 + rs.getInt(6);
 				
 				rs.close();
