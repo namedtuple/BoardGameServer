@@ -91,14 +91,15 @@ public class Tile extends JButton implements ActionListener {
                 Tile.boardScreen.handleRequest(request);
                 break;
             case NEW_GAME:
-                Tile.username = tokens[2];
-                Tile.opponentUsername = tokens[4];
-                if (Tile.imageHashMap == null) {
-                    if (request.getRequest().indexOf(" X ") < request.getRequest().indexOf(" O ")) { // TODO
-                        loadImages(tokens[2], tokens[4]);
-                    } else {
-                        loadImages(tokens[4], tokens[2]);
-                    }
+                String player1 = tokens[2];
+                String player2 = tokens[4];
+                loadImages(player1, player2);
+                if (player1.equals(boardScreen.getUsername())) { // then i'm p1 and I should be X
+                    Tile.username = player1;
+                    Tile.opponentUsername = player2;
+                } else { // then i'm p2 and I should be O
+                    Tile.username = player2;
+                    Tile.opponentUsername = player1;
                 }
                 break;
             case VALID_MOVE:

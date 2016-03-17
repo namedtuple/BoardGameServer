@@ -15,10 +15,10 @@ public class TicTacToeGame extends AbstractGame {
     	X,
     	O
     }
-    
+
     static final int COLS = 3;
     static final int ROWS = 3;
-    
+
     private Turn turn;
 
     // Methods
@@ -27,11 +27,11 @@ public class TicTacToeGame extends AbstractGame {
     	board = new Board(COLS, ROWS);
     	turn = Turn.X;
     }
-    
+
     private boolean validMove(Pair<Integer, Integer> location, ServerThread player) {
         return player == currentPlayer() && board.getCell(location).getOccupant() == null;
     }
-    
+
     private boolean hasWinner() {
         // TL TM TR
         // ML MM MR
@@ -80,7 +80,7 @@ public class TicTacToeGame extends AbstractGame {
 	public void makeMove(ServerThread player, Request request) {
 		Pair<Integer, Integer> location = extractPosition(request.getRequest());
 		board.getCell(location).addOccupant(player.getUserName());
-		
+
     	player.send(new Request(Command.VALID_MOVE));
     	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
 		if (hasWinner()){
@@ -100,23 +100,23 @@ public class TicTacToeGame extends AbstractGame {
 	public ServerThread currentPlayer() {
 		return turn == Turn.X ? player1 : player2;
 	}
-	
+
 	private void changeTurn(){
 		turn = getOppositeTurn(turn);
 	}
-	
+
 	private Turn getOppositeTurn(Turn turn){
 		return turn == Turn.X ? Turn.O : Turn.X;
 	}
-	
+
 	private void sendWelcomeMessage(){
 		String p1 = player1.getUserName();
 		String p2 = player2.getUserName();
 		player1.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-		player2.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X '
+		player2.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username2 O username1 X '
 
 	}
-	
+
     private Pair<Integer, Integer> extractPosition(String message) {
         int i = message.indexOf('[');
         int j = message.indexOf(',');

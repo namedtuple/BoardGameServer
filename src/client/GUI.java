@@ -71,8 +71,12 @@ public class GUI extends JFrame {
                 break;
             case NEW_GAME:
                 GameName gameName = GameName.valueOf(tokens[1]);
-                boardScreen = new BoardScreen(this, gameName.getBoardSize());
-                appendToTitle(tokens[3]);
+                boardScreen = new BoardScreen(this, gameName.getBoardSize(), username);
+                if (tokens[2].equals(username)) {
+                    appendToTitle(tokens[3]);
+                } else {
+                    appendToTitle(tokens[5]);
+                }
                 boardScreen.handleRequest(request);
                 changePanel(boardScreen);
                 break;

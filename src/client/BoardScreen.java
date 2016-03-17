@@ -14,11 +14,13 @@ public class BoardScreen extends JPanel {
     private Tile tile;
     private JLabel turnLabel;
     private JPanel boardPanel, turnPanel;
+    private String username;
 
     // Methods
-    public BoardScreen(GUI gui, int length) {
+    public BoardScreen(GUI gui, int length, String username) {
         this.gui = gui;
         this.length = length;
+        this.username = username;
         setBackground(Color.yellow);
         setLayout(new BorderLayout());
         //JPanel for the game board
@@ -72,6 +74,10 @@ public class BoardScreen extends JPanel {
             default:
                 break;
         }
+    }
+
+    public String getUsername() {
+        return username;
     }
 
 }
