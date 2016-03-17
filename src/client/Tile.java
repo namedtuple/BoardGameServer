@@ -114,28 +114,33 @@ public class Tile extends JButton implements ActionListener {
         String player1 = tokens[2];
         String player2 = tokens[4];
 
-        int adj = 0;
-        for (int yRow = 1; yRow <= 2; ++yRow) {
-            for (int xCol = 1; xCol <= length; xCol+=2) {
-                // Blacks
-                tile = getTile(Pair.with(xCol + adj, yRow));
-                tile.setIcon(chooseIcon(player2));
-                tile.setDisabledIcon(chooseIcon(player2));
-                //tile.setEnabled(false);
-            }
-            adj++;
-        }
-
-        adj = 0;
-        for (int yRow = 7; yRow <= 8; ++yRow) {
+        int adj = 1;
+        for (int yRow = 1; yRow <= 3; ++yRow) {
             for (int xCol = 1; xCol <= length; xCol+=2) {
                 // Reds
+                System.out.print("(" + (xCol+adj) + ", " + yRow + ")    ");
                 tile = getTile(Pair.with(xCol + adj, yRow));
                 tile.setIcon(chooseIcon(player1));
                 tile.setDisabledIcon(chooseIcon(player1));
                 //tile.setEnabled(false);
             }
-            adj++;
+            System.out.println("");
+            adj = adj == 0 ? 1 : 0;
+        }
+        System.out.println("");
+
+        adj = 0;
+        for (int yRow = 6; yRow <= 8; ++yRow) {
+            for (int xCol = 1; xCol <= length; xCol+=2) {
+                // Blacks
+                System.out.print("(" + (xCol+adj) + ", " + yRow + ")    ");
+                tile = getTile(Pair.with(xCol + adj, yRow));
+                tile.setIcon(chooseIcon(player2));
+                tile.setDisabledIcon(chooseIcon(player2));
+                //tile.setEnabled(false);
+            }
+            System.out.println("");
+            adj = adj == 0 ? 1 : 0;
         }
 
     }

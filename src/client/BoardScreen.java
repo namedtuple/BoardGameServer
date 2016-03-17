@@ -88,13 +88,13 @@ public class BoardScreen extends JPanel {
                     Tile tile = new Tile(this, pair);
                     this.tile = tile; // any Tile instance works here
                     if (xCol % 2 == 0 && yRow % 2 == 0) {  // even column, even row
-                        tile.setBackground(Color.darkGray);
+                        tile.setBackground(Color.red);
                     } else if (xCol % 2 == 0 && yRow % 2 != 0) { // even column, odd row
-                        tile.setBackground(Color.red);
-                    } else if (xCol % 2 != 0 && yRow % 2 == 0) { // odd column, even row
-                        tile.setBackground(Color.red);
-                    } else if (xCol % 2 != 0 && yRow % 2 != 0) { // odd column, odd row
                         tile.setBackground(Color.darkGray);
+                    } else if (xCol % 2 != 0 && yRow % 2 == 0) { // odd column, even row
+                        tile.setBackground(Color.darkGray);
+                    } else if (xCol % 2 != 0 && yRow % 2 != 0) { // odd column, odd row
+                        tile.setBackground(Color.red);
                     }
                     boardPanel.add(tile);
                 }
