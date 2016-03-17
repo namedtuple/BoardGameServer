@@ -9,6 +9,8 @@ public enum Command {
     GOTO_LOBBY, LOBBY,
     JOIN, NEW_GAME,
     MOVE, VALID_MOVE("It is your opponent's turn"), OPPONENT_MOVED("It is your turn"),
+    YOUR_TURN, OPPONENT_TURN,
+    CONTINUE_JUMP, //for checkers 
     VICTORY("You win!"), DEFEAT("You lose!"), TIE("You tied!"),
     NULL;
 

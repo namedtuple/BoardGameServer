@@ -1,6 +1,11 @@
 package server;
 
-public class CheckersGame {
+import games.AbstractGame;
+import games.Board;
+import shared.Command;
+import shared.Request;
+
+public class CheckersGame extends AbstractGame{
 
 	enum Action{
 		MOVE, //moving any piece one step
@@ -21,10 +26,7 @@ public class CheckersGame {
 	
 	static final char RED_KING = 'R';
 	static final char BLACK_KING = 'B';
-	
-	private Board board;
-	private ServerThread player1;
-	private ServerThread player2;
+
 	private Turn turn;
 	private boolean gameOver;
 	
@@ -40,13 +42,9 @@ public class CheckersGame {
 	private int mustJumpAgainR;
 	
 	public CheckersGame(ServerThread player1, ServerThread player2){
-		this.player1 = player1;
-		this.player2 = player2;
-		player1.setCheckersGame(this); //
-		player2.setCheckersGame(this); //
+		super(player1, player2);
 
 		turn = Turn.BLACK;
-		gameOver = false;
 		mustJumpAgainC = -1;
 		mustJumpAgainR = -1;
 		
@@ -59,31 +57,31 @@ public class CheckersGame {
 		sendWelcomeMessage();
 	}
 	
-	//can be put into parent class
-	public void receiveFromPlayer(ServerThread player, String message){
+
+	@Override
+	public boolean legalMove(ServerThread player, Request request) {
 		if (!isCurrentTurn(player)) {
-			return; 
+			return false; 
 		}
-		CheckersMove move = CheckersMove.parseMove(message);
-		if (validMove(move)){
-			player.send("VALID_MOVE");
-			makeMove(move);
-			otherPlayer(player).send("OPPONENT_MOVED" + message.substring(4));
-			
-			if(mustJumpAgainC != -1) { //player must continue jumping
-				currentPlayer().send("CONTINUE_JUMP"); 
-			}
-			else{
-				updateTurn();
-				sendTurnMessage();
-			}
+		CheckersMove move = CheckersMove.parseMove(request.getRequest());
+		return validCheckersMove(move);
+	}
+
+	@Override
+	public void makeMove(ServerThread player, Request request) {
+		CheckersMove move = CheckersMove.parseMove(request.getRequest());
+		makeCheckersMove(move);
+		if(mustJumpAgainC != -1) { //player must continue jumping
+			currentPlayer().send(new Request(Command.CONTINUE_JUMP)); 
 		}
-		else {
-			System.out.println("Invalid Move");
+		else{
+			updateTurn();
+			sendTurnMessage();
 		}
 	}
 	
-	private boolean validMove(CheckersMove move){
+	
+	private boolean validCheckersMove(CheckersMove move){
 		//assume players turn has been validated
 		char piece = board.pieceAt(move.sourceCol, move.sourceRow);
 
@@ -134,7 +132,7 @@ public class CheckersGame {
 	}
 	
 	//returns true if player made a jump and must keep jumping that same piece
-	private void makeMove(CheckersMove move) {
+	private void makeCheckersMove(CheckersMove move) {
 		char piece = removePiece(move.sourceCol, move.sourceRow);
 		placePiece(move.destCol, move.destRow, piece);
 		
@@ -161,6 +159,7 @@ public class CheckersGame {
 		printBoard();
 	}
 	
+	
 	//converts a piece to king, if necessary
 	private void checkForKing(char piece, CheckersMove move){
 		if (move.destRow == 0 && piece == BLACK){
@@ -172,6 +171,7 @@ public class CheckersGame {
 			placePiece(move.destCol, move.destRow, RED_KING);
 		}
 	}
+	
 	
 	//determines next turn, or ends game
 	private void updateTurn(){
@@ -190,12 +190,17 @@ public class CheckersGame {
 				return;
 			}
 			if (!actionPossible(Action.MOVE, turn)){
-				gameOver = true;
-				currentPlayer().send("DEFEAT");
-				otherPlayer(currentPlayer()).send("VICTORY");
+				onGameOver();
 			}
 		}
 	}
+	
+	private void onGameOver(){
+		gameOver = true;
+		currentPlayer().send(new Request(Command.DEFEAT));
+		otherPlayer(currentPlayer()).send(new Request(Command.VICTORY));
+	}
+	
 
 	//checks if black or red has a jump or move
 	private boolean actionPossible(Action action, Turn turn){
@@ -247,7 +252,7 @@ public class CheckersGame {
 				int tempDestC = col + dc;
 				int tempDestR = row + dr;
 				if (board.isValidCoord(tempDestC, tempDestR)){
-					if (validMove(new CheckersMove(col, row, tempDestC, tempDestR))){
+					if (validCheckersMove(new CheckersMove(col, row, tempDestC, tempDestR))){
 						return true;
 					}
 				}
@@ -273,12 +278,8 @@ public class CheckersGame {
 		return turn == Turn.BLACK ? Turn.RED : Turn.BLACK;
 	}
 	
-	private ServerThread currentPlayer(){
+	public ServerThread currentPlayer(){
 		return turn == Turn.BLACK ? player1 : player2;
-	}
-	
-	private ServerThread otherPlayer(ServerThread player) {
-		return player == player1 ? player2 : player1;
 	}
 	
 	//can be put into parent class
@@ -318,6 +319,7 @@ public class CheckersGame {
 		}
 	}
 	
+	
 	private char removePiece(int col, int row){
 		char piece = board.pieceAt(col, row);
 		board.set(col, row, EMPTY);
@@ -333,14 +335,14 @@ public class CheckersGame {
 	}
 	
 	private void sendWelcomeMessage(){
-		player1.send("WELCOME " + player1.getUserName() + " B " + player2.getUserName() + " R");
-		player2.send("WELCOME " + player2.getUserName() + " R " + player1.getUserName() + " B");
+		player1.send(new Request(Command.NEW_GAME, player1.getUserName() + " B " + player2.getUserName() + " R "));
+		player2.send(new Request(Command.NEW_GAME, player2.getUserName() + " R " + player1.getUserName() + " B "));
 	}
 	
 	private void sendTurnMessage(){
 		if (!gameOver){
-			currentPlayer().send("YOUR_TURN");
-			otherPlayer(currentPlayer()).send("OPPONENT_TURN");
+			currentPlayer().send(new Request(Command.YOUR_TURN));
+			otherPlayer(currentPlayer()).send(new Request(Command.OPPONENT_TURN));
 		}
 	}
 }
