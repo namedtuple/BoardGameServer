@@ -24,7 +24,10 @@ public class Tile extends JButton implements ActionListener {
     private static Tile lastClickedTile;
     private static String username;
     private static String opponentUsername;
+    private static boolean waitingForSecondMove = true;
+    private static String firstMove;
     private Pair<Integer, Integer> coordinates; //saves button coordinates
+    private static GameName gameName;
 
     // Methods
     public Tile(BoardScreen boardScreen, Pair<Integer, Integer> coordinates) {
@@ -118,7 +121,7 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(Pair.with(xCol + adj, yRow));
                 tile.setIcon(chooseIcon(player2));
                 tile.setDisabledIcon(chooseIcon(player2));
-                tile.setEnabled(false);
+                //tile.setEnabled(false);
             }
             adj++;
         }
@@ -126,11 +129,11 @@ public class Tile extends JButton implements ActionListener {
         adj = 0;
         for (int yRow = 7; yRow <= 8; ++yRow) {
             for (int xCol = 1; xCol <= length; xCol+=2) {
-                // Blacks
+                // Reds
                 tile = getTile(Pair.with(xCol + adj, yRow));
                 tile.setIcon(chooseIcon(player1));
                 tile.setDisabledIcon(chooseIcon(player1));
-                tile.setEnabled(false);
+                //tile.setEnabled(false);
             }
             adj++;
         }
@@ -143,10 +146,26 @@ public class Tile extends JButton implements ActionListener {
         Tile tile = null;
         switch (command) {
             case MOVE:
-                Tile.boardScreen.handleRequest(request);
+                if (gameName == GameName.CHECKERS) {
+                    if (waitingForSecondMove) {
+                        waitingForSecondMove = false;
+                        firstMove = extractPosition(request).toString();
+                        System.out.println("firstMove: " + firstMove);
+                    }
+                    else {
+                        waitingForSecondMove = true;
+                        String secondMove = extractPosition(request).toString();
+                        System.out.println("secondMove: " + secondMove);
+                        Tile.boardScreen.handleRequest(new Request(Command.MOVE, username + " " + firstMove + " " + secondMove));
+                    }
+                }
+                else {
+                    Tile.boardScreen.handleRequest(request);
+                }
+
                 break;
             case NEW_GAME:
-                GameName gameName = GameName.valueOf(tokens[1]);
+                gameName = GameName.valueOf(tokens[1]);
                 String player1 = tokens[2];
                 String player2 = tokens[4];
                 loadImages(gameName, player1, player2);
