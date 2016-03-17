@@ -1,4 +1,4 @@
-package server;
+package games.checkers;
 
 public class CheckersMove {
 	public int sourceCol;

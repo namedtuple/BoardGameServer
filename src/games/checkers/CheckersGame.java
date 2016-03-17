@@ -1,7 +1,10 @@
-package server;
+package games.checkers;
+
+import org.javatuples.Pair;
 
 import games.AbstractGame;
 import games.Board;
+import server.ServerThread;
 import shared.Command;
 import shared.Request;
 
@@ -83,7 +86,7 @@ public class CheckersGame extends AbstractGame{
 	
 	private boolean validCheckersMove(CheckersMove move){
 		//assume players turn has been validated
-		char piece = board.pieceAt(move.sourceCol, move.sourceRow);
+		char piece = getPieceAt(move.sourceCol, move.sourceRow);
 
 		if (!pieceMatchesSide(piece, turn)){
 			return false;
@@ -92,7 +95,7 @@ public class CheckersGame extends AbstractGame{
 	}
 	
 	private boolean canMove(char piece, CheckersMove move){
-		if (board.pieceAt(move.destCol, move.destRow) != EMPTY) {
+		if (getPieceAt(move.destCol, move.destRow) != EMPTY) {
 			return false; //can only move to an empty cell
 		}
 		if (piece == RED){
@@ -114,7 +117,7 @@ public class CheckersGame extends AbstractGame{
 			}
 			int jumpedC = move.sourceCol + Integer.signum(move.getDeltaC());
 			int jumpedR = move.sourceRow + Integer.signum(move.getDeltaR());
-			char jumped = board.pieceAt(jumpedC, jumpedR);
+			char jumped = getPieceAt(jumpedC, jumpedR);
 			return jumped != piece && jumped != EMPTY;
 		}
 		else if (move.isMove()){ //MOVE
@@ -206,7 +209,7 @@ public class CheckersGame extends AbstractGame{
 	private boolean actionPossible(Action action, Turn turn){
 		for(int c = 0; c < COLS; ++c){
 			for (int r = 0; r < ROWS; ++r){
-				char piece = board.pieceAt(c, r);
+				char piece = getPieceAt(c, r);
 				if (pieceMatchesSide(piece, turn)){
 					if (canAct(action, piece, c, r)){
 						return true;
@@ -313,21 +316,26 @@ public class CheckersGame extends AbstractGame{
 		for (int r = 0; r < ROWS; ++r){
 			System.out.print(r + " ");
 			for (int c = 0; c < COLS; ++c){
-				System.out.print(board.pieceAt(c, r) + " ");
+				System.out.print(getPieceAt(c, r) + " ");
 			}
 			System.out.println();
 		}
 	}
 	
 	
+	private char getPieceAt(int col, int row){
+		String piece = board.getCell(Pair.with(col, row)).getOccupant();
+		return piece.charAt(0);
+	}
+	
 	private char removePiece(int col, int row){
-		char piece = board.pieceAt(col, row);
-		board.set(col, row, EMPTY);
+		char piece = getPieceAt(col, row);
+		board.getCell(Pair.with(col, row)).addOccupant(Character.toString(EMPTY));
 		return piece;
 	}
 	
 	private void placePiece(int col, int row, char piece){
-		board.set(col, row, piece);
+		board.getCell(Pair.with(col, row)).addOccupant(Character.toString(piece));
 	}
 	
 	private boolean isDarkSquare(int col, int row){
