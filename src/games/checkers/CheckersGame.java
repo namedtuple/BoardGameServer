@@ -74,6 +74,8 @@ public class CheckersGame extends AbstractGame{
 	public void makeMove(ServerThread player, Request request) {
 		CheckersMove move = CheckersMove.parseMove(request.getRequest());
 		makeCheckersMove(move);
+		
+    	player.send(new Request(Command.VALID_MOVE));
 		if(mustJumpAgainC != -1) { //player must continue jumping
 			currentPlayer().send(new Request(Command.CONTINUE_JUMP)); 
 	    	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));

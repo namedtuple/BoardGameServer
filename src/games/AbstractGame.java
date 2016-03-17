@@ -40,7 +40,6 @@ public abstract class AbstractGame {
                 String username = tokens[1];
                 ServerThread player = server.getConnection(username);
                 if (legalMove(player, request)) {
-                	player.send(new Request(Command.VALID_MOVE));
                 	makeMove(player, request);
                 }
                 else {
