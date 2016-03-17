@@ -145,8 +145,6 @@ public class LoginScreen extends JPanel implements ActionListener, KeyListener {
             case LOGIN_SUCCESS:
                 clearFields();
                 break;
-            default:
-                break;
         }
     }
 

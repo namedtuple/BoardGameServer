@@ -21,9 +21,7 @@ public class Tile extends JButton implements ActionListener {
     private static BoardScreen boardScreen;
     private static HashMap<String, ImageIcon> imageHashMap;
     private static List<Tile> instances = new ArrayList<>();
-    private static Tile lastClickedTile;
     private static String username;
-    private static String opponentUsername;
     private static boolean waitingForSecondMove = true;
     private static String firstMove;
     private Pair<Integer, Integer> coordinates; //saves button coordinates
@@ -73,7 +71,6 @@ public class Tile extends JButton implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        Tile.lastClickedTile = this;
         handleRequest(new Request(Command.MOVE, username + " " + coordinates.toString()));
     }
 
@@ -124,7 +121,6 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(Pair.with(xCol + adj, yRow));
                 tile.setIcon(chooseIcon(player2));
                 tile.setDisabledIcon(chooseIcon(player2));
-                //tile.setEnabled(false);
             }
             System.out.println("");
             adj = adj == 0 ? 1 : 0;
@@ -139,7 +135,6 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(Pair.with(xCol + adj, yRow));
                 tile.setIcon(chooseIcon(player1));
                 tile.setDisabledIcon(chooseIcon(player1));
-                //tile.setEnabled(false);
             }
             System.out.println("");
             adj = adj == 0 ? 1 : 0;
@@ -181,10 +176,8 @@ public class Tile extends JButton implements ActionListener {
                 }
                 if (player1.equals(boardScreen.getUsername())) { // then i'm p1 and I should be X
                     Tile.username = player1;
-                    Tile.opponentUsername = player2;
                 } else { // then i'm p2 and I should be O
                     Tile.username = player2;
-                    Tile.opponentUsername = player1;
                 }
                 break;
             case MOVE_TO:
@@ -194,7 +187,6 @@ public class Tile extends JButton implements ActionListener {
                 tile.setEnabled(true);
                 break;
             case REMOVE_FROM:
-                // TODO handle multiple players per space
                 tile = getTile(extractPosition(request));
                 tile.setIcon(null);
                 tile.setDisabledIcon(null);
@@ -206,24 +198,10 @@ public class Tile extends JButton implements ActionListener {
                 tile.setDisabledIcon(chooseIcon(BOTH));
                 tile.setEnabled(true);
                 break;
-            case VALID_MOVE:
-                Tile.lastClickedTile.setIcon(chooseIcon(Tile.username));
-                Tile.lastClickedTile.setDisabledIcon(chooseIcon(Tile.username));
-                Tile.lastClickedTile.setEnabled(false);
-                break;
-            case OPPONENT_MOVED:
-                tile = getTile(extractPosition(request));
-                tile.setIcon(chooseIcon(Tile.opponentUsername));
-                tile.setDisabledIcon(chooseIcon(Tile.opponentUsername));
-                tile.setEnabled(false);
-                break;
             case VICTORY: case DEFEAT: case TIE:
                 Tile.boardScreen = null;
                 Tile.imageHashMap = null;
                 Tile.instances = new ArrayList<>();
-                Tile.lastClickedTile = null;
-                break;
-            default:
                 break;
         }
     }
