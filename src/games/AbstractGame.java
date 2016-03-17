@@ -14,7 +14,7 @@ public abstract class AbstractGame {
 	protected Turn turn;
 	
 	protected ServerThread player1;
-	protected ServerThread player2;
+	protected ServerThread player2;	
 
 	protected Board board;
 	protected boolean gameOver;
