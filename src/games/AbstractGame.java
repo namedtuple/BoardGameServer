@@ -55,5 +55,23 @@ public abstract class AbstractGame {
     public ServerThread otherPlayer(ServerThread player){
     	return player == player1 ? player2 : player1;
     }
+    
+    protected void endGameWinner(ServerThread winner){
+    	gameOver = true;
+    	
+    	ServerThread loser = otherPlayer(winner);
+    	
+		winner.send(new Request(Command.VICTORY));
+		loser.send(new Request(Command.DEFEAT));
+		
+		server.addWin(winner.getUserName());
+		server.addLoss(loser.getUserName());
+    }
+    
+    protected void endGameTie(){
+    	gameOver = true;
+    	player1.send(new Request(Command.TIE));
+    	player2.send(new Request(Command.TIE));
+    }
 
 }

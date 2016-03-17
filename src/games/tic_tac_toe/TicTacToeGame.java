@@ -85,14 +85,10 @@ public class TicTacToeGame extends AbstractGame {
     	otherPlayer(player).send(new Request(Command.MOVE_TO, player.getUserName() + " " + location.toString()));
 
         if (hasWinner()){
-			gameOver = true;
-			player.send(new Request(Command.VICTORY));
-			otherPlayer(player).send(new Request(Command.DEFEAT));
+			endGameWinner(player);
 		}
 		else if (tied()){
-			gameOver = true;
-			player.send(new Request(Command.TIE));
-			otherPlayer(player).send(new Request(Command.TIE));
+			endGameTie();
 		}
 		changeTurn();
 	}

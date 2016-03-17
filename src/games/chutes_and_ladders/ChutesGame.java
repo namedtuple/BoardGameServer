@@ -109,9 +109,7 @@ public class ChutesGame extends AbstractGame {
 
 
     	if (newActualPosition == 100){
-    		gameOver = true;
-    		player.send(new Request(Command.VICTORY));
-    		otherPlayer(player).send(new Request(Command.DEFEAT));
+    		endGameWinner(player);
     	}
 
     	changeTurn();

@@ -218,17 +218,10 @@ public class CheckersGame extends AbstractGame{
 				return;
 			}
 			if (!actionPossible(Action.MOVE, turn)){
-				onGameOver();
+				endGameWinner(otherPlayer(currentPlayer()));
 			}
 		}
 	}
-
-	private void onGameOver(){
-		gameOver = true;
-		currentPlayer().send(new Request(Command.DEFEAT));
-		otherPlayer(currentPlayer()).send(new Request(Command.VICTORY));
-	}
-
 
 	//checks if black or red has a jump or move
 	private boolean actionPossible(Action action, Turn turn){
