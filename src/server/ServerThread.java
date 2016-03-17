@@ -2,9 +2,8 @@ package server;
 
 import shared.Command;
 import shared.Request;
-import games.AbstractGameLogic;
+import games.AbstractGame;
 import shared.GameName;
-import org.javatuples.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +16,7 @@ public class ServerThread extends Thread {
     // Fields
     private BufferedReader in;
     private PrintWriter out;
-    private ServerThread opponentServerThread;
-    private AbstractGameLogic game;
+    private AbstractGame game;
     private String socketAddress;
     private String username;
     private Server server; //reference to the owning server
@@ -67,19 +65,10 @@ public class ServerThread extends Thread {
         return new Request(msg);
     }
 
-    public void opponentMoved(Pair<Integer, Integer> location) {
-        send(new Request(Command.OPPONENT_MOVED, location.toString()));
-        send(game.hasWinner() ? new Request(Command.DEFEAT) : game.tied() ? new Request(Command.TIE): new Request(Command.NULL));
+    public Server getServer(){
+    	return this.server;
     }
-
-    public ServerThread getOpponent() {
-        return opponentServerThread;
-    }
-
-    public void setOpponent(ServerThread opponentServerThread) {
-        this.opponentServerThread = opponentServerThread;
-    }
-
+    
     public String getUserName() {
         return username == null ? socketAddress : username;
     }
@@ -88,7 +77,7 @@ public class ServerThread extends Thread {
         lobby.removeUser(username);
     }
 
-    public void setGame(AbstractGameLogic game){
+    public void setGame(AbstractGame game){ 
         this.game = game;
     }
 

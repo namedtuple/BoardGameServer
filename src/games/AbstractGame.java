@@ -1,7 +1,5 @@
 package games;
 
-import org.javatuples.Pair;
-
 import server.*;
 import shared.Command;
 import shared.Request;
@@ -44,7 +42,6 @@ public abstract class AbstractGame {
                 if (legalMove(player, request)) {
                 	player.send(new Request(Command.VALID_MOVE));
                 	makeMove(player, request);
-                	otherPlayer(player).send(new Request(Command.OPPONENT_MOVED, request.getRequest().substring(4)));
                 }
                 else {
                 	System.out.print("Invalid Move");

@@ -4,7 +4,7 @@ import shared.Command;
 import shared.Request;
 import shared.GameName;
 //import games.chutes_and_ladders.ChutesLogic;
-import games.tic_tac_toe.TicTacToeLogic;
+import games.tic_tac_toe.TicTacToeGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,16 +66,8 @@ public class GameLobby {
         //
 		//}
         if (lobbyName == GameName.TIC_TAC_TOE) {
-			TicTacToeLogic newGame = new TicTacToeLogic(server, player1, player2, 3);
-
-			player1.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O '
-			player1.setOpponent(player2);
-			player1.setGame(newGame);
-
-			player2.send(new Request(Command.NEW_GAME, GameName.TIC_TAC_TOE + " " + p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X '
-			player2.setOpponent(player1);
-			player2.setGame(newGame);
-
+			TicTacToeGame newGame = new TicTacToeGame(player1, player2);
+			newGame.start();
 		}
 	}
 
