@@ -165,11 +165,11 @@ public class CheckersGame extends AbstractGame{
 	
 	//converts a piece to king, if necessary
 	private void checkForKing(char piece, CheckersMove move){
-		if (move.destRow == 0 && piece == BLACK){
+		if (move.destRow == 1 && piece == BLACK){
 			removePiece(move.destCol, move.sourceRow);
 			placePiece(move.destCol, move.destRow, BLACK_KING);
 		}
-		else if (move.destRow == board.getNumRows()-1 && piece == RED){
+		else if (move.destRow == board.getNumRows() && piece == RED){
 			removePiece(move.destCol, move.sourceRow);
 			placePiece(move.destCol, move.destRow, RED_KING);
 		}
@@ -207,8 +207,8 @@ public class CheckersGame extends AbstractGame{
 
 	//checks if black or red has a jump or move
 	private boolean actionPossible(Action action, Turn turn){
-		for(int c = 0; c < COLS; ++c){
-			for (int r = 0; r < ROWS; ++r){
+		for(int c = 1; c <= COLS; ++c){
+			for (int r = 1; r <= ROWS; ++r){
 				char piece = getPieceAt(c, r);
 				if (pieceMatchesSide(piece, turn)){
 					if (canAct(action, piece, c, r)){
@@ -289,16 +289,16 @@ public class CheckersGame extends AbstractGame{
 	//function can be used to set-up test scenarios
 	private void setupBoard(){
 		//first three rows, place Red on black squares
-		for (int r = 0; r < 3; ++r){
-			for (int c = 0; c < COLS; ++c){
+		for (int r = 1; r <= 3; ++r){
+			for (int c = 1; c <= COLS; ++c){
 				if (isDarkSquare(c, r)){
 					placePiece(c, r, RED);
 				}
 			}
 		}
 		//bottom three rows, place Red on black squares
-		for (int r = ROWS - 3; r < ROWS; ++r){
-			for (int c = 0; c < COLS; ++c){
+		for (int r = ROWS - 2; r <= ROWS; ++r){
+			for (int c = 1; c <= COLS; ++c){
 				if (isDarkSquare(c, r)){
 					placePiece(c, r, BLACK);
 				}
@@ -309,13 +309,13 @@ public class CheckersGame extends AbstractGame{
 	private void printBoard(){
 		System.out.println("===========");
 		System.out.print("  ");
-		for (int c = 0; c < COLS; ++c){
+		for (int c = 1; c <= COLS; ++c){
 			System.out.print(c + " ");
 		}
 		System.out.println();
-		for (int r = 0; r < ROWS; ++r){
+		for (int r = 1; r <= ROWS; ++r){
 			System.out.print(r + " ");
-			for (int c = 0; c < COLS; ++c){
+			for (int c = 1; c <= COLS; ++c){
 				System.out.print(getPieceAt(c, r) + " ");
 			}
 			System.out.println();

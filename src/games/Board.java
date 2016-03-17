@@ -40,8 +40,8 @@ public class Board {
     }
     
     public boolean isValidCoord(int col, int row){
-		return col >= 0 && col < numCols && 
-				row >= 0 && row < numRows;
+		return col >= 1 && col <= numCols && 
+				row >= 1 && row <= numRows;
     }
     
     //overload to reduce the amount of code change outside of board
