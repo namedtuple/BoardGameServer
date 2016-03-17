@@ -24,8 +24,8 @@ public class LobbyScreen extends JPanel implements ActionListener{
     private HashMap<GameName, List<String>> lobbyMap;
     private String[] gameList = GameName.getAllFriendlyNames();
 
-	private JButton logoutButton, challengeOpponentButton;
-	private JPanel selectionPanel;
+	private JButton logoutButton, challengeOpponentButton,userProfileButton;
+	private JPanel selectionPanel,opponentActionPanel;
 	private DefaultListModel waitList; //changes made to this will update GUI waiting list
 	private JList uiList;
     private GUI gui;
@@ -45,7 +45,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
         setVisible(false);
 
 		createSelectionPanel();
-		createJoinGameButton();
+		createOpponentActionPanel();
 		createUIList();
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -53,7 +53,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 
 		add(selectionPanel,BorderLayout.NORTH);
 		add(scrollPane,BorderLayout.CENTER);
-		add(challengeOpponentButton,BorderLayout.SOUTH);
+		add(opponentActionPanel,BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -77,6 +77,11 @@ public class LobbyScreen extends JPanel implements ActionListener{
 			//join an opponents game based on what opponent is chosen
             handleRequest(new Request(Command.JOIN, username + " " + userToJoin));
 		}
+		else if(e.getSource() == userProfileButton){
+			String userSelected = (String) uiList.getSelectedValue();
+			handleRequest(new Request(Command.GET_PROFILE + " "+ userSelected));
+
+		}
 
 	}
 
@@ -88,10 +93,25 @@ public class LobbyScreen extends JPanel implements ActionListener{
         uiList.setFixedCellHeight(44);
 	}
 
+	private void createUserProfileButton(){
+		userProfileButton = new JButton("View User Profile");
+		userProfileButton.addActionListener(this);
+		userProfileButton.setEnabled(false);
+		opponentActionPanel.add(userProfileButton,BorderLayout.EAST);
+	}
+
 	private void createJoinGameButton(){
 		challengeOpponentButton = new JButton("Challenge Opponent");
 		challengeOpponentButton.addActionListener(this);
 		challengeOpponentButton.setEnabled(false);
+		opponentActionPanel.add(challengeOpponentButton,BorderLayout.WEST);
+	}
+
+	private void createOpponentActionPanel(){
+		opponentActionPanel = new JPanel();
+		opponentActionPanel.setLayout(new BorderLayout());
+		createJoinGameButton();
+		createUserProfileButton();
 	}
 
 	private void createSelectionPanel(){
@@ -166,6 +186,7 @@ public class LobbyScreen extends JPanel implements ActionListener{
 	    public void valueChanged(ListSelectionEvent e) {
 	        if (e.getValueIsAdjusting() == false) {
 	            challengeOpponentButton.setEnabled(true);
+				userProfileButton.setEnabled(true);
 	            }
 	        }
 
@@ -182,6 +203,12 @@ public class LobbyScreen extends JPanel implements ActionListener{
                 username = tokens[1];
                 requestWaitlist();
                 break;
+			case GET_PROFILE:
+				gui.handleRequest(request);
+				break;
+			case PROFILE:
+				ProfileScreen profileScreen = new ProfileScreen(gui,tokens[1]);
+				break;
             case VICTORY: case DEFEAT: case TIE:
                 requestWaitlist();
                 break;
