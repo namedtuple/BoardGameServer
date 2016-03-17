@@ -13,7 +13,7 @@ public class GUI extends JFrame {
     private LoginScreen loginScreen;
     private LobbyScreen lobbyScreen;
     private AccountCreationScreen accountScreen;
-    private Board board;
+    private BoardScreen boardScreen;
     private JPanel currentScreen;
     private final static String BASE_WINDOW_TITLE = "BoardGameServer";
     private String username;
@@ -65,14 +65,14 @@ public class GUI extends JFrame {
                 break;
             case NEW_GAME:
                 GameName gameName = GameName.valueOf(tokens[1]);
-                board = new Board(this, gameName.getBoardSize());
+                boardScreen = new BoardScreen(this, gameName.getBoardSize());
                 appendToTitle(tokens[3]);
-                board.handleRequest(request);
-                changePanel(board);
+                boardScreen.handleRequest(request);
+                changePanel(boardScreen);
                 break;
             case VICTORY: case DEFEAT: case TIE:
                 String message = command.getMessage();
-                board.handleRequest(request);
+                boardScreen.handleRequest(request);
                 JOptionPane.showMessageDialog(this, message);
                 lobbyScreen.handleRequest(request);
                 changePanel(lobbyScreen);
@@ -80,7 +80,7 @@ public class GUI extends JFrame {
                 appendToTitle(username);
                 break;
             case VALID_MOVE: case OPPONENT_MOVED:
-                board.handleRequest(request);
+                boardScreen.handleRequest(request);
                 break;
             case LOBBY:
                 lobbyScreen.handleRequest(request);
