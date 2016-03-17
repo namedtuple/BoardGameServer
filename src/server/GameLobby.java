@@ -53,18 +53,18 @@ public class GameLobby {
 	public void startGame(ServerThread player1, ServerThread player2) {
 		String p1 = player1.getUserName();
 		String p2 = player2.getUserName();
-		//if (lobbyName == GameName.CHUTES_AND_LADDERS) {
+		if (lobbyName == GameName.CHUTES_AND_LADDERS) {
 		//	ChutesLogic newGame = new ChutesLogic(server, player1, player2, 10);
         //
-		//	player1.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O ' // TODO
-		//	player1.setOpponent(player2);
-		//	player1.setGame(newGame);
-        //
-		//	player2.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X ' // TODO
-		//	player2.setOpponent(player1);
-		//	player2.setGame(newGame);
-        //
-		//}
+			player1.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p1 + " X " + p2 + " O ")); // 'NEW_GAME username1 X username2 O ' // TODO
+			player1.setOpponent(player2);
+			//player1.setGame(newGame);
+
+			player2.send(new Request(Command.NEW_GAME, GameName.CHUTES_AND_LADDERS + " " + p2 + " O " + p1 + " X ")); // 'NEW_GAME username2 O username1 X ' // TODO
+			player2.setOpponent(player1);
+			//player2.setGame(newGame);
+
+		}
         if (lobbyName == GameName.TIC_TAC_TOE) {
 			TicTacToeLogic newGame = new TicTacToeLogic(server, player1, player2, 3);
 
