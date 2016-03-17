@@ -17,6 +17,7 @@ public class GUI extends JFrame {
     private JPanel currentScreen;
     private final static String BASE_WINDOW_TITLE = "BoardGameServer";
     private String username;
+    private String message;
 
     // Methods
     public GUI(Client client) {
@@ -48,10 +49,17 @@ public class GUI extends JFrame {
             case MOVE: case JOIN: case LOGGING_IN: case GOTO_LOBBY:
                 client.handleRequest(request);
                 break;
+            case GOTO_LOGIN:
+            	changePanel(loginScreen);
+            	break;
             case ACCOUNT_CREATION:
                 changePanel(accountScreen);
                 accountScreen.clearFields();
                 break;
+            case ACCOUNT_CREATION_FAIL:
+            	message = command.getMessage();
+            	JOptionPane.showMessageDialog(this, message);
+            	break;
             case CREATING_ACCOUNT:
                 client.handleRequest(request);
                 changePanel(loginScreen);
@@ -63,6 +71,10 @@ public class GUI extends JFrame {
                 changePanel(lobbyScreen);
                 loginScreen.handleRequest(request);
                 break;
+            case LOGIN_FAIL:
+            	message = command.getMessage();
+            	JOptionPane.showMessageDialog(this,message);
+            	break;
             case NEW_GAME:
                 GameName gameName = GameName.valueOf(tokens[1]);
                 boardScreen = new BoardScreen(this, gameName.getBoardSize());
@@ -71,7 +83,7 @@ public class GUI extends JFrame {
                 changePanel(boardScreen);
                 break;
             case VICTORY: case DEFEAT: case TIE:
-                String message = command.getMessage();
+                message = command.getMessage();
                 boardScreen.handleRequest(request);
                 JOptionPane.showMessageDialog(this, message);
                 lobbyScreen.handleRequest(request);

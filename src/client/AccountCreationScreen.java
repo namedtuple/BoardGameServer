@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class AccountCreationScreen extends JPanel implements ActionListener, KeyListener {
 
-	private JButton submitBtn;
+	private JButton submitBtn, backBtn;
 	private JTextField usernameField, genderField, countryField;
 	private JPasswordField passwordField;
 	private JLabel usernameLabel, passwordLabel, genderLabel, countryLabel, programLogo;
@@ -21,6 +21,7 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 	public AccountCreationScreen(GUI gui) {
         this.gui = gui;
 		createSubmitButton();
+		createBackButton();
 		createUsernameLabel();
 		createPasswordLabel();
 		createGenderLabel();
@@ -42,6 +43,14 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 		submitBtn.addKeyListener(this);
         submitBtn.setBounds(190,195,100,20);
 		this.add(submitBtn);
+	}
+	
+	private void createBackButton(){
+		backBtn = new JButton("Back");
+		backBtn.addActionListener(this);
+		backBtn.addKeyListener(this);
+        backBtn.setBounds(190,215,100,20);
+		this.add(backBtn);
 	}
 
 	private void createLogo(){
@@ -131,6 +140,9 @@ public class AccountCreationScreen extends JPanel implements ActionListener, Key
 		JButton button = (JButton) e.getSource();
 		if (button == submitBtn){
             attemptAccountCreation();
+		}
+		else if(button == backBtn) {
+			gui.handleRequest(new Request(Command.GOTO_LOGIN));
 		}
 	}
 
