@@ -31,10 +31,12 @@ public class ProfileScreen extends JPanel{
         this.setVisible(true);
 
         //throw the panel onto a JFrame
+
         JFrame frame = new JFrame();
         frame.add(this);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(200,200);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setResizable(false);
     }

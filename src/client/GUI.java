@@ -21,6 +21,7 @@ public class GUI extends JFrame {
     // Methods
     public GUI(Client client) {
         super(BASE_WINDOW_TITLE);
+        JFrame.setDefaultLookAndFeelDecorated(true);
         this.client = client;
         this.loginScreen = new LoginScreen(this);
         this.lobbyScreen = new LobbyScreen(this);
@@ -32,6 +33,7 @@ public class GUI extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(450, 375);
+        setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
 
