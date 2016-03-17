@@ -46,25 +46,25 @@ public class ProfileScreen extends JPanel{
     }
     private void createGenderLabel()
     {
-        genderLabel = new JLabel("Gender: " + userProfile[2]);
+        genderLabel = new JLabel("Gender: " + userProfile[1]);
         genderLabel.setFont(new Font("Serif", Font.PLAIN, 16));
         add(genderLabel);
     }
 
     private void createCountryLabel(){
-        countryLabel = new JLabel("Country: " + userProfile[3]);
+        countryLabel = new JLabel("Country: " + userProfile[2]);
         countryLabel.setFont(new Font("Serif", Font.PLAIN, 16));
         add(countryLabel);
     }
 
     private void createWinLabel() {
-        winLabel = new JLabel("Wins: " + userProfile[4]);
+        winLabel = new JLabel("Wins: " + userProfile[3]);
         winLabel.setFont(new Font("Serif", Font.PLAIN, 16));
         add(winLabel);
     }
 
     private void createLossLabel(){
-        lossLabel = new JLabel("Losses: " + userProfile[5]);
+        lossLabel = new JLabel("Losses: " + userProfile[4]);
         lossLabel.setFont(new Font("Serif", Font.PLAIN, 16));
         add(lossLabel);
     }
