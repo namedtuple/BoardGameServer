@@ -149,8 +149,6 @@ public class BoardScreen extends JPanel {
             case REMOVE_FROM: case MOVE_BOTH_TO:
                 tile.handleRequest(request);
                 break;
-            default:
-                break;
         }
     }
 

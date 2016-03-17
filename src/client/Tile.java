@@ -121,7 +121,6 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(Pair.with(xCol + adj, yRow));
                 tile.setIcon(chooseIcon(player2));
                 tile.setDisabledIcon(chooseIcon(player2));
-                //tile.setEnabled(false);
             }
             System.out.println("");
             adj = adj == 0 ? 1 : 0;
@@ -136,7 +135,6 @@ public class Tile extends JButton implements ActionListener {
                 tile = getTile(Pair.with(xCol + adj, yRow));
                 tile.setIcon(chooseIcon(player1));
                 tile.setDisabledIcon(chooseIcon(player1));
-                //tile.setEnabled(false);
             }
             System.out.println("");
             adj = adj == 0 ? 1 : 0;
@@ -204,8 +202,6 @@ public class Tile extends JButton implements ActionListener {
                 Tile.boardScreen = null;
                 Tile.imageHashMap = null;
                 Tile.instances = new ArrayList<>();
-                break;
-            default:
                 break;
         }
     }

@@ -215,8 +215,6 @@ public class LobbyScreen extends JPanel implements ActionListener{
             case LOBBY:
                 addAllToWaitList(request.getRequest()); // TODO
                 break;
-            default:
-                break;
         }
     }
 }

@@ -102,8 +102,6 @@ public class GUI extends JFrame {
             case DISCONNECTED:
                 changePanel(loginScreen);
                 break;
-            default:
-                break;
         }
     }
 
